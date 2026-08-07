@@ -159,6 +159,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
               <div style={{ fontSize: "1.25rem", fontWeight: "800", color: "#ffffff" }}>Think Before You Scan</div>
             </div>
           </div>
+
+          <span className="badge badge-safe" style={{ background: "rgba(16,185,129,0.25)", color: "#34d399", border: "1px solid rgba(52,211,153,0.4)", fontSize: "0.72rem" }}>
+            <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#34d399" }} /> Live Realtime
+          </span>
         </div>
 
         {/* Clear Purpose Statement */}
@@ -166,11 +170,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
           We inspect payment QR codes for fake shop stickers, phishing links & imposter merchants <strong style={{ color: "#ffffff" }}>before money leaves your account</strong>.
         </p>
 
-        {/* Clean Formatted Stats Box with Realtime Indicator */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", background: "rgba(0,0,0,0.35)", padding: "14px 18px", borderRadius: "18px", position: "relative" }}>
-          <div style={{ position: "absolute", top: "10px", right: "12px", fontSize: "0.68rem", color: "var(--color-safe)", fontWeight: "700", display: "flex", alignItems: "center", gap: "4px" }}>
-            <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "var(--color-safe)" }} /> Realtime
-          </div>
+        {/* Clean Formatted Stats Box */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", background: "rgba(0,0,0,0.35)", padding: "14px 18px", borderRadius: "18px" }}>
           <div>
             <div style={{ fontSize: "0.76rem", color: "#94a3b8", fontWeight: "600", marginBottom: "4px" }}>Scans Inspected</div>
             <div className="font-mono" style={{ fontSize: "1.5rem", fontWeight: "700", color: "#ffffff" }}>{scanStats.total}</div>
