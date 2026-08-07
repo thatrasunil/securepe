@@ -1,0 +1,26 @@
+{
+  "name": "SentinelQR",
+  "version": "1.0.0",
+  "gstack": {
+    "enabled_workflows": [
+      "plan-ceo-review",
+      "plan-eng-review",
+      "plan-design-review",
+      "qa",
+      "ship"
+    ],
+    "services": {
+      "backend": {
+        "url": "http://localhost:8000",
+        "health_path": "/healthz"
+      },
+      "frontend": {
+        "url": "http://localhost:3000"
+      }
+    },
+    "slas": {
+      "max_latency_ms": 25,
+      "min_test_pass_rate": 1.0
+    }
+  }
+}

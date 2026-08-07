@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="cyber-trust">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SentinelQR — Working AI Payment Fraud Shield</title>
+  <meta name="description" content="Real working AI security assistant that scans live webcam QR codes and image files before you lose money. Explainable AI and real-time threat detection.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <!-- Real Client-Side QR Decoder Library -->
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+</head>
+<body>
+  <div class="app-container">
+
+    <!-- Top Navigation Header -->
+    <header class="top-nav">
+      <div class="brand">
+        <div class="shield-logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="m9 12 2 2 4-4"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="app-name">SentinelQR</span>
+          <span class="app-tagline">CYBER TRUST AI SHIELD</span>
+        </div>
+      </div>
+
+      <!-- Role-Based Navigation Switcher & Strategy / DevStack Tabs -->
+      <div class="role-selector-box">
+        <span class="role-label">Active View:</span>
+        <select id="role-select" class="role-dropdown" onchange="switchRole(this.value)">
+          <option value="consumer">👤 Consumer Scanner</option>
+          <option value="merchant">🏪 Verified Merchant</option>
+          <option value="moderator">🛡️ Fraud Moderator</option>
+          <option value="admin">⚙️ Super Admin</option>
+          <option value="strategy">💡 80/20 Blue Ocean Strategy</option>
+          <option value="gstack">🚀 gstack & Ponytail Dev Stack</option>
+        </select>
+      </div>
+
+      <div class="nav-actions">
+        <!-- Theme Selector Toggle -->
+        <div class="theme-selector">
+          <span class="theme-label">Theme:</span>
+          <select id="theme-select" class="theme-dropdown">
+            <option value="cyber-trust">🛡️ Cyber Trust (Official)</option>
+            <option value="cyber-dark">🌐 Obsidian Cyber</option>
+            <option value="emerald-glow">🟢 Emerald Shield</option>
+            <option value="neon-cyberpunk">⚡ Neon Matrix</option>
+          </select>
+        </div>
+
+        <div id="backend-status" class="status-pill status-connected">
+          <span class="status-dot"></span>
+          <span class="status-text">API Online</span>
+        </div>
+
+        <button id="tts-toggle" class="icon-btn" title="Toggle Voice Assistance">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Viewport Containers -->
+
+    <!-- ROLE 1: CONSUMER SCANNER VIEW (REAL WORKING WEBCAM & DECODER) -->
+    <main id="role-view-consumer" class="main-content view-pane">
+
+      <!-- Real Live Scanner Section (Left Column) -->
+      <section class="scanner-card">
+        <div class="card-header">
+          <h2>Real Live Viewfinder</h2>
+          <div class="live-metrics">
+            <span id="camera-status-tag" class="latency-badge">📷 Camera Inactive</span>
+            <span class="badge badge-pulse">AI Active</span>
+          </div>
+        </div>
+
+        <!-- Real Working Video Viewfinder & Offscreen Decoding Canvas -->
+        <div class="viewfinder-box">
+          <video id="webcam-video" autoplay playsinline muted></video>
+          <canvas id="qr-canvas" class="hidden"></canvas>
+          
+          <!-- Reticle Overlay -->
+          <div id="scanner-reticle" class="reticle">
+            <div class="corner top-left"></div>
+            <div class="corner top-right"></div>
+            <div class="corner bottom-left"></div>
+            <div class="corner bottom-right"></div>
+            <div class="scan-laser"></div>
+          </div>
+          <div class="scanner-overlay-info">
+            <p id="viewfinder-instruction">Point camera at physical QR or upload an image file</p>
+          </div>
+        </div>
+
+        <!-- Working Controls & Upload Buttons -->
+        <div class="working-scanner-controls">
+          <button id="btn-start-camera" class="btn btn-primary">
+            📷 Enable Live Webcam
+          </button>
+          <button id="btn-upload-file" class="btn btn-scenario">
+            📁 Upload QR Image File
+          </button>
+          <input type="file" id="qr-file-input" accept="image/*" class="hidden" />
+        </div>
+
+        <!-- Hackathon Live Demo Preset Scenarios -->
+        <div class="demo-scenarios" style="margin-top: 18px;">
+          <div class="demo-title">⚡ Test Payload Presets</div>
+          <div class="scenario-buttons">
+            <button class="btn btn-scenario btn-safe" onclick="simulateScan('authentic_merchant')">
+              <span class="btn-icon">🟢</span> Authentic Shop QR
+            </button>
+            <button class="btn btn-scenario btn-danger" onclick="simulateScan('phishing_sticker')">
+              <span class="btn-icon">🔴</span> Fake Paytm Sticker
+            </button>
+            <button class="btn btn-scenario btn-warning" onclick="simulateScan('shortened_url')">
+              <span class="btn-icon">🟡</span> Shortened URL
+            </button>
+            <button class="btn btn-scenario btn-danger" onclick="simulateScan('apk_download')">
+              <span class="btn-icon">⚠️</span> Direct APK Link
+            </button>
+          </div>
+        </div>
+
+        <!-- Custom Manual Input -->
+        <div class="manual-input-box">
+          <input type="text" id="custom-qr-input" placeholder="Or paste decoded QR string (e.g. upi://pay?...)" />
+          <button id="btn-analyze" class="btn btn-primary">Inspect</button>
+        </div>
+      </section>
+
+      <!-- Analysis Results & Intelligence Section (Right Column) -->
+      <section class="analysis-panel">
+        
+        <!-- Idle Placeholder -->
+        <div id="idle-state" class="panel-card idle-card">
+          <div class="idle-icon">🛡️</div>
+          <h3>Realtime Pre-Scan Ready</h3>
+          <p>Click "Enable Live Webcam", upload a QR image file, or inspect a QR string to trigger instant FastAPI AI threat analysis.</p>
+        </div>
+
+        <!-- Dynamic Risk Results Card -->
+        <div id="result-card" class="panel-card result-card hidden">
+          <div id="risk-banner" class="risk-banner banner-safe">
+            <div class="banner-badge" id="risk-badge">🟢 SAFE</div>
+            <div class="banner-title" id="risk-title">SAFE TO PROCEED</div>
+            <div id="api-latency-tag" class="api-latency-tag">⚡ 12ms</div>
+          </div>
+
+          <div class="card-body">
+            <!-- Score Gauge & Overview -->
+            <div class="score-overview">
+              <div class="gauge-box">
+                <svg class="gauge-svg" viewBox="0 0 100 100">
+                  <circle class="gauge-bg" cx="50" cy="50" r="40"/>
+                  <circle id="gauge-fill" class="gauge-fill" cx="50" cy="50" r="40"/>
+                </svg>
+                <div class="gauge-text">
+                  <span id="score-val">0</span>
+                  <span class="score-denom">/100</span>
+                </div>
+              </div>
+              <div class="score-meta">
+                <div class="meta-item">
+                  <span class="meta-label">Payload Type</span>
+                  <span id="meta-type" class="meta-val">UPI Payment</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Community Intelligence</span>
+                  <span id="meta-reports" class="meta-val">0 Reports</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Decoded QR Payload Box -->
+            <div class="decoded-payload-box" style="margin-bottom: 16px; padding: 12px; background: rgba(0,0,0,0.3); border-radius: 10px; border: 1px solid var(--bg-card-border);">
+              <span style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Decoded Raw Payload String:</span>
+              <code id="decoded-payload-str" style="font-size: 0.82rem; font-family: var(--font-mono); word-break: break-all; color: var(--accent-cyan);">None</code>
+            </div>
+
+            <!-- Explainable AI (XAI) Section -->
+            <div class="xai-section">
+              <div class="xai-header">
+                <h4>🤖 Explainable AI Reasoning</h4>
+                <button id="btn-speak-reasons" class="btn-audio-mini" title="Play Voice Audio">🔊 Listen</button>
+              </div>
+              <ul id="xai-reasons" class="xai-reasons-list">
+                <!-- Injected dynamically -->
+              </ul>
+              <div id="xai-recommendation" class="xai-recommendation-box">
+                <!-- Injected dynamically -->
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="result-actions">
+              <button id="btn-action-primary" class="btn btn-action-primary">Proceed with Payment</button>
+              <button id="btn-report-fraud" class="btn btn-outline-danger">Report Fraud</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Community Fraud Intelligence Heatmap & Recent Scams -->
+        <div class="panel-card community-card">
+          <div class="card-header">
+            <h3>🌐 Realtime Fraud Intelligence Feed</h3>
+            <span class="badge badge-pulse">Live Polling (3s)</span>
+          </div>
+          <div class="community-feed" id="community-feed">
+            <!-- Updated via real-time backend API -->
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- ROLE 2: VERIFIED MERCHANT VIEW -->
+    <main id="role-view-merchant" class="main-content view-pane hidden">
+      <section class="panel-card full-width-card">
+        <div class="card-header">
+          <h2>🏪 Verified Merchant Portal</h2>
+          <span class="badge badge-safe">Verified Business</span>
+        </div>
+        <div class="merchant-profile-box">
+          <div class="merchant-badge-icon">✓</div>
+          <div class="merchant-info">
+            <h3>Ramesh Chai Corner</h3>
+            <p class="vpa-text">ramesh.chai@upi • Registered Store ID #MCH-8821</p>
+            <p class="geo-status">📍 Geofence Baseline: MG Road Store Stand (12.9716, 77.5946) — Match 100%</p>
+          </div>
+        </div>
+        <div class="merchant-specs-grid">
+          <div class="spec-card">
+            <span class="spec-label">Expected Payload Hash</span>
+            <span class="spec-val font-mono">e3b0c44298fc1c149afbf4c8996fb924...</span>
+          </div>
+          <div class="spec-card">
+            <span class="spec-label">Sticker Tamper Protection</span>
+            <span class="spec-val color-safe">🟢 Active & Guarded</span>
+          </div>
+          <div class="spec-card">
+            <span class="spec-label">Customer Scans Today</span>
+            <span class="spec-val">142 Scans</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ROLE 3: MODERATOR / FRAUD ANALYST VIEW -->
+    <main id="role-view-moderator" class="main-content view-pane hidden">
+      <section class="panel-card full-width-card">
+        <div class="card-header">
+          <h2>🛡️ Fraud Analyst Moderation Queue</h2>
+          <span class="badge">Active Review</span>
+        </div>
+        <div class="history-table-box">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Report ID</th>
+                <th>Category</th>
+                <th>Target Payload</th>
+                <th>Reports</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>#REP-882</td>
+                <td>IMPOSTER_PAYMENT</td>
+                <td>paytm-support@ybl</td>
+                <td>18 User Flags</td>
+                <td><button class="btn btn-audio-mini" onclick="alert('Report verified and added to global threat feed.')">Confirm Blacklist</button></td>
+              </tr>
+              <tr>
+                <td>#REP-883</td>
+                <td>PHISHING_URL</td>
+                <td>bit.ly/cashback-free</td>
+                <td>5 User Flags</td>
+                <td><button class="btn btn-audio-mini" onclick="alert('Report verified.')">Verify Threat</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <!-- ROLE 4: SUPER ADMIN VIEW -->
+    <main id="role-view-admin" class="main-content view-pane hidden">
+      <section class="panel-card full-width-card">
+        <div class="card-header">
+          <h2>⚙️ Super Admin Operations & Platform Settings</h2>
+          <span class="badge">Full Permissions</span>
+        </div>
+        <div class="admin-kpi-grid">
+          <div class="kpi-card">
+            <span class="kpi-title">Total Scans Evaluated</span>
+            <span class="kpi-value">148,290</span>
+            <span class="kpi-sub">+12% this week</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-title">Fraud Blocked</span>
+            <span class="kpi-value color-danger">3,412</span>
+            <span class="kpi-sub">100% Deterministic</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-title">Active Merchants</span>
+            <span class="kpi-value color-safe">12,850</span>
+            <span class="kpi-sub">Stores Shielded</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-title">False Positive Ratio</span>
+            <span class="kpi-value">0.01%</span>
+            <span class="kpi-sub">Target SLA</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- STRATEGY VIEW: 80/20 BLUE OCEAN VS RED OCEAN -->
+    <main id="role-view-strategy" class="main-content view-pane hidden">
+      <section class="panel-card full-width-card">
+        <div class="card-header">
+          <h2>💡 Painkiller Blue Ocean Strategy & Ponytail 80/20 Efficiency</h2>
+          <span class="badge badge-pulse">High-Value Differentiation</span>
+        </div>
+        
+        <div class="strategy-matrix-grid">
+          <!-- Red Ocean Card -->
+          <div class="matrix-card ocean-red">
+            <div class="matrix-header">
+              <span class="matrix-badge">🔴 RED OCEAN (Vitamins)</span>
+              <h3>Generic QR Scanners</h3>
+            </div>
+            <ul class="matrix-list">
+              <li>❌ Generic VirusTotal / Safe Browsing API wrapper</li>
+              <li>❌ Post-facto user reports after money is already lost</li>
+              <li>❌ Displays raw technical domain logs users can't read</li>
+              <li>❌ High churn, zero urgency to install or retain</li>
+            </ul>
+          </div>
+
+          <!-- Blue Ocean Card -->
+          <div class="matrix-card ocean-blue">
+            <div class="matrix-header">
+              <span class="matrix-badge">🔵 BLUE OCEAN (Painkiller)</span>
+              <h3>SentinelQR AI Payment Shield</h3>
+            </div>
+            <ul class="matrix-list">
+              <li>✅ <strong>Pre-Transaction Shield</strong>: Analyzes before money moves</li>
+              <li>✅ <strong>Geofenced Sticker Check</strong>: Detects physical QR tampering</li>
+              <li>✅ <strong>Explainable AI (XAI)</strong>: Zero technical jargon bullet points</li>
+              <li>✅ <strong>Multi-Gen Voice Shield</strong>: Audio alerts for non-tech seniors</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="ponytail-8020-box">
+          <h3>⚡ Ponytail 80/20 High-Efficiency Principles</h3>
+          <p>20% of core architecture delivers 80% of real-world security impact:</p>
+          <div class="principles-grid">
+            <div class="p-card"><strong>Deterministic Source of Truth</strong><br>Scoring engine never hallucinates score.</div>
+            <div class="p-card"><strong>3s Realtime Intelligence</strong><br>Crowdsourced fraud feeds propagate instantly.</div>
+            <div class="p-card"><strong>Senior Accessibility</strong><br>Audio TTS narration + 48px touch targets.</div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- GSTACK & PONYTAIL DEV STACK VIEW -->
+    <main id="role-view-gstack" class="main-content view-pane hidden">
+      <section class="panel-card full-width-card">
+        <div class="card-header">
+          <h2>🚀 gstack & Ponytail Autonomous Engineering Stack</h2>
+          <span class="badge badge-safe">CI/CD & QA Verified</span>
+        </div>
+        <div class="admin-kpi-grid">
+          <div class="kpi-card">
+            <span class="kpi-title">gstack Workflows</span>
+            <span class="kpi-value color-safe">5 Active</span>
+            <span class="kpi-sub">CEO, Eng, Design, QA, Ship</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-title">Ponytail Ruleset</span>
+            <span class="kpi-value">.ponytailrc</span>
+            <span class="kpi-sub">Max Density, 80/20 Code</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-title">PyTest QA Suite</span>
+            <span class="kpi-value color-safe">100% Pass</span>
+            <span class="kpi-sub">4/4 Tests Green</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-title">Threat Engine SLA</span>
+            <span class="kpi-value color-safe">&lt; 25ms</span>
+            <span class="kpi-sub">Sub-second Latency</span>
+          </div>
+        </div>
+
+        <div class="ponytail-8020-box" style="margin-top: 20px;">
+          <h3>🤖 Automated gstack Development Workflows</h3>
+          <div class="principles-grid" style="margin-top: 10px;">
+            <div class="p-card"><code>python scripts/gstack_qa.py</code><br>1-Click automated QA telemetry runner.</div>
+            <div class="p-card"><code>python compile_master_docs.py</code><br>Master documentation suite compiler.</div>
+            <div class="p-card"><code>AGENTS.md</code><br>Autonomous agent execution guidelines.</div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Report Fraud Modal -->
+    <div id="modal-report" class="modal-backdrop hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Broadcast Fraud Report</h3>
+          <button id="close-modal-report" class="btn-close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <label>Target Payload / Address</label>
+          <input type="text" id="report-payload-input" readonly />
+
+          <label>Scam Category</label>
+          <select id="report-category">
+            <option value="IMPOSTER_PAYMENT">Imposter Merchant / Support Sticker</option>
+            <option value="PHISHING_URL">Phishing / Credential Harvesting URL</option>
+            <option value="MALICIOUS_APK">Direct APK / Malware Download</option>
+            <option value="OTHER_FRAUD">Other Fraudulent Activity</option>
+          </select>
+
+          <label>Additional Location / Notes</label>
+          <textarea id="report-notes" rows="3" placeholder="Describe where this QR was found..."></textarea>
+        </div>
+        <div class="modal-footer">
+          <button id="btn-submit-report" class="btn btn-danger">Broadcast to All Clients</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

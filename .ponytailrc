@@ -1,0 +1,15 @@
+{
+  "project": "SentinelQR",
+  "ruleset": "ponytail-v1.0",
+  "token_minimization": {
+    "enabled": true,
+    "max_file_loc": 400,
+    "strip_boilerplate_comments": true,
+    "high_density_exports": true
+  },
+  "architecture_principles": {
+    "pareto_80_20": true,
+    "source_of_truth": "Deterministic Risk Scoring Engine",
+    "zero_hallucination_guarantee": true
+  }
+}
