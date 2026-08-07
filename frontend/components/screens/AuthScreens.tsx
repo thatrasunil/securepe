@@ -205,7 +205,11 @@ export const LoginScreen: React.FC<ScreenProps> = ({ onNavigate, onUserLogin }) 
       setShowOtpInput(true);
     } catch (err: any) {
       console.error("Phone Auth error:", err);
-      setAuthError("Failed to send OTP. Check phone number format.");
+      if (err.code === "auth/operation-not-allowed") {
+        setAuthError("Firebase Phone SMS is disabled for this region in Firebase Console. Please use 'Continue with Google' or 'Continue as Guest'.");
+      } else {
+        setAuthError(err.message || "Failed to send SMS OTP. Please try 'Continue with Google'.");
+      }
     } finally {
       setLoading(false);
     }
@@ -273,7 +277,7 @@ export const LoginScreen: React.FC<ScreenProps> = ({ onNavigate, onUserLogin }) 
       </div>
 
       {authError && (
-        <div style={{ padding: "10px 14px", borderRadius: "14px", background: "var(--color-danger-bg)", border: "1px solid rgba(239,68,68,0.3)", color: "var(--color-danger)", fontSize: "0.8rem", textAlign: "center" }}>
+        <div style={{ padding: "12px 16px", borderRadius: "14px", background: "var(--color-danger-bg)", border: "1px solid rgba(239,68,68,0.3)", color: "var(--color-danger)", fontSize: "0.82rem", lineHeight: "1.4", textAlign: "center" }}>
           {authError}
         </div>
       )}
