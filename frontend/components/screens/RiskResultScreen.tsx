@@ -42,11 +42,15 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({
   };
 
   const getThemeColor = () => {
-    if (score >= 70) return "#dc2626";       /* Danger Red */
-    if (score >= 50) return "#f97316";       /* Orange */
-    if (score >= 30) return "#eab308";       /* Amber */
-    if (score >= 15) return "#84cc16";       /* Lime */
-    return "#22c55e";                        /* Safe Green */
+    if (score >= 70) return "#EF4444";       /* Critical Danger Red */
+    if (score >= 30) return "#F59E0B";       /* Suspicious Orange */
+    return "#10B981";                        /* Low Risk Safe Green */
+  };
+
+  const getTierLabel = () => {
+    if (score >= 70) return "CRITICAL DANGER";
+    if (score >= 30) return "SUSPICIOUS";
+    return "LOW RISK";
   };
 
   const themeColor = getThemeColor();
@@ -54,72 +58,104 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({
   const offset = circumference - (score / 100) * circumference;
 
   return (
-    <div style={{ padding: "clamp(16px, 4vw, 24px)" }} className="animate-fade">
-      {/* Risk Banner */}
+    <div style={{ padding: "20px 20px 40px 20px", background: "var(--bg-primary)", minHeight: "100dvh", color: "var(--text-main)" }} className="animate-fade">
+      {/* 1. Header Navigation */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+        <button
+          onClick={() => onNavigate("home")}
+          style={{
+            background: "rgba(255,255,255,0.08)",
+            border: "1px solid rgba(255,255,255,0.15)",
+            color: "var(--text-main)",
+            width: "40px",
+            height: "40px",
+            borderRadius: "50%",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          title="Back to Home"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
+
+        <h3 style={{ fontSize: "1.15rem", fontWeight: "700", fontFamily: "Poppins, sans-serif" }}>
+          Scan Analysis Result
+        </h3>
+
+        <div style={{ width: "40px" }} />
+      </div>
+
+      {/* 2. Top Risk Status Banner */}
       <div
         style={{
           padding: "16px 20px",
           borderRadius: "20px",
-          background: level === "HIGH_RISK" ? "var(--color-danger-bg)" : level === "CAUTION" ? "var(--color-caution-bg)" : "var(--color-safe-bg)",
-          border: `1px solid ${themeColor}`,
+          background: level === "HIGH_RISK" ? "#FEE2E2" : level === "CAUTION" ? "#FEF3C7" : "#D1FAE5",
+          border: `2px solid ${themeColor}`,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          marginBottom: "20px",
+          marginBottom: "18px",
+          boxShadow: `0 8px 24px ${themeColor}25`,
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: themeColor, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+          <div style={{ width: "42px", height: "42px", borderRadius: "14px", background: themeColor, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: `0 4px 12px ${themeColor}50` }}>
             {level === "HIGH_RISK" ? (
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             ) : level === "CAUTION" ? (
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
             ) : (
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
             )}
           </div>
           <div>
-            <div style={{ fontSize: "1.1rem", fontWeight: "700", color: themeColor }}>
-              {level.replace("_", " ")}
+            <div style={{ fontSize: "1.2rem", fontWeight: "800", color: themeColor, fontFamily: "Poppins, sans-serif", lineHeight: "1.2" }}>
+              {getTierLabel()}
             </div>
-            <div style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
+            <div style={{ fontSize: "0.78rem", color: "#334155", fontWeight: "600" }}>
               {result.qr_type} Payload Evaluation
             </div>
           </div>
         </div>
 
-        <span className="badge" style={{ background: "rgba(0,0,0,0.3)", color: "var(--accent-cyan)", border: "1px solid rgba(6, 182, 212, 0.3)", display: "flex", alignItems: "center", gap: "4px" }}>
+        {/* Latency Pill */}
+        <span style={{ background: "#0F172A", color: "#38BDF8", border: "1px solid #1E293B", padding: "6px 12px", borderRadius: "14px", fontSize: "0.75rem", fontWeight: "700", display: "flex", alignItems: "center", gap: "4px" }}>
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
           {latencyMs}ms
         </span>
       </div>
 
-      {/* Score Gauge & Decoded String */}
+      {/* 3. Score Gauge & Decoded Payload Section */}
       <div
         style={{
           background: "var(--bg-card)",
           borderRadius: "24px",
           padding: "20px",
           border: "1px solid var(--bg-card-border)",
-          marginBottom: "20px",
+          boxShadow: "var(--card-shadow)",
+          marginBottom: "18px",
           display: "flex",
           alignItems: "center",
-          gap: "20px",
+          gap: "18px",
         }}
       >
-        {/* SVG Circular Gauge with Risk Gradient */}
-        <div style={{ position: "relative", width: "90px", height: "90px" }}>
+        {/* SVG Circular Gauge */}
+        <div style={{ position: "relative", width: "88px", height: "88px", flexShrink: 0 }}>
           <svg viewBox="0 0 100 100" style={{ transform: "rotate(-90deg)", width: "100%", height: "100%" }}>
             <defs>
               <linearGradient id="riskGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#22c55e" />
-                <stop offset="25%" stopColor="#84cc16" />
-                <stop offset="50%" stopColor="#eab308" />
-                <stop offset="75%" stopColor="#f97316" />
-                <stop offset="100%" stopColor="#dc2626" />
+                <stop offset="0%" stopColor="#10B981" />
+                <stop offset="35%" stopColor="#84CC16" />
+                <stop offset="65%" stopColor="#F59E0B" />
+                <stop offset="100%" stopColor="#EF4444" />
               </linearGradient>
             </defs>
-            <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="8" />
+            <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(148, 163, 184, 0.2)" strokeWidth="8" />
             <circle
               cx="50"
               cy="50"
@@ -141,27 +177,32 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
-              fontWeight: "700",
+              fontWeight: "800",
               fontFamily: "var(--font-mono)",
             }}
           >
-            <span style={{ fontSize: "1.4rem", color: themeColor, lineHeight: 1 }}>{score}</span>
-            <span style={{ fontSize: "0.65rem", color: "var(--text-muted)" }}>/100 RISK</span>
+            <span style={{ fontSize: "1.45rem", color: themeColor, lineHeight: 1 }}>{score}</span>
+            <span style={{ fontSize: "0.62rem", color: "var(--text-secondary)", fontWeight: "700" }}>/100 RISK</span>
           </div>
         </div>
 
+        {/* Decoded Payload Box */}
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginBottom: "4px" }}>Decoded Payload String:</div>
+          <div style={{ fontSize: "0.76rem", color: "var(--text-secondary)", fontWeight: "600", marginBottom: "6px" }}>
+            Decoded Payload String:
+          </div>
           <code
             style={{
               display: "block",
               fontSize: "0.78rem",
-              background: "rgba(0,0,0,0.3)",
-              padding: "8px 10px",
-              borderRadius: "10px",
-              color: "var(--accent-cyan)",
+              background: "#0F172A",
+              color: "#38BDF8",
+              padding: "10px 12px",
+              borderRadius: "12px",
+              border: "1px solid #1E293B",
               fontFamily: "var(--font-mono)",
               wordBreak: "break-all",
+              lineHeight: "1.4",
             }}
           >
             {result.raw_payload}
@@ -169,31 +210,31 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({
         </div>
       </div>
 
-      {/* Purple AI Reasoning Card (#7C3AED Accent) */}
+      {/* 4. Purple AI Reasoning Card (#7C3AED Accent) */}
       <div
         style={{
-          background: "var(--ai-card-bg)",
+          background: "rgba(124, 58, 237, 0.08)",
           borderRadius: "24px",
           padding: "20px",
-          border: "1px solid rgba(124, 58, 237, 0.3)",
+          border: "1px solid rgba(124, 58, 237, 0.25)",
           marginBottom: "24px",
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
-          <h4 style={{ fontSize: "1rem", fontWeight: "700", color: "var(--accent-purple)", display: "flex", alignItems: "center", gap: "8px" }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>
+          <h4 style={{ fontSize: "1.05rem", fontWeight: "700", color: "#7C3AED", display: "flex", alignItems: "center", gap: "8px", fontFamily: "Poppins, sans-serif" }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>
             AI Security Reasoning
           </h4>
           <button
             onClick={() => speakText(`${result.explanation.summary}. ${result.explanation.recommended_action}`)}
             style={{
-              padding: "4px 12px",
-              borderRadius: "10px",
-              background: speechActive ? "rgba(124, 58, 237, 0.4)" : "rgba(124, 58, 237, 0.15)",
+              padding: "5px 12px",
+              borderRadius: "12px",
+              background: speechActive ? "rgba(124, 58, 237, 0.3)" : "rgba(124, 58, 237, 0.15)",
               border: "1px solid rgba(124, 58, 237, 0.4)",
-              color: "var(--accent-purple)",
-              fontSize: "0.75rem",
-              fontWeight: "600",
+              color: "#7C3AED",
+              fontSize: "0.78rem",
+              fontWeight: "700",
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
@@ -205,22 +246,23 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({
           </button>
         </div>
 
-        <div style={{ fontSize: "0.88rem", fontWeight: "600", color: "var(--text-main)", marginBottom: "12px" }}>
+        <div style={{ fontSize: "0.92rem", fontWeight: "700", color: "var(--text-main)", marginBottom: "14px", lineHeight: "1.4" }}>
           {result.explanation.summary}
         </div>
 
-        <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "8px", marginBottom: "16px" }}>
+        <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px", marginBottom: "18px" }}>
           {result.explanation.reasons.map((r, idx) => (
             <li
               key={idx}
               style={{
-                fontSize: "0.82rem",
-                color: "var(--text-muted)",
-                padding: "10px 12px",
-                background: "var(--ai-reasoning-bg)",
-                borderRadius: "10px",
-                borderLeft: `3px solid var(--accent-purple)`,
-                lineHeight: "1.4",
+                fontSize: "0.84rem",
+                color: "var(--text-main)",
+                padding: "12px 14px",
+                background: "rgba(255, 255, 255, 0.75)",
+                borderRadius: "14px",
+                borderLeft: "4px solid #7C3AED",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                lineHeight: "1.45",
               }}
             >
               {r}
@@ -228,38 +270,85 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({
           ))}
         </ul>
 
+        {/* High-Contrast Recommendation Box */}
         <div
           style={{
-            padding: "12px 14px",
-            borderRadius: "12px",
-            background: "rgba(0,0,0,0.3)",
-            border: "1px solid rgba(255,255,255,0.05)",
-            fontSize: "0.85rem",
-            fontWeight: "600",
-            color: "var(--accent-cyan)",
+            padding: "14px 16px",
+            borderRadius: "16px",
+            background: themeColor,
+            color: "#ffffff",
+            fontSize: "0.9rem",
+            fontWeight: "800",
+            boxShadow: `0 6px 18px ${themeColor}40`,
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
           }}
         >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
           Recommendation: {result.explanation.recommended_action}
         </div>
       </div>
 
-      {/* Action Buttons */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+      {/* 5. Bottom Action Buttons */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
         {level === "HIGH_RISK" ? (
           <>
-            <button className="btn-primary" onClick={() => onNavigate("home")}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+            <button
+              onClick={() => onNavigate("home")}
+              style={{
+                width: "100%",
+                height: "56px",
+                borderRadius: "18px",
+                background: "#EF4444",
+                color: "#ffffff",
+                fontSize: "1.05rem",
+                fontWeight: "800",
+                border: "none",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "10px",
+                boxShadow: "0 8px 24px rgba(239, 68, 68, 0.4)",
+              }}
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
               Leave Safely (Recommended)
             </button>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
-              <button className="btn-danger" onClick={() => onNavigate("report")} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}>
+              <button
+                onClick={() => onNavigate("report")}
+                style={{
+                  height: "48px",
+                  borderRadius: "16px",
+                  background: "rgba(239, 68, 68, 0.15)",
+                  border: "1px solid #EF4444",
+                  color: "#EF4444",
+                  fontSize: "0.9rem",
+                  fontWeight: "700",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "6px",
+                }}
+              >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
                 Report Fraud
               </button>
               <button
-                className="btn-secondary"
                 onClick={() => alert("Warning: Proceeding with unverified transaction.")}
-                style={{ fontSize: "0.82rem" }}
+                style={{
+                  height: "48px",
+                  borderRadius: "16px",
+                  background: "rgba(255,255,255,0.06)",
+                  border: "1px solid rgba(255,255,255,0.15)",
+                  color: "var(--text-secondary)",
+                  fontSize: "0.84rem",
+                  fontWeight: "600",
+                  cursor: "pointer",
+                }}
               >
                 Continue Anyway
               </button>
@@ -267,11 +356,44 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({
           </>
         ) : (
           <>
-            <button className="btn-success" onClick={() => onNavigate("home")}>
+            <button
+              onClick={() => onNavigate("home")}
+              style={{
+                width: "100%",
+                height: "56px",
+                borderRadius: "18px",
+                background: "#10B981",
+                color: "#ffffff",
+                fontSize: "1.05rem",
+                fontWeight: "800",
+                border: "none",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "10px",
+                boxShadow: "0 8px 24px rgba(16, 185, 129, 0.4)",
+              }}
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
               Proceed with Payment
             </button>
-            <button className="btn-secondary" onClick={() => onNavigate("report")}>
-              Report Issue
+
+            <button
+              onClick={() => onNavigate("scanner")}
+              style={{
+                width: "100%",
+                height: "48px",
+                borderRadius: "16px",
+                background: "rgba(37, 99, 235, 0.12)",
+                border: "1px solid #2563EB",
+                color: "#2563EB",
+                fontSize: "0.9rem",
+                fontWeight: "700",
+                cursor: "pointer",
+              }}
+            >
+              Scan Another QR
             </button>
           </>
         )}

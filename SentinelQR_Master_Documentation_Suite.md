@@ -936,11 +936,19 @@ Speaker 2 (Tech Lead)    ──► Business Model & B2B SDK Vision (3:45 - 5:00)
 
 ## 3. Judge Q&A Defense Handbook
 
+### Q0: "How do you know it's fake?" / "How does your AI know it's fake?"
+* **Answer**: *"We don't claim to identify fake QR images. We decode the QR, analyze the destination using multiple measurable trust signals, calculate a deterministic risk score, and then use AI to explain the findings in plain language before the user decides whether to pay."*
+
+### Q0b: "What if the merchant never registers?"
+* **Answer**: *"Merchant verification is an optional trust layer, not a single point of failure. If a merchant isn't enrolled, SentinelQR relies on the remaining trust signals—such as domain age, URL unrolling, UPI syntax validation, threat intelligence databases, and community reports—to assess destination risk. Merchant registration simply adds an extra layer of sticker replacement protection for participating shopkeepers."*
+
+
 ### Q1: "Why use AI? Couldn't you just use Google Safe Browsing or a database blacklist?"
-* **Answer**: *"Blacklists are reactive — they only block scams after hundreds of victims report them. SentinelQR uses a multi-layered signal engine to analyze domain creation age, redirect depth, homographs, and brand similarity in real time. We then use Gemini 1.5 Flash to translate these complex signals into plain-language explanations that any user can understand before losing money."*
+* **Answer**: *"Blacklists are reactive — they only block scams after hundreds of victims report them. SentinelQR evaluates destination trust in real time across domain age, redirect depth, homographs, brand similarity, and registered merchant VPA hashes. We then use Gemini 1.5 Flash to translate these complex signals into plain-language explanations that any user can understand before losing money."*
 
 ### Q2: "What if Gemini hallucinates a false safety score?"
-* **Answer**: *"Our architecture strictly isolates scoring from LLM text generation. The Risk Engine computes the 0-100 score 100% deterministically. Gemini is strictly an Explainability agent that translates the verified signals into plain English. It cannot override or invent scores."*
+* **Answer**: *"Our architecture strictly isolates scoring from LLM text generation. The Risk Engine computes the 0-100 score 100% deterministically. Gemini is strictly an Explainability agent (XAI) that translates verified signals into plain English. It cannot override or invent scores."*
+
 
 ### Q3: "How do you prevent malicious users from reporting legitimate merchants as scams?"
 * **Answer**: *"Community reports require OTP or device-verified signatures. Furthermore, a single report does not block a merchant; it flags a caution state until 5+ independent reports or administrator verification occurs."*

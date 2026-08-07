@@ -77,6 +77,7 @@ export default function SentinelApp() {
     "onboard3",
     "permissions",
     "login",
+    "scanner",
     "processing",
     "result",
     "merchant",

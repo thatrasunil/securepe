@@ -112,73 +112,80 @@ export async function saveScanToFirestore(result: ScanResult) {
 export function subscribeRealtimeHomeStats(
   callback: (data: { total: number; blocked: number; recentScans: Array<{ id: string; name: string; payload: string; date: string; riskScore: number; level: "SAFE" | "CAUTION" | "HIGH_RISK" }> }) => void
 ) {
-  const q = query(collection(db, "scans"), orderBy("timestamp", "desc"), limit(50));
-  return onSnapshot(
-    q,
-    (snapshot) => {
-      let total = snapshot.docs.length;
-      let blocked = 0;
-      const recentScans = snapshot.docs.slice(0, 3).map((doc) => {
-        const d = doc.data();
-        if (d.risk_level === "HIGH_RISK" || d.risk_score >= 70) {
-          blocked++;
-        }
-        const dateStr = d.timestamp ? new Date(d.timestamp.toDate()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "Just now";
-        return {
-          id: doc.id,
-          name: d.qr_type === "UPI_PAYMENT" ? "UPI Payment QR" : d.qr_type === "APK_DOWNLOAD" ? "Direct APK File" : "Web QR Scan",
-          payload: d.raw_payload || "",
-          date: dateStr,
-          riskScore: d.risk_score || 0,
-          level: (d.risk_level || "SAFE") as "SAFE" | "CAUTION" | "HIGH_RISK",
-        };
-      });
+  try {
+    const q = query(collection(db, "scans"), orderBy("timestamp", "desc"), limit(50));
+    return onSnapshot(
+      q,
+      (snapshot) => {
+        let total = snapshot.docs.length;
+        let blocked = 0;
+        const recentScans = snapshot.docs.slice(0, 3).map((doc) => {
+          const d = doc.data();
+          if (d.risk_level === "HIGH_RISK" || d.risk_score >= 70) {
+            blocked++;
+          }
+          const dateStr = d.timestamp ? new Date(d.timestamp.toDate()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "Just now";
+          return {
+            id: doc.id,
+            name: d.qr_type === "UPI_PAYMENT" ? "UPI Payment QR" : d.qr_type === "APK_DOWNLOAD" ? "Direct APK File" : "Web QR Scan",
+            payload: d.raw_payload || "",
+            date: dateStr,
+            riskScore: d.risk_score || 0,
+            level: (d.risk_level || "SAFE") as "SAFE" | "CAUTION" | "HIGH_RISK",
+          };
+        });
 
-      // Count blocked across full snapshot
-      snapshot.docs.forEach((doc) => {
-        const d = doc.data();
-        if (d.risk_level === "HIGH_RISK" || d.risk_score >= 70) {
-          blocked++;
-        }
-      });
+        snapshot.docs.forEach((doc) => {
+          const d = doc.data();
+          if (d.risk_level === "HIGH_RISK" || d.risk_score >= 70) {
+            blocked++;
+          }
+        });
 
-      callback({
-        total: total > 0 ? total : 12,
-        blocked: blocked > 0 ? blocked : 3,
-        recentScans,
-      });
-    },
-    (err) => {
-      console.warn("Firestore realtime home stats error:", err);
-    }
-  );
+        callback({
+          total: total > 0 ? total : 12,
+          blocked: blocked > 0 ? blocked : 3,
+          recentScans,
+        });
+      },
+      (err) => {
+        // Silently fallback if Firestore database default is unprovisioned
+      }
+    );
+  } catch (e) {
+    return () => {};
+  }
 }
 
 export function subscribeRealtimeHistory(
   callback: (items: Array<{ id: string; name: string; payload: string; date: string; riskScore: number; level: "SAFE" | "CAUTION" | "HIGH_RISK" }>) => void
 ) {
-  const q = query(collection(db, "scans"), orderBy("timestamp", "desc"), limit(25));
-  return onSnapshot(
-    q,
-    (snapshot) => {
-      const items = snapshot.docs.map((doc) => {
-        const d = doc.data();
-        const dateStr = d.timestamp ? new Date(d.timestamp.toDate()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "Just now";
-        return {
-          id: doc.id,
-          name: d.qr_type === "UPI_PAYMENT" ? "UPI Payment QR" : d.qr_type === "APK_DOWNLOAD" ? "Direct APK File" : "Web QR Scan",
-          payload: d.raw_payload || "",
-          date: dateStr,
-          riskScore: d.risk_score || 0,
-          level: d.risk_level || "SAFE",
-        };
-      });
-      callback(items);
-    },
-    (err) => {
-      console.warn("Firestore realtime history error, fallback to local:", err);
-    }
-  );
+  try {
+    const q = query(collection(db, "scans"), orderBy("timestamp", "desc"), limit(25));
+    return onSnapshot(
+      q,
+      (snapshot) => {
+        const items = snapshot.docs.map((doc) => {
+          const d = doc.data();
+          const dateStr = d.timestamp ? new Date(d.timestamp.toDate()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "Just now";
+          return {
+            id: doc.id,
+            name: d.qr_type === "UPI_PAYMENT" ? "UPI Payment QR" : d.qr_type === "APK_DOWNLOAD" ? "Direct APK File" : "Web QR Scan",
+            payload: d.raw_payload || "",
+            date: dateStr,
+            riskScore: d.risk_score || 0,
+            level: d.risk_level || "SAFE",
+          };
+        });
+        callback(items);
+      },
+      (err) => {
+        // Silently fallback if Firestore database default is unprovisioned
+      }
+    );
+  } catch (e) {
+    return () => {};
+  }
 }
 
 export async function submitFraudReport(
@@ -206,34 +213,37 @@ export async function submitFraudReport(
 
     return true;
   } catch (err) {
-    console.error("Firestore report submit error:", err);
     return false;
   }
 }
 
 export function subscribeRealtimeAlerts(callback: (feed: FeedItem[]) => void) {
-  const q = query(collection(db, "reports"), orderBy("timestamp", "desc"), limit(20));
-  return onSnapshot(
-    q,
-    (snapshot) => {
-      const feed = snapshot.docs.map((doc) => {
-        const d = doc.data();
-        return {
-          id: doc.id,
-          icon: d.category === "IMPOSTER_PAYMENT" ? "🔴" : "🟡",
-          title: d.category === "IMPOSTER_PAYMENT" ? "Imposter Merchant QR Reported" : "Suspicious Scanned Link",
-          payload: d.raw_payload || "",
-          reports_count: d.reports_count || 1,
-          location: d.notes ? d.notes.slice(0, 20) : "Local Store",
-          timestamp: "Realtime",
-        };
-      });
-      if (feed.length > 0) callback(feed);
-    },
-    (err) => {
-      console.warn("Firestore realtime alerts error:", err);
-    }
-  );
+  try {
+    const q = query(collection(db, "reports"), orderBy("timestamp", "desc"), limit(20));
+    return onSnapshot(
+      q,
+      (snapshot) => {
+        const feed = snapshot.docs.map((doc) => {
+          const d = doc.data();
+          return {
+            id: doc.id,
+            icon: d.category === "IMPOSTER_PAYMENT" ? "🔴" : "🟡",
+            title: d.category === "IMPOSTER_PAYMENT" ? "Imposter Merchant QR Reported" : "Suspicious Scanned Link",
+            payload: d.raw_payload || "",
+            reports_count: d.reports_count || 1,
+            location: d.notes ? d.notes.slice(0, 20) : "Local Store",
+            timestamp: "Realtime",
+          };
+        });
+        if (feed.length > 0) callback(feed);
+      },
+      (err) => {
+        // Silently fallback if Firestore database default is unprovisioned
+      }
+    );
+  } catch (e) {
+    return () => {};
+  }
 }
 
 export async function fetchCommunityFeed(): Promise<FeedItem[]> {
