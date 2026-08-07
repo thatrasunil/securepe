@@ -60,7 +60,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
     if ("speechSynthesis" in window) {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(
-        `Hello ${userName}, Sentinel QR is your AI payment fraud shield. We inspect payment QR codes for fake stickers and imposter shop merchants before money leaves your account. You are fully protected today with ${scanStats.total} scans inspected and ${scanStats.blocked} scam attempts blocked.`
+        `Hello ${userName}, SecurePE is your AI payment fraud shield. We inspect payment QR codes for fake stickers and imposter shop merchants before money leaves your account. You are fully protected today with ${scanStats.total} scans inspected and ${scanStats.blocked} scam attempts blocked.`
       );
       utterance.rate = 0.9;
       utterance.onstart = () => setIsSpeaking(true);
@@ -186,7 +186,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
       {/* HOW IT WORKS — 3 STEP SAFETY GUARANTEE CARD */}
       <div style={{ background: "var(--bg-card)", borderRadius: "var(--card-radius)", padding: "18px", border: "1px solid var(--bg-card-border)", boxShadow: "var(--card-shadow)", marginBottom: "22px" }}>
         <div style={{ fontSize: "0.92rem", fontWeight: "700", marginBottom: "14px", display: "flex", alignItems: "center", justifyContent: "space-between", color: "var(--text-main)" }}>
-          <span>How SentinelQR Protects Your Money</span>
+          <span>How SecurePE Protects Your Money</span>
           <span style={{ fontSize: "0.78rem", color: "var(--accent-blue)", fontWeight: "700" }}>3 Steps</span>
         </div>
 

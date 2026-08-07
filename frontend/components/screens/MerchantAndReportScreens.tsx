@@ -157,7 +157,7 @@ export const ReportFraudScreen: React.FC<ScreenProps> = ({ onNavigate, scannedPa
           </div>
           <h3 style={{ fontSize: "1.5rem", fontWeight: "700", marginBottom: "8px" }}>Report Broadcasted!</h3>
           <p style={{ color: "var(--text-muted)", fontSize: "0.95rem", marginBottom: "24px", lineHeight: "1.5" }}>
-            Your report has been broadcasted to all SentinelQR clients to shield the community.
+            Your report has been broadcasted to all SecurePE clients to shield the community.
           </p>
           <button className="btn-primary" onClick={() => onNavigate("home")}>
             Back to Home

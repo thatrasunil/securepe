@@ -214,7 +214,7 @@ export const Onboard3Screen: React.FC<OnboardProps> = ({ onNavigate, theme = "da
           Setup Profile & Appearance
         </h2>
         <p style={{ color: "var(--text-muted)", fontSize: "0.88rem" }}>
-          Personalize your SentinelQR security shield.
+          Personalize your SecurePE security shield.
         </p>
       </div>
 

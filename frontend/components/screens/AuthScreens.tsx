@@ -45,7 +45,7 @@ export const PermissionsScreen: React.FC<ScreenProps> = ({ onNavigate }) => {
           Enable Permissions
         </h2>
         <p style={{ color: "var(--text-muted)", fontSize: "0.9rem", marginBottom: "28px", lineHeight: "1.5" }}>
-          SentinelQR requires access to protect your account before scanning live payments.
+          SecurePE requires access to protect your account before scanning live payments.
         </p>
 
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
@@ -216,7 +216,7 @@ export const LoginScreen: React.FC<ScreenProps> = ({ onNavigate, onUserLogin }) 
         </div>
 
         <h2 style={{ fontSize: "1.75rem", fontWeight: "800", marginBottom: "8px" }}>
-          Welcome to SentinelQR
+          Welcome to SecurePE
         </h2>
         <p style={{ color: "var(--text-muted)", fontSize: "0.9rem", lineHeight: "1.5" }}>
           Secure your payment profile with bank-grade AI fraud shield.

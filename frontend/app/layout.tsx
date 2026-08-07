@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "SentinelQR — Fintech Payment Fraud Shield AI",
+  title: "SecurePE — AI Payment Fraud Shield",
   description: "AI-powered pre-transaction security shield for payment QR codes. Detects fake stickers, phishing URLs, and imposter merchants before you lose money.",
 };
 
