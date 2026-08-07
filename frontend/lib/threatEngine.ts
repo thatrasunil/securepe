@@ -1,5 +1,5 @@
 /**
- * SentinelQR Serverless Deterministic Threat Engine & Sentinel Memory™ Trust Graph
+ * SentinelQR Serverless Deterministic Threat Engine & Payment Intent Validation Engine
  * Sub-10ms Serverless Execution for Vercel / Firebase Functions / Netlify
  */
 
@@ -19,6 +19,14 @@ export interface SentinelMemoryGraph {
   };
 }
 
+export interface PaymentIntentSignals {
+  has_prefilled_amount: boolean;
+  amount_value?: number;
+  has_transaction_ref: boolean;
+  is_suspicious_static_prefill: boolean;
+  intent_warning?: string;
+}
+
 export interface ThreatSignals {
   is_upi: boolean;
   is_url: boolean;
@@ -33,6 +41,7 @@ export interface ThreatSignals {
   vpa?: string;
   display_name?: string;
   sentinel_memory?: SentinelMemoryGraph;
+  payment_intent?: PaymentIntentSignals;
 }
 
 export interface ThreatAnalysisResponse {
@@ -142,6 +151,8 @@ export function extractServerlessThreatSignals(
       const params = new URLSearchParams(queryStr);
       const vpa = params.get("pa");
       const pn = params.get("pn");
+      const amountParam = params.get("am");
+      const refParam = params.get("tr");
 
       if (vpa) {
         signals.vpa = vpa;
@@ -160,6 +171,21 @@ export function extractServerlessThreatSignals(
           signals.unverified_vpa = true;
         }
       }
+
+      // Signal 8: Payment Intent Validation Engine
+      const hasAmount = Boolean(amountParam && parseFloat(amountParam) > 0);
+      const hasRef = Boolean(refParam && refParam.trim().length > 0);
+      const isSuspiciousPrefill = hasAmount && !hasRef;
+
+      signals.payment_intent = {
+        has_prefilled_amount: hasAmount,
+        amount_value: hasAmount ? parseFloat(amountParam!) : undefined,
+        has_transaction_ref: hasRef,
+        is_suspicious_static_prefill: isSuspiciousPrefill,
+        intent_warning: isSuspiciousPrefill
+          ? "Unexpected pre-filled payment amount detected. Trusted static merchant QR codes usually ask you to enter the amount manually. Please confirm with the merchant before proceeding."
+          : undefined,
+      };
 
       // Sentinel Memory Geofence Baseline Check
       const isAuthenticRamesh = rawPayload.includes("ramesh.chai@upi");
@@ -231,7 +257,6 @@ export function extractServerlessThreatSignals(
     } catch (e) {}
   }
 
-  // Default Sentinel Memory Graph fallback
   if (!signals.sentinel_memory) {
     signals.sentinel_memory = {
       payload_hash: payloadHash,
@@ -259,6 +284,7 @@ export function calculateServerlessRiskScore(signals: ThreatSignals): number {
   if (signals.is_apk) score += 45;
   if (signals.brand_impersonation) score += 40;
   if (signals.unverified_vpa) score += 35;
+  if (signals.payment_intent?.is_suspicious_static_prefill) score += 30;
   if (signals.sticker_tamper_detected) score += 70;
   if (signals.community_reports_count > 0) {
     score += Math.min(60, 25 + signals.community_reports_count * 3);
@@ -282,6 +308,11 @@ export function evaluateServerlessThreat(
       "Potential QR replacement detected. The payment destination differs from previous trusted scans at this location. Please verify the merchant before proceeding."
     );
   }
+  if (signals.payment_intent?.is_suspicious_static_prefill) {
+    reasons.push(
+      `Payment Review Required: Unexpected pre-filled payment amount (₹${signals.payment_intent.amount_value}) detected without dynamic transaction reference. Trusted static shop QR codes usually ask you to enter the amount manually.`
+    );
+  }
   if (signals.brand_impersonation) {
     reasons.push(`Brand Imposter Warning: Target mimics official fintech service '${signals.brand_impersonation}'.`);
   }
@@ -299,6 +330,7 @@ export function evaluateServerlessThreat(
   }
 
   if (reasons.length === 0) {
+    reasons.push("Payment intent validated: No unexpected pre-filled amount or missing transaction reference.");
     reasons.push("Sentinel Memory™ confirms payment destination matches historical trust patterns for this location.");
     reasons.push("Domain identity and payment handle match verified safety standards.");
   }

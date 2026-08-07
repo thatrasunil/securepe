@@ -1,18 +1,19 @@
 # 🏛️ SentinelQR — System Design Architecture & 16-Screen UI Wireframe Specification
 
-> **Core Positioning**: SentinelQR is a **Pre-Transaction Payment Trust Engine** powered by **Sentinel Memory™** — a privacy-preserving trust graph that evaluates QR payment destinations using multi-signal risk analysis, location context, and explainable AI before users authorize a transaction.
+> **Core Positioning**: SentinelQR is a **Pre-Transaction Payment Trust Engine** powered by **Sentinel Memory™** and the **Payment Intent Validation Engine** — evaluating *where* a payment goes and *how* the payment request is constructed before users authorize a transaction.
 
 ---
 
 ## 1. High-Level System Architecture (HLD)
 
-SentinelQR adopts a **Sentinel Memory™ Trust Graph + Strict Deterministic Core + Explainable AI (XAI)** architecture.
+SentinelQR adopts a **Sentinel Memory™ + Payment Intent Analysis + Strict Deterministic Core + Explainable AI (XAI)** architecture.
 
 ```mermaid
 graph TD
     Client["📱 Client Application (Next.js 16 / Mobile PWA)"] -->|Scan Raw Payload| Gateway["🌐 Serverless API Gateway / Edge Function"]
     
     subgraph "Deterministic Pre-Transaction Engine (< 10ms)"
+        Gateway --> Intent["⚡ Signal 8: Payment Intent Validation Engine (Check am vs tr Parameters)"]
         Gateway --> Memory["🧠 Signal 1: Sentinel Memory™ (Payload Hash vs Geofence Baseline)"]
         Gateway --> Router{"Type Classifier"}
         Router -->|UPI Scheme| UPI["Signal 2: UPI VPA & Imposter Validator"]
@@ -24,7 +25,7 @@ graph TD
         UPI & Web & APK --> Merchant["Signal 6: Optional Merchant Verification Hash Check"]
         UPI & Web & APK --> Geo["Signal 7: Physical Geofence Proximity Check"]
         
-        Memory & Intel & Community & Merchant & Geo --> Evaluator["🧮 Deterministic Risk Calculator"]
+        Intent & Memory & Intel & Community & Merchant & Geo --> Evaluator["🧮 Deterministic Risk Calculator"]
     end
 
     Evaluator -->|Deterministic Risk Score 0-100 + JSON Signals| AI["🤖 Gemini 1.5 Flash (Explainable AI Engine)"]
@@ -40,14 +41,7 @@ graph TD
 
 ---
 
-## 2. Sentinel Memory™ Trust Model & Multi-Signal Tiers
-
-### 🧠 Sentinel Memory™ Privacy-Preserving Trust Graph
-SentinelQR builds a privacy-preserving memory of trusted QR payment destinations over time.
-
-$$\text{Trust Confidence Score} = \text{Same Location (+20)} + \text{Repeat Payload (+30)} + \text{Confirmations (+20)} + \text{Merchant Verified (+20)} + \text{Community (+10)}$$
-
-### 📡 The 7 Core Signal Vectors
+## 2. Multi-Signal Matrix (The 9 Core Signal Vectors)
 
 | Signal | Category | Weight ($w_i$) | Description & Logic |
 | :--- | :--- | :---: | :--- |
@@ -58,11 +52,13 @@ $$\text{Trust Confidence Score} = \text{Same Location (+20)} + \text{Repeat Payl
 | **Signal 5** | **Suspicious VPA Handle** | `+35` | Fraudulent keyword patterns (`refund`, `support`, `cashback`). |
 | **Signal 6** | **URL Shorteners** | `+25` | Concealed redirect destination (`bit.ly`, `tinyurl`). |
 | **Signal 7** | **Direct APK Download** | `+45` | Direct Android executable payload. |
+| **⭐ Signal 8** | **Payment Intent Validation** | `+30` | Detects unexpected pre-filled amount (`am`) without dynamic transaction reference (`tr`). |
+| **Signal 9** | **Explainable AI (XAI)** | Summary | Gemini 1.5 Flash translates JSON threat evidence into plain-English reasoning. |
 
 ---
 
 ## 3. Confidence-Based Risk Tiers
 
 * **🟢 0 – 29 (LOW RISK)**: Destination matches historical trust pattern. Safe to proceed.
-* **🟡 30 – 69 (SUSPICIOUS)**: Unverified handle or new destination observed. Caution required.
+* **🟡 30 – 69 (SUSPICIOUS)**: Unexpected pre-filled amount or unverified handle detected. Caution required.
 * **🔴 70 – 100 (CRITICAL DANGER)**: Potential QR replacement or phishing attempt detected. Do not proceed.
