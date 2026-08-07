@@ -18,6 +18,7 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({
   ttsEnabled,
 }) => {
   const [speechActive, setSpeechActive] = useState(false);
+  const [showBypassModal, setShowBypassModal] = useState(false);
 
   useEffect(() => {
     if (result && ttsEnabled && "speechSynthesis" in window) {
@@ -58,7 +59,7 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({
   const offset = circumference - (score / 100) * circumference;
 
   return (
-    <div style={{ padding: "20px 20px 40px 20px", background: "var(--bg-primary)", minHeight: "100dvh", color: "var(--text-main)" }} className="animate-fade">
+    <div style={{ padding: "20px 20px 40px 20px", background: "var(--bg-primary)", minHeight: "100dvh", color: "var(--text-main)", position: "relative" }} className="animate-fade">
       {/* 1. Header Navigation */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
         <button
@@ -373,7 +374,7 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({
                 Report Fraud
               </button>
               <button
-                onClick={() => alert("Warning: Proceeding with unverified transaction.")}
+                onClick={() => setShowBypassModal(true)}
                 style={{
                   height: "48px",
                   borderRadius: "16px",
@@ -433,6 +434,106 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({
           </>
         )}
       </div>
+
+      {/* Sleek Custom Warning Bypass Modal Dialog (No native alert popups!) */}
+      {showBypassModal && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 100,
+            background: "rgba(0, 0, 0, 0.85)",
+            backdropFilter: "blur(12px)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "20px",
+          }}
+        >
+          <div
+            style={{
+              background: "#1A2233",
+              borderRadius: "28px",
+              padding: "24px",
+              maxWidth: "360px",
+              width: "100%",
+              border: "1px solid rgba(239, 68, 68, 0.4)",
+              boxShadow: "0 20px 50px rgba(0,0,0,0.8)",
+              textAlign: "center",
+            }}
+            className="animate-scale-up"
+          >
+            {/* Warning Shield Icon */}
+            <div
+              style={{
+                width: "60px",
+                height: "60px",
+                borderRadius: "50%",
+                background: "rgba(239, 68, 68, 0.18)",
+                color: "#EF4444",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                margin: "0 auto 16px auto",
+                boxShadow: "0 0 24px rgba(239, 68, 68, 0.4)",
+              }}
+            >
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                <line x1="12" y1="9" x2="12" y2="13" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg>
+            </div>
+
+            <h3 style={{ fontSize: "1.2rem", fontWeight: "800", color: "#f8fafc", marginBottom: "8px", fontFamily: "Poppins, sans-serif" }}>
+              Unverified Transaction Warning
+            </h3>
+
+            <p style={{ fontSize: "0.85rem", color: "#cbd5e1", lineHeight: "1.5", marginBottom: "20px" }}>
+              SentinelQR AI has flagged high-risk scam indicators for this payment destination. Proceeding may result in financial loss or credential theft.
+            </p>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+              <button
+                onClick={() => setShowBypassModal(false)}
+                style={{
+                  width: "100%",
+                  height: "50px",
+                  borderRadius: "16px",
+                  background: "#10B981",
+                  color: "#ffffff",
+                  fontSize: "0.95rem",
+                  fontWeight: "800",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                Cancel & Return Safely (Recommended)
+              </button>
+
+              <button
+                onClick={() => {
+                  setShowBypassModal(false);
+                  onNavigate("home");
+                }}
+                style={{
+                  width: "100%",
+                  height: "44px",
+                  borderRadius: "14px",
+                  background: "transparent",
+                  border: "1px solid rgba(239, 68, 68, 0.4)",
+                  color: "#EF4444",
+                  fontSize: "0.84rem",
+                  fontWeight: "600",
+                  cursor: "pointer",
+                }}
+              >
+                Confirm Unverified Payment
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

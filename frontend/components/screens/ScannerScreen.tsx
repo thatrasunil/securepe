@@ -141,7 +141,7 @@ export const ScannerScreen: React.FC<ScannerScreenProps> = ({ onNavigate, onScan
           if (code && code.data) {
             triggerAutoCaptureSequence(code.data);
           } else {
-            alert("No QR code detected in image file.");
+            setErrorMsg("No scannable QR code detected in selected image file.");
           }
         }
       };
