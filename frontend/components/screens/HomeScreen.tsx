@@ -216,7 +216,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
             We inspect payment QR codes for fake stickers, phishing links & imposter merchants before money leaves your account.
           </p>
 
-          {/* Stat Badges Box */}
+          {/* Stat Badges Box (Live Dynamic Realtime Stream) */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", background: "rgba(5, 12, 26, 0.65)", padding: "10px 14px", borderRadius: "16px", border: "1px solid rgba(255,255,255,0.08)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               <div style={{ width: "34px", height: "34px", borderRadius: "12px", background: "rgba(37, 99, 235, 0.25)", color: "#3b82f6", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
@@ -224,7 +224,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
               </div>
               <div>
                 <div style={{ fontSize: "0.68rem", color: "#94a3b8" }}>Scans Inspected</div>
-                <div style={{ fontSize: "0.95rem", fontWeight: "800", color: "#ffffff", fontFamily: "var(--font-mono)" }}>
+                <div key={scanStats.total} className="animate-scale-up" style={{ fontSize: "0.95rem", fontWeight: "800", color: "#38BDF8", fontFamily: "var(--font-mono)" }}>
                   {scanStats.total.toLocaleString()} <span style={{ fontSize: "0.68rem", color: "#64748b", fontWeight: "400" }}>Today</span>
                 </div>
               </div>
@@ -236,8 +236,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
               </div>
               <div>
                 <div style={{ fontSize: "0.68rem", color: "#94a3b8" }}>Fake Stickers Blocked</div>
-                <div style={{ fontSize: "0.95rem", fontWeight: "800", color: "#EF4444", fontFamily: "var(--font-mono)" }}>
-                  {scanStats.blocked} <span style={{ fontSize: "0.68rem", color: "#64748b", fontWeight: "400" }}>Today</span>
+                <div key={scanStats.blocked} className="animate-scale-up" style={{ fontSize: "0.95rem", fontWeight: "800", color: "#EF4444", fontFamily: "var(--font-mono)" }}>
+                  {scanStats.blocked.toLocaleString()} <span style={{ fontSize: "0.68rem", color: "#64748b", fontWeight: "400" }}>Today</span>
                 </div>
               </div>
             </div>

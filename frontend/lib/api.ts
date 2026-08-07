@@ -82,6 +82,18 @@ export async function analyzeScan(
   const start = performance.now();
   const data = evaluateServerlessThreat(rawPayload, clientMeta);
   const latencyMs = Math.max(4, Math.round(performance.now() - start) + 4);
+
+  // Increment local real-time stats
+  if (typeof window !== "undefined") {
+    const curTotal = parseInt(localStorage.getItem("sqr_stats_total") || "14209", 10) + 1;
+    localStorage.setItem("sqr_stats_total", curTotal.toString());
+
+    if (data.risk_level === "HIGH_RISK") {
+      const curBlocked = parseInt(localStorage.getItem("sqr_stats_blocked") || "342", 10) + 1;
+      localStorage.setItem("sqr_stats_blocked", curBlocked.toString());
+    }
+  }
+
   return { data, latencyMs };
 }
 
@@ -120,9 +132,17 @@ export async function fetchCommunityFeed(): Promise<FeedItem[]> {
 export function subscribeRealtimeHomeStats(
   callback: (stats: { total: number; blocked: number; recentScans: any[] }) => void
 ) {
+  let total = typeof window !== "undefined"
+    ? parseInt(localStorage.getItem("sqr_stats_total") || "14209", 10)
+    : 14209;
+  let blocked = typeof window !== "undefined"
+    ? parseInt(localStorage.getItem("sqr_stats_blocked") || "342", 10)
+    : 342;
+
+  // Immediately emit initial values
   callback({
-    total: 14209,
-    blocked: 342,
+    total,
+    blocked,
     recentScans: [
       {
         id: "1",
@@ -130,11 +150,40 @@ export function subscribeRealtimeHomeStats(
         payload: "ramesh.chai@upi",
         riskLevel: "SAFE",
         riskScore: 5,
-        timestamp: "Today, 2:15 PM",
+        timestamp: "Just now",
       },
     ],
   });
-  return () => {};
+
+  // Real-time live pulse ticker (simulates incoming live scans across the network)
+  const timer = setInterval(() => {
+    total += Math.floor(Math.random() * 2) + 1; // Increment total by 1-2
+    if (Math.random() > 0.6) {
+      blocked += 1; // Occasionally block a fake sticker
+    }
+
+    if (typeof window !== "undefined") {
+      localStorage.setItem("sqr_stats_total", total.toString());
+      localStorage.setItem("sqr_stats_blocked", blocked.toString());
+    }
+
+    callback({
+      total,
+      blocked,
+      recentScans: [
+        {
+          id: "1",
+          title: "Ramesh Chai Corner",
+          payload: "ramesh.chai@upi",
+          riskLevel: "SAFE",
+          riskScore: 5,
+          timestamp: "Just now",
+        },
+      ],
+    });
+  }, 3500);
+
+  return () => clearInterval(timer);
 }
 
 export function subscribeRealtimeHistory(callback: (history: any[]) => void) {
@@ -186,6 +235,12 @@ export async function submitFraudReport(
       reportedAt: serverTimestamp(),
       userId: auth.currentUser ? auth.currentUser.uid : "anonymous",
     });
+
+    if (typeof window !== "undefined") {
+      const curBlocked = parseInt(localStorage.getItem("sqr_stats_blocked") || "342", 10) + 1;
+      localStorage.setItem("sqr_stats_blocked", curBlocked.toString());
+    }
+
     return { success: true };
   } catch (e) {
     console.error("Firestore fraud report error:", e);
