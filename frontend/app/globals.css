@@ -1,0 +1,358 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap');
+
+:root {
+  /* Cyber Trust & Senior Safety Palette */
+  --bg-primary: #020617;
+  --brand-navy: #0b1f3a;
+  --bg-card: #0f172a;
+  --bg-card-border: #1e293b;
+  --text-main: #f8fafc;
+  --text-muted: #cbd5e1;
+  --text-secondary: #94a3b8;
+  
+  /* Primary & Accents */
+  --accent-blue: #2563eb;       /* Royal Blue */
+  --accent-cyan: #06b6d4;       /* Electric Cyan */
+  --accent-purple: #7c3aed;     /* AI Reasoning Purple */
+  --ai-card-bg: rgba(124, 58, 237, 0.14);
+  --ai-reasoning-bg: rgba(124, 58, 237, 0.08);
+
+  /* High Contrast Safety Colors */
+  --color-safe: #10b981;        /* Emerald Green */
+  --color-safe-bg: rgba(16, 185, 129, 0.14);
+  --color-caution: #f59e0b;     /* Amber Warning */
+  --color-caution-bg: rgba(245, 158, 11, 0.14);
+  --color-danger: #ef4444;      /* Red Danger */
+  --color-danger-bg: rgba(239, 68, 68, 0.16);
+
+  /* Typography */
+  --font-heading: 'Poppins', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Senior-Friendly Dimensions & Tokens */
+  --card-radius: 24px;
+  --button-radius: 18px;
+  --bottom-sheet-radius: 36px;
+  --card-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+}
+
+[data-theme="light"] {
+  --bg-primary: #f1f5f9;
+  --brand-navy: #0f172a;
+  --bg-card: #ffffff;
+  --bg-card-border: #cbd5e1;
+  --text-main: #020617;
+  --text-muted: #334155;
+  --text-secondary: #475569;
+
+  --accent-blue: #1d4ed8;
+  --accent-cyan: #0284c7;
+  --accent-purple: #6d28d9;
+  --ai-card-bg: #f3e8ff;
+  --ai-reasoning-bg: #f5f3ff;
+
+  --color-safe: #059669;
+  --color-safe-bg: #d1fae5;
+  --color-caution: #d97706;
+  --color-caution-bg: #fef3c7;
+  --color-danger: #dc2626;
+  --color-danger-bg: #fee2e2;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Hide native scrollbars for seamless UI */
+::-webkit-scrollbar {
+  display: none;
+  width: 0px;
+  height: 0px;
+}
+
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  background-color: #020617;
+  color: var(--text-main);
+  font-family: var(--font-body);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100dvh;
+}
+
+/* Mobile App Viewport Container */
+.app-wrapper {
+  width: 100%;
+  max-width: 480px;
+  height: 100dvh;
+  background-color: var(--bg-primary);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+@media (min-width: 481px) {
+  .app-wrapper {
+    height: 900px;
+    max-height: 94dvh;
+    border-radius: 40px;
+    border: 6px solid #1e293b;
+  }
+}
+
+.screen-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  padding-bottom: 120px;
+  display: flex;
+  flex-direction: column;
+}
+
+.screen-container.no-nav {
+  padding-bottom: 0;
+}
+
+/* Animations & Tactile Motion Design */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseHeroScan {
+  0% { transform: scale(1); box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4); }
+  50% { transform: scale(1.08); box-shadow: 0 14px 36px rgba(37, 99, 235, 0.75); }
+  100% { transform: scale(1); box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4); }
+}
+
+@keyframes floatBadge {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes shakeDanger {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}
+
+.animate-fade {
+  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-shake {
+  animation: shakeDanger 0.4s ease-in-out;
+}
+
+.animate-float {
+  animation: floatBadge 3s infinite ease-in-out;
+}
+
+/* Typography */
+h1, h2, h3, h4, .brand-title {
+  font-family: var(--font-heading);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Buttons with Senior Touch Affordance */
+.btn-primary {
+  width: 100%;
+  height: 56px;
+  background: var(--accent-blue);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--button-radius);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(1rem, 2.8vw, 1.1rem);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-primary:active {
+  transform: scale(0.97);
+}
+
+.btn-secondary {
+  width: 100%;
+  height: 54px;
+  background: var(--bg-card);
+  color: var(--text-main);
+  border: 1px solid var(--bg-card-border);
+  border-radius: var(--button-radius);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: var(--card-shadow);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-secondary:active {
+  transform: scale(0.97);
+}
+
+.btn-danger {
+  width: 100%;
+  height: 56px;
+  background: var(--color-danger);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--button-radius);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(0.95rem, 2.5vw, 1.05rem);
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(239, 68, 68, 0.35);
+}
+
+.btn-success {
+  width: 100%;
+  height: 56px;
+  background: var(--color-safe);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--button-radius);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(0.95rem, 2.5vw, 1.05rem);
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+}
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.badge-safe {
+  background: var(--color-safe-bg);
+  color: var(--color-safe);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.badge-caution {
+  background: var(--color-caution-bg);
+  color: var(--color-caution);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+.badge-danger {
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+/* Bottom Navigation Bar */
+.bottom-nav {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 78px;
+  background: var(--bg-card);
+  border-top: 1px solid var(--bg-card-border);
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.15);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 100;
+  padding-bottom: 6px;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1;
+}
+
+.nav-item.active {
+  color: var(--accent-blue);
+}
+
+/* Floating Center Hero Scan Button (76px x 76px) */
+.scan-center-btn {
+  width: 76px;
+  height: 76px;
+  background: linear-gradient(135deg, var(--brand-navy), var(--accent-blue));
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  box-shadow: 0 10px 28px rgba(37, 99, 235, 0.5);
+  margin-top: -38px;
+  border: 4px solid var(--bg-primary);
+  transition: transform 0.2s ease;
+  animation: pulseHeroScan 3s infinite ease-in-out;
+  cursor: pointer;
+}
+
+.scan-center-btn:active {
+  transform: scale(0.92);
+}
+
+/* Form Inputs */
+.input-field {
+  width: 100%;
+  height: 52px;
+  background: var(--bg-card);
+  border: 1px solid var(--bg-card-border);
+  border-radius: 16px;
+  padding: 0 18px;
+  color: var(--text-main);
+  font-size: 0.95rem;
+  outline: none;
+  box-shadow: var(--card-shadow);
+}
+
+.input-field:focus {
+  border-color: var(--accent-blue);
+}
