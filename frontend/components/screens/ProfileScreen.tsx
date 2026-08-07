@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScreenId } from "../BottomNav";
 import { auth, signOut, User } from "@/lib/firebase";
 
@@ -22,6 +22,16 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
   currentUser,
 }) => {
   const [language, setLanguage] = useState("English");
+  const [displayName, setDisplayName] = useState("Sunil");
+
+  useEffect(() => {
+    const storedName = localStorage.getItem("sqr_user_name");
+    if (currentUser?.displayName) {
+      setDisplayName(currentUser.displayName);
+    } else if (storedName) {
+      setDisplayName(storedName);
+    }
+  }, [currentUser]);
 
   const handleSignOut = async () => {
     try {
@@ -71,16 +81,16 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
               boxShadow: "0 0 16px rgba(37,99,235,0.4)",
             }}
           >
-            {currentUser?.displayName ? currentUser.displayName.charAt(0) : "S"}
+            {displayName.charAt(0).toUpperCase()}
           </div>
         )}
 
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontSize: "1.25rem", fontWeight: "700", color: "#ffffff", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-            {currentUser?.displayName || (currentUser?.phoneNumber ? currentUser.phoneNumber : "Super Star")}
+            {displayName}
           </div>
           <div style={{ fontSize: "0.85rem", color: "#38bdf8", fontWeight: "600" }}>
-            {currentUser?.email || (currentUser?.phoneNumber ? "Firebase Phone Auth" : "superstargkl@gmail.com")}
+            {currentUser?.email || (currentUser?.phoneNumber ? currentUser.phoneNumber : "Protected Sentinel Member")}
           </div>
           <div style={{ fontSize: "0.75rem", color: "#94a3b8", display: "flex", alignItems: "center", gap: "4px", marginTop: "2px" }}>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#34d399" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>

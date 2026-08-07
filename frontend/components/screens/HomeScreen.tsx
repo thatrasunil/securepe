@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { ScreenId } from "../BottomNav";
 import { fetchCommunityFeed, FeedItem, subscribeRealtimeHomeStats } from "@/lib/api";
+import { auth } from "@/lib/firebase";
 
 interface HomeScreenProps {
   onNavigate: (target: ScreenId) => void;
@@ -10,6 +11,7 @@ interface HomeScreenProps {
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
   const [feed, setFeed] = useState<FeedItem[]>([]);
+  const [userName, setUserName] = useState("Sunil");
   const [scanStats, setScanStats] = useState({ total: 12, blocked: 3 });
   const [recentScans, setRecentScans] = useState<Array<{ id: string; name: string; payload: string; date: string; riskScore: number; level: "SAFE" | "CAUTION" | "HIGH_RISK" }>>([
     {
@@ -32,6 +34,15 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
 
   useEffect(() => {
+    // Dynamic user name from Firebase Auth or Local Storage onboarding
+    const currentUser = auth.currentUser;
+    const storedName = localStorage.getItem("sqr_user_name");
+    if (currentUser?.displayName) {
+      setUserName(currentUser.displayName);
+    } else if (storedName) {
+      setUserName(storedName);
+    }
+
     fetchCommunityFeed().then(setFeed);
 
     // Subscribe to Realtime Firebase Firestore Home Stats & Recent Scans
@@ -49,7 +60,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
     if ("speechSynthesis" in window) {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(
-        `Sentinel QR is your AI payment fraud shield. We inspect payment QR codes for fake stickers and imposter shop merchants before money leaves your account. You are fully protected today with ${scanStats.total} scans inspected and ${scanStats.blocked} scam attempts blocked.`
+        `Hello ${userName}, Sentinel QR is your AI payment fraud shield. We inspect payment QR codes for fake stickers and imposter shop merchants before money leaves your account. You are fully protected today with ${scanStats.total} scans inspected and ${scanStats.blocked} scam attempts blocked.`
       );
       utterance.rate = 0.9;
       utterance.onstart = () => setIsSpeaking(true);
@@ -63,7 +74,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
       {/* Top Header */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", paddingTop: "4px" }}>
         <div>
-          <div style={{ fontSize: "1.35rem", fontWeight: "700" }}>Hello Sunil</div>
+          <div style={{ fontSize: "1.35rem", fontWeight: "700" }}>Hello {userName}</div>
           <div style={{ fontSize: "0.82rem", color: "var(--color-safe)", fontWeight: "700", display: "flex", alignItems: "center", gap: "6px" }}>
             <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "var(--color-safe)", boxShadow: "0 0 8px var(--color-safe)" }} />
             AI Protection Active

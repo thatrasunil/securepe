@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { ScreenId } from "../BottomNav";
 
 interface OnboardProps {
@@ -185,6 +185,19 @@ export const Onboard2Screen: React.FC<OnboardProps> = ({ onNavigate }) => {
 };
 
 export const Onboard3Screen: React.FC<OnboardProps> = ({ onNavigate, theme = "dark", onSelectTheme }) => {
+  const [name, setName] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("sqr_user_name") || "Sunil";
+    }
+    return "Sunil";
+  });
+
+  const handleFinishOnboarding = () => {
+    const finalName = name.trim() || "Sunil";
+    localStorage.setItem("sqr_user_name", finalName);
+    onNavigate("permissions");
+  };
+
   return (
     <div
       style={{
@@ -196,22 +209,45 @@ export const Onboard3Screen: React.FC<OnboardProps> = ({ onNavigate, theme = "da
       }}
       className="animate-fade"
     >
-      <div style={{ textAlign: "center", marginTop: "12px" }}>
+      <div style={{ textAlign: "center", marginTop: "8px" }}>
         <h2 style={{ fontSize: "1.55rem", fontWeight: "800", marginBottom: "6px" }}>
-          Choose App Appearance
+          Setup Profile & Appearance
         </h2>
         <p style={{ color: "var(--text-muted)", fontSize: "0.88rem" }}>
-          Select your preferred visual style before continuing.
+          Personalize your SentinelQR security shield.
         </p>
       </div>
 
+      {/* User Name Input Section */}
+      <div style={{ margin: "16px 0 8px 0" }}>
+        <label style={{ fontSize: "0.88rem", fontWeight: "700", color: "var(--text-main)", display: "block", marginBottom: "8px" }}>
+          Enter Your Name
+        </label>
+        <input
+          className="input-field"
+          placeholder="e.g. Sunil"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          style={{
+            height: "54px",
+            fontSize: "1.05rem",
+            fontWeight: "600",
+            borderRadius: "16px",
+            background: "var(--bg-card)",
+            color: "var(--text-main)",
+            border: "1px solid var(--bg-card-border)",
+            padding: "0 18px",
+          }}
+        />
+      </div>
+
       {/* Interactive Theme Selection Cards */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", margin: "20px 0" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", margin: "8px 0 16px 0" }}>
         {/* Dark Mode Card */}
         <div
           onClick={() => onSelectTheme && onSelectTheme("dark")}
           style={{
-            padding: "20px 14px",
+            padding: "18px 12px",
             borderRadius: "20px",
             background: "#0f172a",
             border: theme === "dark" ? "2px solid var(--accent-blue)" : "1px solid #1e293b",
@@ -246,23 +282,23 @@ export const Onboard3Screen: React.FC<OnboardProps> = ({ onNavigate, theme = "da
 
           <div
             style={{
-              width: "48px",
-              height: "48px",
+              width: "44px",
+              height: "44px",
               borderRadius: "14px",
               background: "#0b1f3a",
               color: "#38bdf8",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              margin: "0 auto 12px auto",
+              margin: "0 auto 10px auto",
             }}
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
             </svg>
           </div>
 
-          <div style={{ fontSize: "0.95rem", fontWeight: "700", color: "#f8fafc", marginBottom: "4px" }}>Dark Mode</div>
+          <div style={{ fontSize: "0.9rem", fontWeight: "700", color: "#f8fafc", marginBottom: "3px" }}>Dark Mode</div>
           <div style={{ fontSize: "0.75rem", color: "#94a3b8" }}>Cyber Trust Navy</div>
         </div>
 
@@ -270,7 +306,7 @@ export const Onboard3Screen: React.FC<OnboardProps> = ({ onNavigate, theme = "da
         <div
           onClick={() => onSelectTheme && onSelectTheme("light")}
           style={{
-            padding: "20px 14px",
+            padding: "18px 12px",
             borderRadius: "20px",
             background: "#ffffff",
             border: theme === "light" ? "2px solid var(--accent-blue)" : "1px solid #e2e8f0",
@@ -305,18 +341,18 @@ export const Onboard3Screen: React.FC<OnboardProps> = ({ onNavigate, theme = "da
 
           <div
             style={{
-              width: "48px",
-              height: "48px",
+              width: "44px",
+              height: "44px",
               borderRadius: "14px",
               background: "#ecfdf5",
               color: "#f59e0b",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              margin: "0 auto 12px auto",
+              margin: "0 auto 10px auto",
             }}
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <circle cx="12" cy="12" r="5" />
               <line x1="12" y1="1" x2="12" y2="3" />
               <line x1="12" y1="21" x2="12" y2="23" />
@@ -329,20 +365,20 @@ export const Onboard3Screen: React.FC<OnboardProps> = ({ onNavigate, theme = "da
             </svg>
           </div>
 
-          <div style={{ fontSize: "0.95rem", fontWeight: "700", color: "#0f172a", marginBottom: "4px" }}>Light Mode</div>
+          <div style={{ fontSize: "0.9rem", fontWeight: "700", color: "#0f172a", marginBottom: "3px" }}>Light Mode</div>
           <div style={{ fontSize: "0.75rem", color: "#64748b" }}>Clean Banking UI</div>
         </div>
       </div>
 
       <div>
-        <div style={{ display: "flex", justifyContent: "center", gap: "8px", marginBottom: "24px" }}>
+        <div style={{ display: "flex", justifyContent: "center", gap: "8px", marginBottom: "20px" }}>
           <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "rgba(255,255,255,0.2)" }} />
           <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "rgba(255,255,255,0.2)" }} />
           <span style={{ width: "24px", height: "8px", borderRadius: "4px", background: "var(--accent-blue)" }} />
         </div>
 
-        <button className="btn-primary" onClick={() => onNavigate("permissions")}>
-          Get Started ({theme === "dark" ? "Dark Mode" : "Light Mode"})
+        <button className="btn-primary" onClick={handleFinishOnboarding}>
+          Get Started as {name.trim() || "Sunil"}
         </button>
       </div>
     </div>
