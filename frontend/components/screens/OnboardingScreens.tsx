@@ -187,13 +187,13 @@ export const Onboard2Screen: React.FC<OnboardProps> = ({ onNavigate }) => {
 export const Onboard3Screen: React.FC<OnboardProps> = ({ onNavigate, theme = "dark", onSelectTheme }) => {
   const [name, setName] = useState(() => {
     if (typeof window !== "undefined") {
-      return localStorage.getItem("sqr_user_name") || "Sunil";
+      return localStorage.getItem("sqr_user_name") || "";
     }
-    return "Sunil";
+    return "";
   });
 
   const handleFinishOnboarding = () => {
-    const finalName = name.trim() || "Sunil";
+    const finalName = name.trim() || "User";
     localStorage.setItem("sqr_user_name", finalName);
     onNavigate("permissions");
   };
@@ -225,7 +225,7 @@ export const Onboard3Screen: React.FC<OnboardProps> = ({ onNavigate, theme = "da
         </label>
         <input
           className="input-field"
-          placeholder="e.g. Sunil"
+          placeholder="Enter your full name"
           value={name}
           onChange={(e) => setName(e.target.value)}
           style={{
@@ -378,7 +378,7 @@ export const Onboard3Screen: React.FC<OnboardProps> = ({ onNavigate, theme = "da
         </div>
 
         <button className="btn-primary" onClick={handleFinishOnboarding}>
-          Get Started as {name.trim() || "Sunil"}
+          Get Started {name.trim() ? `as ${name.trim()}` : ""}
         </button>
       </div>
     </div>

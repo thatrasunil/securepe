@@ -22,7 +22,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
   currentUser,
 }) => {
   const [language, setLanguage] = useState("English");
-  const [displayName, setDisplayName] = useState("Sunil");
+  const [displayName, setDisplayName] = useState("User");
 
   useEffect(() => {
     const storedName = localStorage.getItem("sqr_user_name");
