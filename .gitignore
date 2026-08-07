@@ -18,9 +18,10 @@ npm-debug.log*
 yarn-debug.log*
 lerna-debug.log*
 
-# local env files
+# local env files (ignore actual secrets, allow example)
 .env*.local
 .env
+!.env.example
 
 # vercel
 .vercel
