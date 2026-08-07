@@ -373,43 +373,43 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
             <span style={{ fontSize: "0.85rem", color: "#64748B", cursor: "pointer" }}>›</span>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr 1fr", gap: "10px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "6px" }}>
             {/* Card 1: Overall Protection */}
-            <div style={{ padding: "14px 12px", borderRadius: "18px", background: "#F8FAFC", border: "1px solid #E2E8F0" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "6px" }}>
-                <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#D1FAE5", color: "#059669", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+            <div style={{ padding: "12px 8px", borderRadius: "16px", background: "#F8FAFC", border: "1px solid #E2E8F0", minWidth: 0 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "4px", marginBottom: "4px", overflow: "hidden", whiteSpace: "nowrap" }}>
+                <div style={{ width: "16px", height: "16px", borderRadius: "50%", background: "#D1FAE5", color: "#059669", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
                 </div>
-                <span style={{ fontSize: "0.68rem", color: "#64748B", fontWeight: "600" }}>Overall Protection</span>
+                <span style={{ fontSize: "0.64rem", color: "#64748B", fontWeight: "600", textOverflow: "ellipsis", overflow: "hidden" }}>Protection</span>
               </div>
-              <div style={{ fontSize: "1.3rem", fontWeight: "800", color: "#0F172A", fontFamily: "Poppins, sans-serif" }}>
+              <div style={{ fontSize: "1.2rem", fontWeight: "800", color: "#0F172A", fontFamily: "Poppins, sans-serif" }}>
                 98%
               </div>
-              <div style={{ fontSize: "0.66rem", color: "#059669", fontWeight: "700", marginTop: "2px" }}>Very High</div>
+              <div style={{ fontSize: "0.62rem", color: "#059669", fontWeight: "700", marginTop: "2px" }}>Very High</div>
             </div>
 
             {/* Card 2: Safe Scans */}
-            <div style={{ padding: "14px 12px", borderRadius: "18px", background: "#F8FAFC", border: "1px solid #E2E8F0" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "5px", marginBottom: "6px" }}>
-                <span style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#059669" }} />
-                <span style={{ fontSize: "0.68rem", color: "#64748B", fontWeight: "600" }}>Safe Scans</span>
+            <div style={{ padding: "12px 8px", borderRadius: "16px", background: "#F8FAFC", border: "1px solid #E2E8F0", minWidth: 0 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "4px", marginBottom: "4px", overflow: "hidden", whiteSpace: "nowrap" }}>
+                <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#059669", flexShrink: 0 }} />
+                <span style={{ fontSize: "0.64rem", color: "#64748B", fontWeight: "600", textOverflow: "ellipsis", overflow: "hidden" }}>Safe Scans</span>
               </div>
-              <div style={{ fontSize: "1.3rem", fontWeight: "800", color: "#0F172A", fontFamily: "Poppins, sans-serif" }}>
+              <div style={{ fontSize: "1.2rem", fontWeight: "800", color: "#0F172A", fontFamily: "Poppins, sans-serif" }}>
                 {scanStats.safeCount}
               </div>
-              <div style={{ fontSize: "0.66rem", color: "#64748B", marginTop: "2px" }}>Today</div>
+              <div style={{ fontSize: "0.62rem", color: "#64748B", marginTop: "2px" }}>Today</div>
             </div>
 
             {/* Card 3: Risky Scans */}
-            <div style={{ padding: "14px 12px", borderRadius: "18px", background: "#F8FAFC", border: "1px solid #E2E8F0" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "5px", marginBottom: "6px" }}>
-                <span style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#DC2626" }} />
-                <span style={{ fontSize: "0.68rem", color: "#64748B", fontWeight: "600" }}>Risky Scans</span>
+            <div style={{ padding: "12px 8px", borderRadius: "16px", background: "#F8FAFC", border: "1px solid #E2E8F0", minWidth: 0 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "4px", marginBottom: "4px", overflow: "hidden", whiteSpace: "nowrap" }}>
+                <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#EF4444", flexShrink: 0 }} />
+                <span style={{ fontSize: "0.64rem", color: "#64748B", fontWeight: "600", textOverflow: "ellipsis", overflow: "hidden" }}>Risky Scans</span>
               </div>
-              <div style={{ fontSize: "1.3rem", fontWeight: "800", color: "#0F172A", fontFamily: "Poppins, sans-serif" }}>
+              <div style={{ fontSize: "1.2rem", fontWeight: "800", color: "#0F172A", fontFamily: "Poppins, sans-serif" }}>
                 {scanStats.blocked}
               </div>
-              <div style={{ fontSize: "0.66rem", color: "#64748B", marginTop: "2px" }}>Today</div>
+              <div style={{ fontSize: "0.62rem", color: "#64748B", marginTop: "2px" }}>Today</div>
             </div>
           </div>
         </div>
