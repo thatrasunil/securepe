@@ -250,25 +250,60 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({
           {result.explanation.summary}
         </div>
 
-        <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px", marginBottom: "18px" }}>
-          {result.explanation.reasons.map((r, idx) => (
-            <li
-              key={idx}
-              style={{
-                fontSize: "0.84rem",
-                color: "var(--text-main)",
-                padding: "12px 14px",
-                background: "rgba(255, 255, 255, 0.75)",
-                borderRadius: "14px",
-                borderLeft: "4px solid #7C3AED",
-                boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
-                lineHeight: "1.45",
-              }}
-            >
-              {r}
-            </li>
-          ))}
-        </ul>
+        {/* Reasoning Items with Professional Vector SVG Icons */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "18px" }}>
+          {result.explanation.reasons.map((r, idx) => {
+            const cleanText = r.replace(/^[\u26A0\u2713\uFE0F\s]+/, "");
+            const isDangerReason = level === "HIGH_RISK" || level === "CAUTION";
+
+            return (
+              <div
+                key={idx}
+                style={{
+                  fontSize: "0.84rem",
+                  color: "var(--text-main)",
+                  padding: "12px 14px",
+                  background: "rgba(255, 255, 255, 0.85)",
+                  borderRadius: "14px",
+                  borderLeft: isDangerReason ? "4px solid #EF4444" : "4px solid #10B981",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "10px",
+                  lineHeight: "1.45",
+                }}
+              >
+                <div
+                  style={{
+                    width: "22px",
+                    height: "22px",
+                    borderRadius: "50%",
+                    background: isDangerReason ? "#FEE2E2" : "#D1FAE5",
+                    color: isDangerReason ? "#EF4444" : "#10B981",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                    marginTop: "1px",
+                  }}
+                >
+                  {isDangerReason ? (
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                      <line x1="12" y1="9" x2="12" y2="13" />
+                      <line x1="12" y1="17" x2="12.01" y2="17" />
+                    </svg>
+                  ) : (
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  )}
+                </div>
+                <span>{cleanText}</span>
+              </div>
+            );
+          })}
+        </div>
 
         {/* High-Contrast Recommendation Box */}
         <div

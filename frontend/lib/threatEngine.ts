@@ -133,7 +133,6 @@ export function extractServerlessThreatSignals(
       }
 
       if (clientMeta?.latitude && clientMeta?.longitude) {
-        // Geofence check against Ramesh Chai Corner baseline (12.9716, 77.5946)
         const dist = Math.sqrt(
           Math.pow(clientMeta.latitude - 12.9716, 2) + Math.pow(clientMeta.longitude - 77.5946, 2)
         ) * 111000;
@@ -194,27 +193,27 @@ export function evaluateServerlessThreat(
 
   const reasons: string[] = [];
   if (signals.sticker_tamper_detected) {
-    reasons.push("⚠️ Physical QR Tamper Alert: Payload does not match verified shopkeeper baseline for this location.");
+    reasons.push("Physical QR Tamper Alert: Payload does not match verified shopkeeper baseline for this location.");
   }
   if (signals.brand_impersonation) {
-    reasons.push(`⚠️ Brand Imposter Warning: Target mimics official fintech service '${signals.brand_impersonation}'.`);
+    reasons.push(`Brand Imposter Warning: Target mimics official fintech service '${signals.brand_impersonation}'.`);
   }
   if (signals.community_reports_count > 0) {
-    reasons.push(`⚠️ Community Fraud Alert: ${signals.community_reports_count} users recently reported this QR code.`);
+    reasons.push(`Community Fraud Alert: ${signals.community_reports_count} users recently reported this QR code.`);
   }
   if (signals.unverified_vpa) {
-    reasons.push("⚠️ Suspicious Payment Handle: Display name claims to be 'Customer Support / Refund', a common scam tactic.");
+    reasons.push("Suspicious Payment Handle: Display name claims to be 'Customer Support / Refund', a common scam tactic.");
   }
   if (signals.is_shortened) {
-    reasons.push("⚠️ Hidden Link: The QR uses a URL shortener service to conceal its destination.");
+    reasons.push("Hidden Link: The QR uses a URL shortener service to conceal its destination.");
   }
   if (signals.is_apk) {
-    reasons.push("⚠️ Dangerous File: Attempts to directly download an executable Android APK.");
+    reasons.push("Dangerous File: Attempts to directly download an executable Android APK.");
   }
 
   if (reasons.length === 0) {
-    reasons.push("✓ Domain identity and payment handle match verified safety standards.");
-    reasons.push("✓ No community reports or suspicious redirects detected.");
+    reasons.push("Domain identity and payment handle match verified safety standards.");
+    reasons.push("No community reports or suspicious redirects detected.");
   }
 
   const summary =

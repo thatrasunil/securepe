@@ -89,7 +89,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
           <div>
             <div style={{ fontSize: "1.35rem", fontWeight: "800", color: "#ffffff", fontFamily: "Poppins, sans-serif" }}>
-              Hello, {userName} 👋
+              Hello, {userName}
             </div>
             <div style={{ fontSize: "0.78rem", color: "#06D6A0", fontWeight: "600", display: "flex", alignItems: "center", gap: "6px", marginTop: "2px" }}>
               <span style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#06D6A0", boxShadow: "0 0 6px #06D6A0" }} />
