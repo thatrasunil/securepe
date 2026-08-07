@@ -6,9 +6,6 @@ import {
   auth,
   googleProvider,
   signInWithPopup,
-  RecaptchaVerifier,
-  signInWithPhoneNumber,
-  ConfirmationResult,
   User,
 } from "@/lib/firebase";
 
@@ -166,10 +163,6 @@ export const PermissionsScreen: React.FC<ScreenProps> = ({ onNavigate }) => {
 };
 
 export const LoginScreen: React.FC<ScreenProps> = ({ onNavigate, onUserLogin }) => {
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [otpCode, setOtpCode] = useState("");
-  const [showOtpInput, setShowOtpInput] = useState(false);
-  const [confirmResult, setConfirmResult] = useState<ConfirmationResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [authError, setAuthError] = useState("");
 
@@ -188,52 +181,6 @@ export const LoginScreen: React.FC<ScreenProps> = ({ onNavigate, onUserLogin }) 
     }
   };
 
-  const handleSendPhoneOtp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!phoneNumber) return;
-    setLoading(true);
-    setAuthError("");
-    try {
-      if (!window.recaptchaVerifier) {
-        window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
-          size: "invisible",
-        });
-      }
-      const formattedPhone = phoneNumber.startsWith("+") ? phoneNumber : `+91${phoneNumber}`;
-      const confirmation = await signInWithPhoneNumber(auth, formattedPhone, window.recaptchaVerifier);
-      setConfirmResult(confirmation);
-      setShowOtpInput(true);
-    } catch (err: any) {
-      console.error("Phone Auth error:", err);
-      if (err.code === "auth/billing-not-enabled") {
-        setAuthError("Firebase live SMS requires a paid Firebase Blaze plan or Test Phone Numbers. Please use 'Continue with Google' or 'Continue as Guest'.");
-      } else if (err.code === "auth/operation-not-allowed") {
-        setAuthError("Firebase Phone SMS is disabled for this region in Firebase Console. Please use 'Continue with Google' or 'Continue as Guest'.");
-      } else {
-        setAuthError(err.message || "Failed to send SMS OTP. Please try 'Continue with Google'.");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleVerifyOtp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!confirmResult || !otpCode) return;
-    setLoading(true);
-    setAuthError("");
-    try {
-      const res = await confirmResult.confirm(otpCode);
-      if (onUserLogin) onUserLogin(res.user);
-      onNavigate("home");
-    } catch (err: any) {
-      console.error("OTP verification error:", err);
-      setAuthError("Invalid OTP code. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <div
       style={{
@@ -245,147 +192,89 @@ export const LoginScreen: React.FC<ScreenProps> = ({ onNavigate, onUserLogin }) 
       }}
       className="animate-fade"
     >
-      <div id="recaptcha-container" />
-
       {/* Brand Header */}
-      <div style={{ textAlign: "center", marginTop: "12px" }}>
+      <div style={{ textAlign: "center", marginTop: "24px" }}>
         <div
           style={{
-            width: "68px",
-            height: "68px",
-            borderRadius: "22px",
+            width: "80px",
+            height: "80px",
+            borderRadius: "24px",
             background: "linear-gradient(135deg, var(--brand-navy), var(--accent-blue))",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             color: "#fff",
-            margin: "0 auto 16px auto",
-            boxShadow: "0 10px 28px rgba(37, 99, 235, 0.4)",
+            margin: "0 auto 20px auto",
+            boxShadow: "0 12px 32px rgba(37, 99, 235, 0.4)",
             border: "1px solid rgba(255, 255, 255, 0.15)",
           }}
         >
-          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+          <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
             <path d="m9 12 2 2 4-4" />
           </svg>
         </div>
 
-        <h2 style={{ fontSize: "1.65rem", fontWeight: "700", marginBottom: "6px" }}>
+        <h2 style={{ fontSize: "1.75rem", fontWeight: "800", marginBottom: "8px" }}>
           Welcome to SentinelQR
         </h2>
-        <p style={{ color: "var(--text-muted)", fontSize: "0.88rem", lineHeight: "1.4" }}>
-          Secure your payment profile with bank-grade fraud shield.
+        <p style={{ color: "var(--text-muted)", fontSize: "0.9rem", lineHeight: "1.5" }}>
+          Secure your payment profile with bank-grade AI fraud shield.
         </p>
       </div>
 
       {authError && (
-        <div style={{ padding: "12px 16px", borderRadius: "14px", background: "var(--color-danger-bg)", border: "1px solid rgba(239,68,68,0.3)", color: "var(--color-danger)", fontSize: "0.82rem", lineHeight: "1.4", textAlign: "center" }}>
+        <div style={{ padding: "12px 16px", borderRadius: "14px", background: "var(--color-danger-bg)", border: "1px solid rgba(239,68,68,0.3)", color: "var(--color-danger)", fontSize: "0.85rem", textAlign: "center" }}>
           {authError}
         </div>
       )}
 
       {/* Auth Actions Block */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "16px", marginBottom: "20px" }}>
         {/* Google Authentication Button */}
         <button
           className="btn-secondary"
           onClick={handleGoogleLogin}
           disabled={loading}
           style={{
+            height: "56px",
             background: "#ffffff",
             color: "#0f172a",
             border: "none",
-            boxShadow: "0 4px 16px rgba(0, 0, 0, 0.12)",
-            fontWeight: "600",
-            fontSize: "0.95rem",
+            boxShadow: "0 6px 20px rgba(0, 0, 0, 0.15)",
+            fontWeight: "700",
+            fontSize: "1rem",
+            borderRadius: "18px",
           }}
         >
-          <svg width="20" height="20" viewBox="0 0 24 24">
+          <svg width="22" height="22" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
             <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
             <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
             <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
           </svg>
-          {loading ? "Connecting..." : "Continue with Google"}
+          {loading ? "Connecting to Google..." : "Continue with Google"}
         </button>
 
-        {/* Divider Line */}
-        <div style={{ display: "flex", alignItems: "center", gap: "12px", margin: "2px 0" }}>
-          <div style={{ flex: 1, height: "1px", background: "var(--bg-card-border)" }} />
-          <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: "600" }}>
-            OR PHONE OTP
-          </span>
-          <div style={{ flex: 1, height: "1px", background: "var(--bg-card-border)" }} />
-        </div>
-
-        {/* Phone OTP Form */}
-        {!showOtpInput ? (
-          <form onSubmit={handleSendPhoneOtp} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-            <div style={{ display: "flex", gap: "10px" }}>
-              <div
-                style={{
-                  width: "60px",
-                  height: "52px",
-                  borderRadius: "16px",
-                  background: "var(--bg-card)",
-                  border: "1px solid var(--bg-card-border)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontWeight: "700",
-                  fontSize: "0.88rem",
-                  color: "var(--accent-blue)",
-                  fontFamily: "var(--font-mono)",
-                }}
-              >
-                +91
-              </div>
-              <input
-                className="input-field font-mono"
-                placeholder="Mobile Number"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-                style={{ height: "52px", fontSize: "0.95rem", flex: 1 }}
-                required
-              />
-            </div>
-            <button type="submit" className="btn-primary" disabled={loading} style={{ height: "50px" }}>
-              {loading ? "Sending OTP..." : "Send Verification OTP"}
-            </button>
-          </form>
-        ) : (
-          <form onSubmit={handleVerifyOtp} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-            <input
-              className="input-field font-mono"
-              placeholder="Enter 6-Digit OTP Code"
-              value={otpCode}
-              onChange={(e) => setOtpCode(e.target.value)}
-              style={{ height: "52px", fontSize: "1rem", textAlign: "center", letterSpacing: "0.2em" }}
-              required
-            />
-            <button type="submit" className="btn-success" disabled={loading} style={{ height: "50px" }}>
-              {loading ? "Verifying..." : "Verify & Complete Login"}
-            </button>
-          </form>
-        )}
-
-        {/* Continue as Guest Pill */}
+        {/* Continue as Guest Button */}
         <button
           className="btn-secondary"
           onClick={() => onNavigate("home")}
           style={{
-            height: "48px",
-            fontSize: "0.88rem",
-            color: "var(--text-muted)",
+            height: "52px",
+            fontSize: "0.92rem",
+            fontWeight: "700",
+            color: "var(--text-main)",
             background: "var(--bg-card)",
             border: "1px solid var(--bg-card-border)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            gap: "8px",
+            gap: "10px",
+            borderRadius: "18px",
           }}
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
             <circle cx="12" cy="7" r="4" />
           </svg>
@@ -396,8 +285,8 @@ export const LoginScreen: React.FC<ScreenProps> = ({ onNavigate, onUserLogin }) 
       {/* Security Privacy Badge */}
       <div
         style={{
-          padding: "10px 14px",
-          borderRadius: "16px",
+          padding: "12px 16px",
+          borderRadius: "18px",
           background: "var(--bg-card)",
           border: "1px solid var(--bg-card-border)",
           display: "flex",
@@ -405,7 +294,8 @@ export const LoginScreen: React.FC<ScreenProps> = ({ onNavigate, onUserLogin }) 
           justifyContent: "center",
           gap: "8px",
           color: "var(--text-secondary)",
-          fontSize: "0.78rem",
+          fontSize: "0.8rem",
+          fontWeight: "500",
         }}
       >
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-safe)" strokeWidth="2.5">
@@ -417,9 +307,3 @@ export const LoginScreen: React.FC<ScreenProps> = ({ onNavigate, onUserLogin }) 
     </div>
   );
 };
-
-declare global {
-  interface Window {
-    recaptchaVerifier?: RecaptchaVerifier;
-  }
-}
