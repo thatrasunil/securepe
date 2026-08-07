@@ -1,37 +1,35 @@
 # 🛡️ SentinelQR — Core USP & Hackathon Judge Defense Playbook
 
-> **Core Positioning**: SentinelQR is a **Pre-Transaction Payment Trust Engine** powered by **Sentinel Memory™** and the **Payment Intent Validation Engine** — evaluating *where* a payment goes and *how* the payment request is constructed before users authorize a transaction.
+> **Core Positioning**: SentinelQR is a **Pre-Transaction Payment Trust Engine** powered by **Sentinel Memory™** and **Smart Payment Intent Validation** — evaluating *where* a payment goes and *whether the payment request itself is consistent with expected merchant behavior* before users authorize a transaction.
 
 ---
 
-## 🎯 Signature Pitch: "Where It Goes + How It's Constructed"
+## 🎯 Final Hackathon USP Statement
 
-> **"Most QR security solutions only analyze where the payment goes. SentinelQR also analyzes how the payment request is constructed. Our Payment Intent Validation Engine detects suspicious UPI payment requests—such as unexpected pre-filled amounts on static merchant QR codes—and combines that with Sentinel Memory™ trust history, merchant verification, and community intelligence to generate an explainable risk assessment before users authorize payment."**
+> **"SentinelQR doesn't just verify where your money is going—it verifies whether the payment request itself is consistent with expected merchant behavior. Our Payment Intent Validation Engine detects suspicious characteristics, such as unexpected pre-filled amounts combined with other trust signals, helping users catch potentially manipulated payment requests before authorizing the transaction."**
 
 ---
 
-## ⭐ Signal #8: Payment Intent Validation Engine
+## ⭐ Signal #8: Smart Payment Intent Validation Engine
 
 ### Concept
-SentinelQR doesn't just verify **who you're paying**. It verifies **how the payment request is structured**.
+SentinelQR doesn't just verify **who receives the money**. It verifies **whether the payment request itself looks suspicious**.
 
-A standard static merchant QR code (at tea shops, grocery stands, etc.) encodes:
-```text
-upi://pay?pa=merchant@ybl&pn=ABC%20Store
-```
-Customers manually type the amount they want to pay.
+### Detection Heuristics & Weighted Rule Engine
 
-### Scam Scenario & Detection
-Scammers paste stickers pre-filling an amount:
-```text
-upi://pay?pa=scammer@ybl&pn=ABC%20Store&am=5000
-```
-- Customers scan and pay, assuming they are entering the amount, but `am=5000` is already set.
-- **Detection Logic**: `UPI Scheme` + `Static Merchant Profile` + `Pre-filled Amount (am)` + `Missing Transaction Ref (tr)` $\rightarrow$ **Risk Score +30**.
+| Payment Intent Signal Vector | Weighted Risk Score |
+| :--- | :---: |
+| **Pre-filled payment amount (`am` present)** | `+10` |
+| **No transaction reference (`tr` missing/empty)** | `+15` |
+| **Merchant profile suggests static QR** | `+10` |
+| **Amount unusually high ($\ge$ ₹2,000)** | `+15` |
+| **Merchant VPA handle mismatch** | `+20` |
+| **Community fraud reports on destination** | `+30` |
 
-### Non-Overclaiming User Warning
-Instead of declaring *"Fake QR"*, SentinelQR outputs:
-> **⚠️ Payment Review Required: Unexpected pre-filled payment amount detected. Trusted static merchant QR codes usually ask you to enter the amount manually. Please confirm with the merchant before proceeding.**
+### Factual & User-Friendly Alerting
+Instead of declaring *"Fake QR"*, SentinelQR presents a factual, non-overclaiming prompt:
+
+> **⚠️ Review Payment Details: This QR already contains a payment amount. Static merchant QR codes commonly require customers to enter the amount manually. Please verify the amount with the merchant before proceeding.**
 
 ---
 
@@ -50,24 +48,24 @@ SentinelQR builds a privacy-preserving memory of trusted QR payment destinations
 
 ## 📊 Complete 9-Signal Vector Matrix
 
-| # | Signal Vector | Category |
-| :-: | :--- | :--- |
-| **1** | **QR Type Detection** | Protocol Classifier |
-| **2** | **UPI Handle & VPA Validation** | Handle Inspector |
-| **3** | **Website Reputation & Shortener Unrolling** | Domain Intelligence |
-| **4** | **Threat Intelligence (SafeBrowsing / PhishTank)** | Blacklist Feeds |
-| **5** | **Community Intelligence** | Crowd-sourced Alerts |
-| **6** | **Merchant Verification Baseline** | Enrolled Hash Matching |
-| **7** | **Historical Trust Memory (Sentinel Memory™)** | Geofenced Trust Graph |
-| **⭐ 8** | **Payment Intent Validation Engine** | Payment Request Analysis |
-| **9** | **Explainable AI (XAI Summary)** | Gemini 1.5 Flash Translation |
+| # | Signal Vector | Category | Weight ($w_i$) |
+| :-: | :--- | :--- | :---: |
+| **1** | **QR Type Detection** | Protocol Classifier | Baseline |
+| **2** | **UPI Handle & VPA Validation** | Handle Inspector | `+35` |
+| **3** | **Website Reputation & Shortener Unrolling** | Domain Intelligence | `+25..45` |
+| **4** | **Threat Intelligence (SafeBrowsing / PhishTank)** | Blacklist Feeds | `+40` |
+| **5** | **Community Intelligence** | Crowd-sourced Alerts | `+30` |
+| **6** | **Merchant Verification Baseline** | Enrolled Hash Matching | `+20` |
+| **7** | **Historical Trust Memory (Sentinel Memory™)** | Geofenced Trust Graph | `+20..30` |
+| **⭐ 8** | **Payment Intent Validation Engine** | Payment Request Analysis | `+10..40` |
+| **9** | **Explainable AI (XAI Summary)** | Gemini 1.5 Flash Translation | Human Summary |
 
 ---
 
 ## 🎙️ Judge Q&A Playbook
 
 ### Q1: "Why is a pre-filled amount on a QR code suspicious?"
-> *"Static merchant QR codes generally don't pre-fill payment amounts. If a QR unexpectedly includes an amount while lacking characteristics typically associated with dynamic payment requests (like transaction references), SentinelQR increases the risk score and asks the user to verify the payment before proceeding."*
+> *"We avoid claiming legitimate static QRs never carry amounts. There are valid use cases where an amount is set. Instead, SentinelQR treats an unexpected pre-filled amount—especially when lacking dynamic transaction references—as a strong risk signal. It increases the risk score and asks the user to confirm the amount with the shopkeeper before proceeding."*
 
-### Q2: "How do you know if a QR code is fake?"
-> *"A QR code itself is just raw data—you cannot know if an image is fake. SentinelQR evaluates the payment destination, request structure, and location context. Through Sentinel Memory™ and Payment Intent Analysis, we check whether the payload matches historical trust baselines for that physical location before money leaves the user's account."*
+### Q2: "How does your solution differ from standard virus/blacklist scanners?"
+> *"Most teams focus on URL blacklists or VirusTotal API calls. SentinelQR analyzes payment intent and historical location context. We evaluate whether the payment request structure matches expected merchant behavior before money leaves the user's account."*

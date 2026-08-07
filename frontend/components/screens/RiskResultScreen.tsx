@@ -240,7 +240,7 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({
             </div>
             <div>
               <div style={{ fontSize: "0.98rem", fontWeight: "800", color: "#F59E0B", fontFamily: "Poppins, sans-serif" }}>
-                Payment Review Required
+                Review Payment Details
               </div>
               <div style={{ fontSize: "0.74rem", color: "var(--text-secondary)", fontWeight: "600" }}>
                 Payment Intent Validation Engine (Signal #8)
@@ -248,12 +248,12 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({
             </div>
           </div>
 
-          <p style={{ fontSize: "0.82rem", color: "var(--text-main)", lineHeight: "1.45", marginBottom: "10px", fontWeight: "600" }}>
-            Unexpected pre-filled payment amount detected ({intent.amount_value ? `₹${intent.amount_value}` : "Pre-set Amount"}) without a dynamic transaction reference.
+          <p style={{ fontSize: "0.84rem", color: "var(--text-main)", lineHeight: "1.45", marginBottom: "10px", fontWeight: "600" }}>
+            This QR already contains a pre-filled payment amount ({intent.amount_value ? `₹${intent.amount_value.toLocaleString()}` : "Set Amount"}).
           </p>
 
-          <div style={{ fontSize: "0.76rem", color: "var(--text-secondary)", background: "rgba(0,0,0,0.05)", padding: "8px 12px", borderRadius: "12px", lineHeight: "1.4" }}>
-            💡 <strong>Security Note:</strong> Trusted static merchant QR codes usually ask you to enter the payment amount manually. Please confirm with the merchant before proceeding.
+          <div style={{ fontSize: "0.78rem", color: "var(--text-secondary)", background: "rgba(0,0,0,0.05)", padding: "10px 12px", borderRadius: "12px", lineHeight: "1.45" }}>
+            💡 <strong>Security Note:</strong> Static merchant QR codes commonly require customers to enter the amount manually. Please verify the amount with the merchant before proceeding.
           </div>
         </div>
       )}

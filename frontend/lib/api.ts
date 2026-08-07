@@ -54,6 +54,8 @@ export interface ScanResult {
       amount_value?: number;
       has_transaction_ref: boolean;
       is_suspicious_static_prefill: boolean;
+      is_unusually_high_amount: boolean;
+      intent_risk_score: number;
       intent_warning?: string;
     };
   };

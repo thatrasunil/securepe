@@ -1,5 +1,5 @@
 /**
- * SentinelQR Serverless Deterministic Threat Engine & Payment Intent Validation Engine
+ * SentinelQR Serverless Deterministic Threat Engine & Smart Payment Intent Validation Engine
  * Sub-10ms Serverless Execution for Vercel / Firebase Functions / Netlify
  */
 
@@ -24,6 +24,8 @@ export interface PaymentIntentSignals {
   amount_value?: number;
   has_transaction_ref: boolean;
   is_suspicious_static_prefill: boolean;
+  is_unusually_high_amount: boolean;
+  intent_risk_score: number;
   intent_warning?: string;
 }
 
@@ -172,18 +174,28 @@ export function extractServerlessThreatSignals(
         }
       }
 
-      // Signal 8: Payment Intent Validation Engine
-      const hasAmount = Boolean(amountParam && parseFloat(amountParam) > 0);
+      // Signal 8: Smart Payment Intent Validation Engine
+      const amountVal = amountParam ? parseFloat(amountParam) : undefined;
+      const hasAmount = Boolean(amountVal && amountVal > 0);
       const hasRef = Boolean(refParam && refParam.trim().length > 0);
-      const isSuspiciousPrefill = hasAmount && !hasRef;
+      const isHighAmount = Boolean(amountVal && amountVal >= 2000);
+
+      let intentRisk = 0;
+      if (hasAmount) intentRisk += 10;
+      if (hasAmount && !hasRef) intentRisk += 15;
+      if (hasAmount && isHighAmount) intentRisk += 15;
+
+      const isSuspiciousPrefill = hasAmount && (!hasRef || intentRisk >= 25);
 
       signals.payment_intent = {
         has_prefilled_amount: hasAmount,
-        amount_value: hasAmount ? parseFloat(amountParam!) : undefined,
+        amount_value: amountVal,
         has_transaction_ref: hasRef,
         is_suspicious_static_prefill: isSuspiciousPrefill,
+        is_unusually_high_amount: isHighAmount,
+        intent_risk_score: intentRisk,
         intent_warning: isSuspiciousPrefill
-          ? "Unexpected pre-filled payment amount detected. Trusted static merchant QR codes usually ask you to enter the amount manually. Please confirm with the merchant before proceeding."
+          ? "Review Payment Details: This QR already contains a payment amount. Static merchant QR codes commonly require customers to enter the amount manually. Please verify the amount with the merchant before proceeding."
           : undefined,
       };
 
@@ -284,7 +296,9 @@ export function calculateServerlessRiskScore(signals: ThreatSignals): number {
   if (signals.is_apk) score += 45;
   if (signals.brand_impersonation) score += 40;
   if (signals.unverified_vpa) score += 35;
-  if (signals.payment_intent?.is_suspicious_static_prefill) score += 30;
+  if (signals.payment_intent?.has_prefilled_amount) score += 10;
+  if (signals.payment_intent?.has_prefilled_amount && !signals.payment_intent?.has_transaction_ref) score += 15;
+  if (signals.payment_intent?.is_unusually_high_amount) score += 15;
   if (signals.sticker_tamper_detected) score += 70;
   if (signals.community_reports_count > 0) {
     score += Math.min(60, 25 + signals.community_reports_count * 3);
@@ -310,7 +324,7 @@ export function evaluateServerlessThreat(
   }
   if (signals.payment_intent?.is_suspicious_static_prefill) {
     reasons.push(
-      `Payment Review Required: Unexpected pre-filled payment amount (₹${signals.payment_intent.amount_value}) detected without dynamic transaction reference. Trusted static shop QR codes usually ask you to enter the amount manually.`
+      `Review Payment Details: This QR already contains a pre-filled payment amount (${signals.payment_intent.amount_value ? `₹${signals.payment_intent.amount_value}` : "Set Amount"}). Static merchant QR codes commonly require customers to enter the amount manually.`
     );
   }
   if (signals.brand_impersonation) {
@@ -330,7 +344,7 @@ export function evaluateServerlessThreat(
   }
 
   if (reasons.length === 0) {
-    reasons.push("Payment intent validated: No unexpected pre-filled amount or missing transaction reference.");
+    reasons.push("Payment intent validated: Payment request structure matches expected merchant behavior.");
     reasons.push("Sentinel Memory™ confirms payment destination matches historical trust patterns for this location.");
     reasons.push("Domain identity and payment handle match verified safety standards.");
   }
