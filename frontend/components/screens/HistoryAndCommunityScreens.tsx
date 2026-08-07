@@ -67,13 +67,28 @@ export const HistoryScreen: React.FC<ScreenProps> = () => {
   });
 
   return (
-    <div style={{ padding: "20px 20px 130px 20px" }} className="animate-fade">
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
-        <h2 style={{ fontSize: "1.35rem", fontWeight: "700" }}>
+    <div style={{ padding: "20px 20px 140px 20px" }} className="animate-fade">
+      {/* Header Bar */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+        <h2 style={{ fontSize: "1.3rem", fontWeight: "800", fontFamily: "Poppins, sans-serif" }}>
           Scan History
         </h2>
-        <span className="badge badge-safe" style={{ background: "rgba(16,185,129,0.15)", color: "var(--color-safe)", border: "1px solid rgba(16,185,129,0.3)", fontSize: "0.75rem" }}>
-          🔥 Firebase Realtime Live
+        <span
+          style={{
+            background: "rgba(16, 185, 129, 0.12)",
+            color: "#10B981",
+            border: "1px solid rgba(16, 185, 129, 0.3)",
+            fontSize: "0.72rem",
+            fontWeight: "700",
+            padding: "4px 10px",
+            borderRadius: "12px",
+            display: "flex",
+            alignItems: "center",
+            gap: "5px",
+          }}
+        >
+          <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#10B981" }} />
+          Firebase Live
         </span>
       </div>
 
@@ -84,14 +99,14 @@ export const HistoryScreen: React.FC<ScreenProps> = () => {
           placeholder="Search scans by shop or payload..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          style={{ paddingLeft: "44px", height: "48px", fontSize: "0.9rem" }}
+          style={{ paddingLeft: "44px", height: "48px", fontSize: "0.88rem", borderRadius: "16px" }}
         />
         <svg
           width="18"
           height="18"
           viewBox="0 0 24 24"
           fill="none"
-          stroke="var(--text-muted)"
+          stroke="var(--text-secondary)"
           strokeWidth="2.5"
           style={{ position: "absolute", left: "16px", top: "15px" }}
         >
@@ -109,22 +124,23 @@ export const HistoryScreen: React.FC<ScreenProps> = () => {
             style={{
               padding: "6px 14px",
               borderRadius: "14px",
-              fontSize: "0.78rem",
+              fontSize: "0.76rem",
               fontWeight: "700",
               border: activeFilter === filterKey ? "none" : "1px solid var(--bg-card-border)",
               background:
                 activeFilter === filterKey
                   ? filterKey === "HIGH_RISK"
-                    ? "var(--color-danger)"
+                    ? "#EF4444"
                     : filterKey === "CAUTION"
-                    ? "var(--color-caution)"
+                    ? "#F59E0B"
                     : filterKey === "SAFE"
-                    ? "var(--color-safe)"
-                    : "var(--accent-blue)"
+                    ? "#10B981"
+                    : "#2563EB"
                   : "var(--bg-card)",
               color: activeFilter === filterKey ? "#ffffff" : "var(--text-main)",
               cursor: "pointer",
               transition: "all 0.2s ease",
+              flexShrink: 0,
             }}
           >
             {filterKey.replace("_", " ")}
@@ -143,7 +159,7 @@ export const HistoryScreen: React.FC<ScreenProps> = () => {
               key={item.id}
               style={{
                 padding: "16px",
-                borderRadius: "var(--card-radius)",
+                borderRadius: "20px",
                 background: "var(--bg-card)",
                 border: `1px solid ${isDanger ? "rgba(239,68,68,0.4)" : isCaution ? "rgba(245,158,11,0.4)" : "rgba(16,185,129,0.3)"}`,
                 boxShadow: "var(--card-shadow)",
@@ -155,11 +171,11 @@ export const HistoryScreen: React.FC<ScreenProps> = () => {
               {/* Risk Icon */}
               <div
                 style={{
-                  width: "40px",
-                  height: "40px",
-                  borderRadius: "12px",
-                  background: isDanger ? "var(--color-danger-bg)" : isCaution ? "var(--color-caution-bg)" : "var(--color-safe-bg)",
-                  color: isDanger ? "var(--color-danger)" : isCaution ? "var(--color-caution)" : "var(--color-safe)",
+                  width: "42px",
+                  height: "42px",
+                  borderRadius: "14px",
+                  background: isDanger ? "rgba(239, 68, 68, 0.12)" : isCaution ? "rgba(245, 158, 11, 0.12)" : "rgba(16, 185, 129, 0.12)",
+                  color: isDanger ? "#EF4444" : isCaution ? "#F59E0B" : "#10B981",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -167,33 +183,42 @@ export const HistoryScreen: React.FC<ScreenProps> = () => {
                 }}
               >
                 {isDanger ? (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
                 ) : isCaution ? (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                 ) : (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
                 )}
               </div>
 
               {/* Content */}
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
-                  <span className={`badge ${isDanger ? "badge-danger" : isCaution ? "badge-caution" : "badge-safe"}`}>
+                  <span
+                    style={{
+                      fontSize: "0.68rem",
+                      fontWeight: "700",
+                      padding: "2px 8px",
+                      borderRadius: "8px",
+                      background: isDanger ? "rgba(239, 68, 68, 0.15)" : isCaution ? "rgba(245, 158, 11, 0.15)" : "rgba(16, 185, 129, 0.15)",
+                      color: isDanger ? "#EF4444" : isCaution ? "#F59E0B" : "#10B981",
+                    }}
+                  >
                     {item.level.replace("_", " ")}
                   </span>
-                  <span style={{ fontSize: "0.78rem", color: "var(--text-muted)", fontWeight: "500" }}>{item.date}</span>
+                  <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontWeight: "500" }}>{item.date}</span>
                 </div>
 
-                <div style={{ fontWeight: "700", fontSize: "0.95rem" }}>{item.name}</div>
-                <div className="font-mono" style={{ fontSize: "0.78rem", color: "var(--text-muted)", wordBreak: "break-all" }}>{item.payload}</div>
+                <div style={{ fontWeight: "700", fontSize: "0.95rem", fontFamily: "Poppins, sans-serif" }}>{item.name}</div>
+                <div className="font-mono" style={{ fontSize: "0.76rem", color: "#38BDF8", wordBreak: "break-all", marginTop: "2px" }}>{item.payload}</div>
               </div>
 
               {/* Risk Score */}
               <div style={{ textAlign: "right", flexShrink: 0 }}>
-                <div className="font-mono" style={{ fontSize: "1.2rem", fontWeight: "700", color: isDanger ? "var(--color-danger)" : isCaution ? "var(--color-caution)" : "var(--color-safe)" }}>
+                <div className="font-mono" style={{ fontSize: "1.25rem", fontWeight: "800", color: isDanger ? "#EF4444" : isCaution ? "#F59E0B" : "#10B981" }}>
                   {item.riskScore}
                 </div>
-                <div style={{ fontSize: "0.65rem", color: "var(--text-secondary)", fontWeight: "600" }}>RISK</div>
+                <div style={{ fontSize: "0.62rem", color: "var(--text-secondary)", fontWeight: "700" }}>RISK</div>
               </div>
             </div>
           );
@@ -220,33 +245,50 @@ export const AlertsScreen: React.FC<ScreenProps> = ({ onNavigate }) => {
   }, []);
 
   return (
-    <div style={{ padding: "20px 20px 130px 20px" }} className="animate-fade">
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
-        <div>
-          <h2 style={{ fontSize: "1.35rem", fontWeight: "700" }}>Security Alerts</h2>
-          <div style={{ fontSize: "0.8rem", color: "var(--color-danger)", fontWeight: "600", display: "flex", alignItems: "center", gap: "6px" }}>
-            <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "var(--color-danger)" }} />
-            Firebase Realtime Live Alerts
-          </div>
-        </div>
+    <div style={{ padding: "20px 20px 140px 20px", minHeight: "100dvh" }} className="animate-fade">
+      
+      {/* 1. Header Bar (Single Line Layout without text wrap!) */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+        <h2 style={{ fontSize: "1.35rem", fontWeight: "800", fontFamily: "Poppins, sans-serif", color: "var(--text-main)" }}>
+          Security Alerts
+        </h2>
 
         <button
-          className="btn-secondary"
           onClick={() => onNavigate("report")}
-          style={{ height: "36px", padding: "0 12px", fontSize: "0.8rem" }}
+          style={{
+            height: "38px",
+            padding: "0 14px",
+            fontSize: "0.82rem",
+            fontWeight: "700",
+            borderRadius: "14px",
+            background: "rgba(239, 68, 68, 0.12)",
+            border: "1px solid #EF4444",
+            color: "#EF4444",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            gap: "6px",
+          }}
         >
-          + Report Scam
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Report Scam
         </button>
       </div>
 
-      {/* Threat Alert Cards List */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+      {/* Subtitle Row */}
+      <div style={{ fontSize: "0.78rem", color: "#EF4444", fontWeight: "700", display: "flex", alignItems: "center", gap: "6px", marginBottom: "18px" }}>
+        <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#EF4444", boxShadow: "0 0 8px #EF4444" }} />
+        Live Realtime Threat Intelligence Feed
+      </div>
+
+      {/* 2. Threat Alert Cards List */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
         {feed.map((item) => (
           <div
             key={item.id}
             style={{
-              padding: "16px",
-              borderRadius: "var(--card-radius)",
+              padding: "18px",
+              borderRadius: "22px",
               background: "var(--bg-card)",
               border: "1px solid var(--bg-card-border)",
               boxShadow: "var(--card-shadow)",
@@ -255,18 +297,78 @@ export const AlertsScreen: React.FC<ScreenProps> = ({ onNavigate }) => {
               gap: "14px",
             }}
           >
-            <div style={{ width: "40px", height: "40px", borderRadius: "12px", background: item.icon.includes("🔴") ? "var(--color-danger-bg)" : "var(--color-caution-bg)", color: item.icon.includes("🔴") ? "var(--color-danger)" : "var(--color-caution)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            {/* Warning Shield Icon Badge */}
+            <div
+              style={{
+                width: "44px",
+                height: "44px",
+                borderRadius: "16px",
+                background: "rgba(239, 68, 68, 0.12)",
+                color: "#EF4444",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+                boxShadow: "0 4px 12px rgba(239, 68, 68, 0.15)",
+              }}
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                <line x1="12" y1="9" x2="12" y2="13" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg>
             </div>
+
+            {/* Alert Content */}
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontWeight: "600", fontSize: "0.95rem", marginBottom: "2px" }}>{item.title}</div>
-              <div className="font-mono" style={{ fontSize: "0.8rem", color: "var(--accent-cyan)", marginBottom: "6px", wordBreak: "break-all" }}>
-                {item.payload}
+              <div style={{ fontWeight: "800", fontSize: "1rem", color: "var(--text-main)", marginBottom: "4px", fontFamily: "Poppins, sans-serif" }}>
+                {item.title}
               </div>
-              <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", display: "flex", flexWrap: "wrap", gap: "12px" }}>
-                <span style={{ display: "flex", alignItems: "center", gap: "4px" }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>{item.location}</span>
-                <span style={{ display: "flex", alignItems: "center", gap: "4px" }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>{item.reports_count} Flags</span>
-                <span style={{ display: "flex", alignItems: "center", gap: "4px" }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>{item.timestamp}</span>
+
+              {/* Monospace Dark Payload Pill */}
+              <code
+                style={{
+                  display: "block",
+                  fontSize: "0.78rem",
+                  background: "#0F172A",
+                  color: "#38BDF8",
+                  padding: "6px 10px",
+                  borderRadius: "10px",
+                  border: "1px solid #1E293B",
+                  fontFamily: "var(--font-mono)",
+                  wordBreak: "break-all",
+                  marginBottom: "10px",
+                  lineHeight: "1.4",
+                }}
+              >
+                {item.payload}
+              </code>
+
+              {/* Metadata Badges Row */}
+              <div style={{ fontSize: "0.74rem", color: "var(--text-secondary)", fontWeight: "600", display: "flex", flexWrap: "wrap", gap: "10px", alignItems: "center" }}>
+                <span style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
+                  {item.location || "Bengaluru"}
+                </span>
+
+                <span style={{ display: "inline-flex", alignItems: "center", gap: "4px", color: "#EF4444" }}>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                  </svg>
+                  {item.reports_count} Flags
+                </span>
+
+                <span style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                  </svg>
+                  {item.timestamp}
+                </span>
               </div>
             </div>
           </div>
