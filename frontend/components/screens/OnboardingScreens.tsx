@@ -37,18 +37,18 @@ export const Onboard1Screen: React.FC<OnboardProps> = ({ onNavigate }) => {
             height: "180px",
             margin: "0 auto 32px auto",
             borderRadius: "32px",
-            background: "rgba(37, 99, 235, 0.12)",
-            border: "1px solid rgba(37, 99, 235, 0.3)",
+            background: "linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(6, 182, 212, 0.15))",
+            border: "1px solid rgba(37, 99, 235, 0.4)",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
             gap: "12px",
-            color: "var(--accent-blue)",
-            boxShadow: "0 10px 30px rgba(37, 99, 235, 0.2)",
+            color: "#ffffff",
+            boxShadow: "0 12px 32px rgba(37, 99, 235, 0.25)",
           }}
         >
-          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" strokeWidth="2">
             <rect x="3" y="3" width="7" height="7" rx="1" />
             <rect x="14" y="3" width="7" height="7" rx="1" />
             <rect x="3" y="14" width="7" height="7" rx="1" />
@@ -57,10 +57,10 @@ export const Onboard1Screen: React.FC<OnboardProps> = ({ onNavigate }) => {
             <path d="M14 18h3v3h-3z" />
             <path d="M18 14h3v3h-3z" />
           </svg>
-          <span style={{ fontSize: "0.8rem", fontWeight: "700", letterSpacing: "0.05em" }}>PAYMENT SCANNER</span>
+          <span style={{ fontSize: "0.8rem", fontWeight: "800", letterSpacing: "0.08em", color: "#38bdf8" }}>PAYMENT SCANNER</span>
         </div>
 
-        <h2 style={{ fontSize: "1.6rem", fontWeight: "700", marginBottom: "12px" }}>
+        <h2 style={{ fontSize: "1.65rem", fontWeight: "800", marginBottom: "12px" }}>
           Pay Safely. Scan Smart.
         </h2>
         <p style={{ color: "var(--text-muted)", fontSize: "0.95rem", lineHeight: "1.5" }}>
@@ -111,18 +111,18 @@ export const Onboard2Screen: React.FC<OnboardProps> = ({ onNavigate }) => {
             height: "180px",
             margin: "0 auto 32px auto",
             borderRadius: "32px",
-            background: "var(--ai-card-bg)",
-            border: "1px solid rgba(124, 58, 237, 0.3)",
+            background: "linear-gradient(135deg, rgba(124, 58, 237, 0.28), rgba(168, 85, 247, 0.16))",
+            border: "1px solid rgba(168, 85, 247, 0.5)",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
             gap: "12px",
-            color: "var(--accent-purple)",
-            boxShadow: "0 10px 30px rgba(124, 58, 237, 0.2)",
+            color: "#ffffff",
+            boxShadow: "0 12px 32px rgba(124, 58, 237, 0.3)",
           }}
         >
-          <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#c084fc" strokeWidth="2.2">
             <rect x="4" y="4" width="16" height="16" rx="2" />
             <rect x="9" y="9" width="6" height="6" />
             <path d="M15 2v2" />
@@ -134,27 +134,38 @@ export const Onboard2Screen: React.FC<OnboardProps> = ({ onNavigate }) => {
             <path d="M9 2v2" />
             <path d="M9 20v2" />
           </svg>
-          <span style={{ fontSize: "0.78rem", fontWeight: "700", letterSpacing: "0.08em" }}>XAI REASONING ENGINE</span>
+          <span style={{ fontSize: "0.8rem", fontWeight: "800", letterSpacing: "0.08em", color: "#e9d5ff" }}>
+            XAI REASONING ENGINE
+          </span>
         </div>
 
-        <h2 style={{ fontSize: "1.6rem", fontWeight: "700", marginBottom: "12px" }}>
+        <h2 style={{ fontSize: "1.65rem", fontWeight: "800", marginBottom: "14px" }}>
           AI Detects Hidden Risks
         </h2>
         
-        <div style={{ textAlign: "left", background: "var(--bg-card)", padding: "16px", borderRadius: "16px", border: "1px solid var(--bg-card-border)", marginBottom: "16px" }}>
-          <div style={{ fontSize: "0.85rem", color: "var(--color-danger)", fontWeight: "600", marginBottom: "8px", display: "flex", alignItems: "center", gap: "6px" }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+        <div style={{ textAlign: "left", background: "var(--bg-card)", padding: "18px", borderRadius: "20px", border: "1px solid var(--bg-card-border)", boxShadow: "var(--card-shadow)" }}>
+          <div style={{ fontSize: "0.88rem", color: "var(--color-danger)", fontWeight: "700", marginBottom: "12px", display: "flex", alignItems: "center", gap: "8px" }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
               <line x1="12" y1="9" x2="12" y2="13" />
               <line x1="12" y1="17" x2="12.01" y2="17" />
             </svg>
             Proactively Identifies:
           </div>
-          <ul style={{ fontSize: "0.82rem", color: "var(--text-muted)", paddingLeft: "20px", display: "flex", flexDirection: "column", gap: "6px" }}>
-            <li>Imposter Paytm / GPay Support stickers</li>
-            <li>Phishing links concealing behind bit.ly URLs</li>
-            <li>Physical QR sticker tampering at shops</li>
-          </ul>
+          <div style={{ fontSize: "0.85rem", color: "var(--text-main)", display: "flex", flexDirection: "column", gap: "10px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <span style={{ color: "var(--color-danger)" }}>•</span>
+              Imposter Paytm / GPay Support stickers
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <span style={{ color: "var(--color-caution)" }}>•</span>
+              Phishing links concealing behind bit.ly URLs
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <span style={{ color: "var(--accent-blue)" }}>•</span>
+              Physical QR sticker tampering at shops
+            </div>
+          </div>
         </div>
       </div>
 
@@ -186,7 +197,7 @@ export const Onboard3Screen: React.FC<OnboardProps> = ({ onNavigate, theme = "da
       className="animate-fade"
     >
       <div style={{ textAlign: "center", marginTop: "12px" }}>
-        <h2 style={{ fontSize: "1.5rem", fontWeight: "700", marginBottom: "6px" }}>
+        <h2 style={{ fontSize: "1.55rem", fontWeight: "800", marginBottom: "6px" }}>
           Choose App Appearance
         </h2>
         <p style={{ color: "var(--text-muted)", fontSize: "0.88rem" }}>
