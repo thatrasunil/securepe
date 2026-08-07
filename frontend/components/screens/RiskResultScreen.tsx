@@ -26,6 +26,15 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({
     }
   }, [result, ttsEnabled]);
 
+  useEffect(() => {
+    if (showBypassModal) {
+      const container = document.querySelector(".screen-container");
+      if (container) {
+        container.scrollTop = 0;
+      }
+    }
+  }, [showBypassModal]);
+
   if (!result) return null;
 
   const score = result.risk_score;
@@ -435,19 +444,23 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({
         )}
       </div>
 
-      {/* Sleek Custom Warning Bypass Modal Dialog (No native alert popups!) */}
+      {/* Sleek Custom Warning Bypass Modal Dialog (Centering Fixed!) */}
       {showBypassModal && (
         <div
           style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 100,
-            background: "rgba(0, 0, 0, 0.85)",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 9999,
+            background: "rgba(0, 0, 0, 0.88)",
             backdropFilter: "blur(12px)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             padding: "20px",
+            minHeight: "100%",
           }}
         >
           <div
