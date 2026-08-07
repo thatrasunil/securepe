@@ -202,7 +202,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onNext }) => {
         }}
       >
         <h1 style={{ fontSize: "clamp(2.3rem, 7vw, 2.8rem)", fontWeight: "800", color: "#ffffff", marginBottom: "4px", letterSpacing: "-0.03em", fontFamily: "Poppins, sans-serif" }}>
-          Sentinel<span style={{ color: "#38bdf8" }}>QR</span>
+          Secure<span style={{ color: "#38bdf8" }}>PE</span>
         </h1>
         
         <p style={{ fontSize: "1rem", color: "#38bdf8", fontWeight: "700", marginBottom: "8px", letterSpacing: "0.03em" }}>
