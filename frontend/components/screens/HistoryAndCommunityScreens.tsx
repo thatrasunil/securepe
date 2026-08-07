@@ -59,10 +59,15 @@ export const HistoryScreen: React.FC<ScreenProps> = () => {
   }, []);
 
   const filteredHistory = history.filter((item) => {
+    const itemName = item?.name || (item as any)?.title || "Scan Result";
+    const itemPayload = item?.payload || "";
+    const itemLevel = item?.level || (item as any)?.riskLevel || "SAFE";
+
+    const query = searchQuery.toLowerCase();
     const matchesSearch =
-      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.payload.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesFilter = activeFilter === "ALL" || item.level === activeFilter;
+      itemName.toLowerCase().includes(query) ||
+      itemPayload.toLowerCase().includes(query);
+    const matchesFilter = activeFilter === "ALL" || itemLevel === activeFilter;
     return matchesSearch && matchesFilter;
   });
 

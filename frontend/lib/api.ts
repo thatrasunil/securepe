@@ -143,18 +143,24 @@ export function subscribeRealtimeHistory(callback: (history: any[]) => void) {
   callback([
     {
       id: "1",
+      name: "Ramesh Chai Corner",
       title: "Ramesh Chai Corner",
       payload: "ramesh.chai@upi",
+      level: "SAFE",
       riskLevel: "SAFE",
       riskScore: 5,
+      date: "Today, 2:15 PM",
       timestamp: "Today, 2:15 PM",
     },
     {
       id: "2",
+      name: "Fake Support Sticker",
       title: "Fake Support Sticker",
       payload: "paytm-support@ybl",
+      level: "HIGH_RISK",
       riskLevel: "HIGH_RISK",
       riskScore: 95,
+      date: "Yesterday, 6:40 PM",
       timestamp: "Yesterday, 6:40 PM",
     },
   ]);
