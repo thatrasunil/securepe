@@ -12,20 +12,20 @@ interface HomeScreenProps {
 export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
   const [feed, setFeed] = useState<FeedItem[]>([]);
   const [userName, setUserName] = useState("Sunil");
-  const [scanStats, setScanStats] = useState({ total: 12, blocked: 3, safeCount: 9 });
+  const [scanStats, setScanStats] = useState({ total: 14209, blocked: 342, safeCount: 13867 });
   const [recentScans, setRecentScans] = useState<Array<{ id: string; name: string; payload: string; date: string; riskScore: number; level: "SAFE" | "CAUTION" | "HIGH_RISK" }>>([
     {
       id: "s1",
-      name: "ABC Store",
-      payload: "abc@ybl · UPI Payment",
+      name: "Ramesh Chai Corner",
+      payload: "ramesh.chai@upi · UPI Payment",
       date: "10:30 AM",
       riskScore: 5,
       level: "SAFE",
     },
     {
       id: "s2",
-      name: "Fake Paytm Support",
-      payload: "paytm-secure-login.net",
+      name: "Fake Support Sticker",
+      payload: "paytm-support@ybl",
       date: "Yesterday",
       riskScore: 88,
       level: "HIGH_RISK",
@@ -80,7 +80,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
   };
 
   return (
-    <div style={{ minHeight: "100%", background: "#050C1A", color: "#f8fafc", paddingBottom: "160px" }} className="animate-fade">
+    <div style={{ minHeight: "100%", background: "#050C1A", color: "#f8fafc", paddingBottom: "180px" }} className="animate-fade">
 
       {/* Top Header & Hero Card Container (Dark Navy #050C1A) */}
       <div style={{ padding: "16px 20px 20px 20px" }}>
@@ -183,7 +183,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
             overflow: "hidden",
           }}
         >
-          {/* Top Row: Badge + 3D Shield */}
+          {/* Top Row: Badge + 3D Shield Image */}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
             <div>
               <div style={{ fontSize: "0.7rem", color: "#38bdf8", fontWeight: "800", letterSpacing: "0.06em", display: "flex", alignItems: "center", gap: "6px", marginBottom: "4px" }}>
@@ -200,12 +200,14 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
                 <span style={{ width: "5px", height: "5px", borderRadius: "50%", background: "#06D6A0" }} /> Live Realtime
               </span>
 
-              {/* 3D Glowing Shield Icon */}
-              <div style={{ width: "58px", height: "58px", borderRadius: "18px", background: "linear-gradient(135deg, #2563EB, #0284c7)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 24px rgba(37, 99, 235, 0.6)", border: "2px solid rgba(255,255,255,0.25)" }}>
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2.5">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                  <path d="m9 12 2 2 4-4" />
-                </svg>
+              {/* High-Tech 3D Cyber Security Shield Graphic */}
+              <div style={{ width: "64px", height: "64px", borderRadius: "20px", overflow: "hidden", border: "2px solid #38BDF8", boxShadow: "0 0 24px rgba(56, 189, 248, 0.5)", background: "#0F172A" }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/sentinel_hero_shield.jpg"
+                  alt="3D Cyber Security Shield"
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
               </div>
             </div>
           </div>
@@ -221,21 +223,21 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
               </div>
               <div>
-                <div style={{ fontSize: "0.68rem", color: "#94a3b8", fontWeight: "600" }}>Scans Inspected</div>
-                <div style={{ fontSize: "1.15rem", fontWeight: "800", color: "#ffffff", fontFamily: "Poppins, sans-serif" }}>
-                  {scanStats.total} <span style={{ fontSize: "0.68rem", color: "#94a3b8", fontWeight: "500" }}>Today</span>
+                <div style={{ fontSize: "0.68rem", color: "#94a3b8" }}>Scans Inspected</div>
+                <div style={{ fontSize: "0.95rem", fontWeight: "800", color: "#ffffff", fontFamily: "var(--font-mono)" }}>
+                  {scanStats.total.toLocaleString()} <span style={{ fontSize: "0.68rem", color: "#64748b", fontWeight: "400" }}>Today</span>
                 </div>
               </div>
             </div>
 
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <div style={{ width: "34px", height: "34px", borderRadius: "12px", background: "rgba(239, 68, 68, 0.25)", color: "#f87171", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <div style={{ width: "34px", height: "34px", borderRadius: "12px", background: "rgba(239, 68, 68, 0.2)", color: "#EF4444", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
               </div>
               <div>
-                <div style={{ fontSize: "0.68rem", color: "#94a3b8", fontWeight: "600" }}>Fake Stickers Blocked</div>
-                <div style={{ fontSize: "1.15rem", fontWeight: "800", color: "#ef4444", fontFamily: "Poppins, sans-serif" }}>
-                  {scanStats.blocked} <span style={{ fontSize: "0.68rem", color: "#94a3b8", fontWeight: "500" }}>Today</span>
+                <div style={{ fontSize: "0.68rem", color: "#94a3b8" }}>Fake Stickers Blocked</div>
+                <div style={{ fontSize: "0.95rem", fontWeight: "800", color: "#EF4444", fontFamily: "var(--font-mono)" }}>
+                  {scanStats.blocked} <span style={{ fontSize: "0.68rem", color: "#64748b", fontWeight: "400" }}>Today</span>
                 </div>
               </div>
             </div>
@@ -250,7 +252,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
           color: "#0F172A",
           borderTopLeftRadius: "32px",
           borderTopRightRadius: "32px",
-          padding: "24px 20px 30px 20px",
+          padding: "24px 14px 100px 14px",
           marginTop: "-8px",
           boxShadow: "0 -10px 30px rgba(0,0,0,0.2)",
         }}
@@ -258,11 +260,11 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
 
         {/* 3. Quick Actions 4-Column Icons Grid */}
         <div style={{ marginBottom: "24px" }}>
-          <h3 style={{ fontSize: "0.95rem", fontWeight: "700", marginBottom: "14px", color: "#0F172A", fontFamily: "Poppins, sans-serif" }}>
+          <h3 style={{ fontSize: "0.95rem", fontWeight: "700", marginBottom: "14px", color: "#0F172A", fontFamily: "Poppins, sans-serif", paddingLeft: "6px" }}>
             Quick Actions
           </h3>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "6px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "4px" }}>
             {/* Scan QR */}
             <button
               onClick={() => onNavigate("scanner")}
@@ -274,6 +276,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
                 flexDirection: "column",
                 alignItems: "center",
                 textAlign: "center",
+                padding: "4px 2px",
               }}
             >
               <div style={{ width: "52px", height: "52px", borderRadius: "50%", background: "#0B1F3A", border: "2px solid #2563EB", boxShadow: "0 6px 16px rgba(37, 99, 235, 0.25)", display: "flex", alignItems: "center", justifyContent: "center", color: "#ffffff", marginBottom: "6px" }}>
@@ -285,8 +288,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
                   <path d="M18 18h3v3h-3z" />
                 </svg>
               </div>
-              <span style={{ fontSize: "0.78rem", fontWeight: "700", color: "#0F172A", lineHeight: "1.1" }}>Scan QR</span>
-              <span style={{ fontSize: "0.62rem", color: "#64748B", marginTop: "2px" }}>AI Scan & Analyze</span>
+              <span style={{ fontSize: "0.78rem", fontWeight: "700", color: "#0F172A", lineHeight: "1.1", whiteSpace: "nowrap" }}>Scan QR</span>
+              <span style={{ fontSize: "0.6rem", color: "#64748B", marginTop: "2px", whiteSpace: "nowrap" }}>AI Scan</span>
             </button>
 
             {/* Verify Merchant */}
@@ -300,6 +303,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
                 flexDirection: "column",
                 alignItems: "center",
                 textAlign: "center",
+                padding: "4px 2px",
               }}
             >
               <div style={{ width: "52px", height: "52px", borderRadius: "50%", background: "#E6F7F2", border: "1px solid #A7F3D0", display: "flex", alignItems: "center", justifyContent: "center", color: "#10B981", marginBottom: "6px" }}>
@@ -308,8 +312,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
                   <polyline points="9 22 9 12 15 12 15 22" />
                 </svg>
               </div>
-              <span style={{ fontSize: "0.78rem", fontWeight: "700", color: "#0F172A", lineHeight: "1.1" }}>Verify Merchant</span>
-              <span style={{ fontSize: "0.62rem", color: "#64748B", marginTop: "2px" }}>Check Authenticity</span>
+              <span style={{ fontSize: "0.76rem", fontWeight: "700", color: "#0F172A", lineHeight: "1.1", whiteSpace: "nowrap" }}>Merchant</span>
+              <span style={{ fontSize: "0.6rem", color: "#64748B", marginTop: "2px", whiteSpace: "nowrap" }}>Verify Stand</span>
             </button>
 
             {/* Scan History */}
@@ -323,23 +327,22 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
                 flexDirection: "column",
                 alignItems: "center",
                 textAlign: "center",
+                padding: "4px 2px",
               }}
             >
-              <div style={{ width: "52px", height: "52px", borderRadius: "50%", background: "#FEF6E6", border: "1px solid #FDE68A", display: "flex", alignItems: "center", justifyContent: "center", color: "#D97706", marginBottom: "6px" }}>
+              <div style={{ width: "52px", height: "52px", borderRadius: "50%", background: "#FFFBEB", border: "1px solid #FDE68A", display: "flex", alignItems: "center", justifyContent: "center", color: "#D97706", marginBottom: "6px" }}>
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                  <polyline points="14 2 14 8 20 8" />
-                  <line x1="16" y1="13" x2="8" y2="13" />
-                  <line x1="16" y1="17" x2="8" y2="17" />
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
                 </svg>
               </div>
-              <span style={{ fontSize: "0.78rem", fontWeight: "700", color: "#0F172A", lineHeight: "1.1" }}>Scan History</span>
-              <span style={{ fontSize: "0.62rem", color: "#64748B", marginTop: "2px" }}>View Past Scans</span>
+              <span style={{ fontSize: "0.78rem", fontWeight: "700", color: "#0F172A", lineHeight: "1.1", whiteSpace: "nowrap" }}>History</span>
+              <span style={{ fontSize: "0.6rem", color: "#64748B", marginTop: "2px", whiteSpace: "nowrap" }}>Past Scans</span>
             </button>
 
-            {/* Community */}
+            {/* Community Report */}
             <button
-              onClick={() => onNavigate("alerts")}
+              onClick={() => onNavigate("report")}
               style={{
                 background: "none",
                 border: "none",
@@ -348,9 +351,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
                 flexDirection: "column",
                 alignItems: "center",
                 textAlign: "center",
+                padding: "4px 2px",
               }}
             >
-              <div style={{ width: "52px", height: "52px", borderRadius: "50%", background: "#F3E8FF", border: "1px solid #DDD6FE", display: "flex", alignItems: "center", justifyContent: "center", color: "#7C3AED", marginBottom: "6px" }}>
+              <div style={{ width: "52px", height: "52px", borderRadius: "50%", background: "#F3E8FF", border: "1px solid #E9D5FF", display: "flex", alignItems: "center", justifyContent: "center", color: "#7C3AED", marginBottom: "6px" }}>
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                   <circle cx="9" cy="7" r="4" />
@@ -358,174 +362,137 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
                   <path d="M16 3.13a4 4 0 0 1 0 7.75" />
                 </svg>
               </div>
-              <span style={{ fontSize: "0.78rem", fontWeight: "700", color: "#0F172A", lineHeight: "1.1" }}>Community</span>
-              <span style={{ fontSize: "0.62rem", color: "#64748B", marginTop: "2px" }}>Report & Protect</span>
+              <span style={{ fontSize: "0.78rem", fontWeight: "700", color: "#0F172A", lineHeight: "1.1", whiteSpace: "nowrap" }}>Community</span>
+              <span style={{ fontSize: "0.6rem", color: "#64748B", marginTop: "2px", whiteSpace: "nowrap" }}>Report Fraud</span>
             </button>
           </div>
         </div>
 
-        {/* 4. Protection at a Glance Stats Row */}
-        <div style={{ marginBottom: "22px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
-            <h3 style={{ fontSize: "0.95rem", fontWeight: "700", color: "#0F172A", fontFamily: "Poppins, sans-serif" }}>
-              Protection at a Glance
-            </h3>
-            <span style={{ fontSize: "0.85rem", color: "#64748B", cursor: "pointer" }}>›</span>
-          </div>
-
-          <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr 1fr", gap: "10px" }}>
-            {/* Card 1: Overall Protection */}
-            <div style={{ padding: "14px 12px", borderRadius: "18px", background: "#F8FAFC", border: "1px solid #E2E8F0" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "6px" }}>
-                <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#D1FAE5", color: "#059669", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
-                </div>
-                <span style={{ fontSize: "0.68rem", color: "#64748B", fontWeight: "600" }}>Overall Protection</span>
-              </div>
-              <div style={{ fontSize: "1.3rem", fontWeight: "800", color: "#0F172A", fontFamily: "Poppins, sans-serif" }}>
-                98%
-              </div>
-              <div style={{ fontSize: "0.66rem", color: "#059669", fontWeight: "700", marginTop: "2px" }}>Very High</div>
-            </div>
-
-            {/* Card 2: Safe Scans */}
-            <div style={{ padding: "14px 12px", borderRadius: "18px", background: "#F8FAFC", border: "1px solid #E2E8F0" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "5px", marginBottom: "6px" }}>
-                <span style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#059669" }} />
-                <span style={{ fontSize: "0.68rem", color: "#64748B", fontWeight: "600" }}>Safe Scans</span>
-              </div>
-              <div style={{ fontSize: "1.3rem", fontWeight: "800", color: "#0F172A", fontFamily: "Poppins, sans-serif" }}>
-                {scanStats.safeCount}
-              </div>
-              <div style={{ fontSize: "0.66rem", color: "#64748B", marginTop: "2px" }}>Today</div>
-            </div>
-
-            {/* Card 3: Risky Scans */}
-            <div style={{ padding: "14px 12px", borderRadius: "18px", background: "#F8FAFC", border: "1px solid #E2E8F0" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "5px", marginBottom: "6px" }}>
-                <span style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#DC2626" }} />
-                <span style={{ fontSize: "0.68rem", color: "#64748B", fontWeight: "600" }}>Risky Scans</span>
-              </div>
-              <div style={{ fontSize: "1.3rem", fontWeight: "800", color: "#0F172A", fontFamily: "Poppins, sans-serif" }}>
-                {scanStats.blocked}
-              </div>
-              <div style={{ fontSize: "0.66rem", color: "#64748B", marginTop: "2px" }}>Today</div>
-            </div>
-          </div>
-        </div>
-
-        {/* 5. Educational Reassurance Banner ("Your Money. Our Priority.") */}
+        {/* 4. "Your Money. Our Priority." 3D Lock Security Banner */}
         <div
           style={{
-            background: "linear-gradient(135deg, #ECFDF5 0%, #F0FDF4 100%)",
-            borderRadius: "20px",
+            background: "linear-gradient(135deg, #0F172A 0%, #1E293B 100%)",
+            borderRadius: "24px",
             padding: "16px 18px",
-            border: "1px solid #A7F3D0",
-            marginBottom: "24px",
+            color: "#ffffff",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            gap: "12px",
+            marginBottom: "24px",
+            boxShadow: "0 8px 24px rgba(15, 23, 42, 0.15)",
           }}
         >
-          <div style={{ flex: 1 }}>
-            <h4 style={{ fontSize: "0.92rem", fontWeight: "700", color: "#065F46", marginBottom: "4px", fontFamily: "Poppins, sans-serif" }}>
-              Your Money. Our Priority.
-            </h4>
-            <p style={{ fontSize: "0.76rem", color: "#047857", lineHeight: "1.4", marginBottom: "6px" }}>
-              Every scan is protected by 20+ trust checks and AI intelligence.
-            </p>
-            <button
-              onClick={() => onNavigate("merchant")}
-              style={{
-                background: "none",
-                border: "none",
-                color: "#059669",
-                fontSize: "0.78rem",
-                fontWeight: "700",
-                cursor: "pointer",
-                padding: 0,
-                display: "flex",
-                alignItems: "center",
-                gap: "3px",
-              }}
-            >
-              Learn How ›
-            </button>
-          </div>
-
-          {/* 3D Lock Illustration */}
-          <div style={{ width: "48px", height: "48px", borderRadius: "50%", background: "#D1FAE5", display: "flex", alignItems: "center", justifyContent: "center", color: "#059669", flexShrink: 0, boxShadow: "0 4px 12px rgba(5, 150, 105, 0.15)" }}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-            </svg>
+          <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+            <div style={{ width: "42px", height: "42px", borderRadius: "14px", background: "rgba(56, 189, 248, 0.15)", border: "1px solid rgba(56, 189, 248, 0.4)", color: "#38BDF8", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <div>
+              <div style={{ fontSize: "0.95rem", fontWeight: "800", color: "#ffffff", fontFamily: "Poppins, sans-serif" }}>
+                Your Money. Our Priority.
+              </div>
+              <div style={{ fontSize: "0.75rem", color: "#94A3B8" }}>
+                Multi-signal pre-transaction fraud prevention engine.
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* 6. Recent Scans Preview Section */}
-        <div>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
-            <h3 style={{ fontSize: "0.95rem", fontWeight: "700", color: "#0F172A", fontFamily: "Poppins, sans-serif" }}>Recent Scans</h3>
-            <button onClick={() => onNavigate("history")} style={{ background: "none", border: "none", color: "#2563EB", fontSize: "0.82rem", fontWeight: "700", cursor: "pointer" }}>
-              View All
+        {/* 5. Live Community Scam Broadcasts Section */}
+        <div style={{ marginBottom: "24px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px", paddingLeft: "6px" }}>
+            <h3 style={{ fontSize: "0.95rem", fontWeight: "700", color: "#0F172A", fontFamily: "Poppins, sans-serif" }}>
+              Live Fraud Alerts
+            </h3>
+            <button
+              onClick={() => onNavigate("alerts")}
+              style={{ background: "none", border: "none", color: "#2563EB", fontSize: "0.78rem", fontWeight: "700", cursor: "pointer" }}
+            >
+              View Feed →
             </button>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-            {recentScans.map((scan) => {
-              const isDanger = scan.level === "HIGH_RISK";
-              const isCaution = scan.level === "CAUTION";
-
-              return (
-                <div
-                  key={scan.id}
-                  onClick={() => onNavigate(isDanger ? "report" : "merchant")}
-                  style={{
-                    padding: "12px 14px",
-                    borderRadius: "16px",
-                    background: "#F8FAFC",
-                    border: "1px solid #E2E8F0",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    cursor: "pointer",
-                  }}
-                >
-                  <div style={{ display: "flex", alignItems: "center", gap: "10px", flex: 1, minWidth: 0, paddingRight: "8px" }}>
-                    <div style={{ width: "38px", height: "38px", borderRadius: "12px", background: isDanger ? "#FEE2E2" : isCaution ? "#FEF3C7" : "#D1FAE5", color: isDanger ? "#DC2626" : isCaution ? "#D97706" : "#059669", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                      {isDanger ? (
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                      ) : (
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                      )}
-                    </div>
-
-                    <div style={{ minWidth: 0 }}>
-                      <div style={{ fontWeight: "700", fontSize: "0.88rem", color: "#0F172A" }}>{scan.name}</div>
-                      <div style={{ fontSize: "0.72rem", color: "#64748B", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{scan.payload}</div>
-                    </div>
+            {feed.slice(0, 2).map((item) => (
+              <div
+                key={item.id}
+                style={{
+                  padding: "14px 16px",
+                  borderRadius: "18px",
+                  background: "#F8FAFC",
+                  border: "1px solid #E2E8F0",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                  <div style={{ width: "36px", height: "36px", borderRadius: "12px", background: "#FEE2E2", color: "#EF4444", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
                   </div>
-
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
-                    <span
-                      style={{
-                        fontSize: "0.7rem",
-                        fontWeight: "700",
-                        padding: "3px 8px",
-                        borderRadius: "10px",
-                        background: isDanger ? "#FEE2E2" : isCaution ? "#FEF3C7" : "#D1FAE5",
-                        color: isDanger ? "#DC2626" : isCaution ? "#D97706" : "#059669",
-                      }}
-                    >
-                      {isDanger ? "High Risk" : isCaution ? "Caution" : "Safe"}
-                    </span>
-                    <span style={{ fontSize: "0.72rem", color: "#94A3B8" }}>{scan.date}</span>
-                    <span style={{ color: "#CBD5E1", fontSize: "0.85rem" }}>›</span>
+                  <div>
+                    <div style={{ fontSize: "0.85rem", fontWeight: "700", color: "#0F172A" }}>{item.title}</div>
+                    <div className="font-mono" style={{ fontSize: "0.72rem", color: "#64748B" }}>{item.payload}</div>
                   </div>
                 </div>
-              );
-            })}
+
+                <span style={{ fontSize: "0.7rem", fontWeight: "700", color: "#EF4444", background: "rgba(239, 68, 68, 0.1)", padding: "4px 8px", borderRadius: "10px" }}>
+                  {item.reports_count} Reports
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 6. Recent Scans History Section */}
+        <div>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px", paddingLeft: "6px" }}>
+            <h3 style={{ fontSize: "0.95rem", fontWeight: "700", color: "#0F172A", fontFamily: "Poppins, sans-serif" }}>
+              Recent Scans
+            </h3>
+            <button
+              onClick={() => onNavigate("history")}
+              style={{ background: "none", border: "none", color: "#2563EB", fontSize: "0.78rem", fontWeight: "700", cursor: "pointer" }}
+            >
+              See All →
+            </button>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+            {recentScans.map((scan) => (
+              <div
+                key={scan.id}
+                style={{
+                  padding: "14px 16px",
+                  borderRadius: "18px",
+                  background: "#F8FAFC",
+                  border: "1px solid #E2E8F0",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                  <div style={{ width: "36px", height: "36px", borderRadius: "12px", background: scan.level === "SAFE" ? "#D1FAE5" : "#FEE2E2", color: scan.level === "SAFE" ? "#10B981" : "#EF4444", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    {scan.level === "SAFE" ? (
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+                    ) : (
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+                    )}
+                  </div>
+                  <div>
+                    <div style={{ fontSize: "0.85rem", fontWeight: "700", color: "#0F172A" }}>{scan.name}</div>
+                    <div className="font-mono" style={{ fontSize: "0.72rem", color: "#64748B" }}>{scan.payload}</div>
+                  </div>
+                </div>
+
+                <div style={{ textAlign: "right" }}>
+                  <span style={{ fontSize: "0.75rem", fontWeight: "800", color: scan.level === "SAFE" ? "#10B981" : "#EF4444" }}>
+                    {scan.level}
+                  </span>
+                  <div style={{ fontSize: "0.68rem", color: "#94A3B8" }}>{scan.date}</div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
