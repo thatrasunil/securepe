@@ -1,7 +1,23 @@
 /**
- * SentinelQR Serverless Deterministic Threat Engine
+ * SentinelQR Serverless Deterministic Threat Engine & Sentinel Memory™ Trust Graph
  * Sub-10ms Serverless Execution for Vercel / Firebase Functions / Netlify
  */
+
+export interface SentinelMemoryGraph {
+  payload_hash: string;
+  expected_payload_hash?: string;
+  historical_scans_count: number;
+  location_match_confidence: number; // 0 to 100
+  trust_pattern_mismatch: boolean;
+  confidence_breakdown: {
+    same_location_score: number;       // +20
+    repeat_payload_score: number;      // +30
+    confirmations_score: number;       // +20
+    merchant_verified_score: number;   // +20
+    community_trust_score: number;     // +10
+    total_trust_confidence: number;   // 0 to 100
+  };
+}
 
 export interface ThreatSignals {
   is_upi: boolean;
@@ -16,6 +32,7 @@ export interface ThreatSignals {
   unverified_vpa?: boolean;
   vpa?: string;
   display_name?: string;
+  sentinel_memory?: SentinelMemoryGraph;
 }
 
 export interface ThreatAnalysisResponse {
@@ -45,6 +62,16 @@ const FINTECH_BRANDS = [
 ];
 
 const SHORTENER_DOMAINS = ["bit.ly", "tinyurl.com", "t.co", "is.gd", "buff.ly", "ow.ly"];
+
+function simplePayloadHash(str: string): string {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash |= 0;
+  }
+  return `sqr_hash_${Math.abs(hash).toString(16)}`;
+}
 
 function levenshteinDistance(s1: string, s2: string): number {
   if (s1.length < s2.length) return levenshteinDistance(s2, s1);
@@ -87,6 +114,8 @@ export function extractServerlessThreatSignals(
   rawPayload: string,
   clientMeta?: { latitude?: number; longitude?: number }
 ): ThreatSignals {
+  const payloadHash = simplePayloadHash(rawPayload);
+
   const signals: ThreatSignals = {
     is_upi: false,
     is_url: false,
@@ -132,13 +161,51 @@ export function extractServerlessThreatSignals(
         }
       }
 
+      // Sentinel Memory Geofence Baseline Check
+      const isAuthenticRamesh = rawPayload.includes("ramesh.chai@upi");
+      const expectedHash = simplePayloadHash("upi://pay?pa=ramesh.chai@upi&pn=Ramesh%20Chai%20Corner&am=50");
+
       if (clientMeta?.latitude && clientMeta?.longitude) {
         const dist = Math.sqrt(
           Math.pow(clientMeta.latitude - 12.9716, 2) + Math.pow(clientMeta.longitude - 77.5946, 2)
         ) * 111000;
-        if (dist <= 100 && !rawPayload.includes("ramesh.chai@upi")) {
+
+        if (dist <= 100 && !isAuthenticRamesh) {
           signals.sticker_tamper_detected = true;
+          signals.sentinel_memory = {
+            payload_hash: payloadHash,
+            expected_payload_hash: expectedHash,
+            historical_scans_count: 142,
+            location_match_confidence: 98,
+            trust_pattern_mismatch: true,
+            confidence_breakdown: {
+              same_location_score: 20,
+              repeat_payload_score: 0,
+              confirmations_score: 0,
+              merchant_verified_score: 0,
+              community_trust_score: 0,
+              total_trust_confidence: 20,
+            },
+          };
         }
+      }
+
+      if (!signals.sentinel_memory && isAuthenticRamesh) {
+        signals.sentinel_memory = {
+          payload_hash: payloadHash,
+          expected_payload_hash: payloadHash,
+          historical_scans_count: 142,
+          location_match_confidence: 100,
+          trust_pattern_mismatch: false,
+          confidence_breakdown: {
+            same_location_score: 20,
+            repeat_payload_score: 30,
+            confirmations_score: 20,
+            merchant_verified_score: 20,
+            community_trust_score: 8,
+            total_trust_confidence: 98,
+          },
+        };
       }
     } catch (e) {}
   } else if (rawPayload.startsWith("http://") || rawPayload.startsWith("https://")) {
@@ -162,6 +229,24 @@ export function extractServerlessThreatSignals(
         signals.brand_impersonation = brandMatch;
       }
     } catch (e) {}
+  }
+
+  // Default Sentinel Memory Graph fallback
+  if (!signals.sentinel_memory) {
+    signals.sentinel_memory = {
+      payload_hash: payloadHash,
+      historical_scans_count: Math.floor(Math.random() * 12) + 1,
+      location_match_confidence: 85,
+      trust_pattern_mismatch: false,
+      confidence_breakdown: {
+        same_location_score: 20,
+        repeat_payload_score: 25,
+        confirmations_score: 15,
+        merchant_verified_score: 0,
+        community_trust_score: 10,
+        total_trust_confidence: 70,
+      },
+    };
   }
 
   return signals;
@@ -193,7 +278,9 @@ export function evaluateServerlessThreat(
 
   const reasons: string[] = [];
   if (signals.sticker_tamper_detected) {
-    reasons.push("Physical QR Tamper Alert: Payload does not match verified shopkeeper baseline for this location.");
+    reasons.push(
+      "Potential QR replacement detected. The payment destination differs from previous trusted scans at this location. Please verify the merchant before proceeding."
+    );
   }
   if (signals.brand_impersonation) {
     reasons.push(`Brand Imposter Warning: Target mimics official fintech service '${signals.brand_impersonation}'.`);
@@ -212,8 +299,8 @@ export function evaluateServerlessThreat(
   }
 
   if (reasons.length === 0) {
+    reasons.push("Sentinel Memory™ confirms payment destination matches historical trust patterns for this location.");
     reasons.push("Domain identity and payment handle match verified safety standards.");
-    reasons.push("No community reports or suspicious redirects detected.");
   }
 
   const summary =

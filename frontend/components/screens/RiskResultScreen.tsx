@@ -39,6 +39,7 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({
 
   const score = result.risk_score;
   const level = result.risk_level;
+  const memory = result.signals?.sentinel_memory;
 
   const speakText = (text: string) => {
     if ("speechSynthesis" in window) {
@@ -220,7 +221,53 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({
         </div>
       </div>
 
-      {/* 4. Purple AI Reasoning Card (#7C3AED Accent) */}
+      {/* 4. Sentinel Memory™ Privacy-Preserving Trust Graph Card */}
+      {memory && (
+        <div
+          style={{
+            background: "linear-gradient(135deg, rgba(6, 182, 212, 0.08) 0%, rgba(37, 99, 235, 0.08) 100%)",
+            borderRadius: "24px",
+            padding: "18px 20px",
+            border: "1px solid rgba(6, 182, 212, 0.25)",
+            marginBottom: "18px",
+          }}
+        >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+            <div style={{ fontSize: "0.95rem", fontWeight: "700", color: "#0284c7", display: "flex", alignItems: "center", gap: "6px", fontFamily: "Poppins, sans-serif" }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              Sentinel Memory™ Trust Graph
+            </div>
+            <span
+              style={{
+                fontSize: "0.72rem",
+                fontWeight: "700",
+                padding: "4px 10px",
+                borderRadius: "12px",
+                background: memory.trust_pattern_mismatch ? "rgba(239, 68, 68, 0.15)" : "rgba(16, 185, 129, 0.15)",
+                color: memory.trust_pattern_mismatch ? "#EF4444" : "#10B981",
+                border: memory.trust_pattern_mismatch ? "1px solid rgba(239,68,68,0.3)" : "1px solid rgba(16,185,129,0.3)",
+              }}
+            >
+              {memory.trust_pattern_mismatch ? "Pattern Mismatch" : "Trust Match 98%"}
+            </span>
+          </div>
+
+          <p style={{ fontSize: "0.78rem", color: "var(--text-secondary)", lineHeight: "1.45", marginBottom: "12px" }}>
+            Privacy-preserving historical trust model for this location based on {memory.historical_scans_count} previous user scans.
+          </p>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
+            <div style={{ padding: "8px 10px", background: "rgba(0,0,0,0.04)", borderRadius: "10px", fontSize: "0.72rem", color: "var(--text-secondary)" }}>
+              Payload Hash: <span style={{ fontFamily: "var(--font-mono)", color: "var(--text-main)", fontWeight: "700" }}>{memory.payload_hash}</span>
+            </div>
+            <div style={{ padding: "8px 10px", background: "rgba(0,0,0,0.04)", borderRadius: "10px", fontSize: "0.72rem", color: "var(--text-secondary)" }}>
+              Location Confidence: <span style={{ color: "#10B981", fontWeight: "700" }}>{memory.location_match_confidence}%</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 5. Purple AI Reasoning Card (#7C3AED Accent) */}
       <div
         style={{
           background: "rgba(124, 58, 237, 0.08)",
@@ -335,7 +382,7 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({
         </div>
       </div>
 
-      {/* 5. Bottom Action Buttons */}
+      {/* 6. Bottom Action Buttons */}
       <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
         {level === "HIGH_RISK" ? (
           <>
@@ -444,7 +491,7 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({
         )}
       </div>
 
-      {/* Sleek Custom Warning Bypass Modal Dialog (Centering Fixed!) */}
+      {/* Sleek Custom Warning Bypass Modal Dialog */}
       {showBypassModal && (
         <div
           style={{

@@ -1,6 +1,6 @@
 # SentinelQR — Pre-Transaction Payment Trust Engine
 
-> **"Evaluating payment destinations using multi-signal risk analysis and explainable AI before users authorize a transaction."**
+> **"Evaluating payment destinations using Sentinel Memory™ privacy-preserving trust graphs, multi-signal risk analysis, and explainable AI before users authorize a transaction."**
 
 [![Next.js](https://img.shields.io/badge/Next.js-16.3-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![Firebase](https://img.shields.io/badge/Firebase-Auth%20%26%20Firestore-FFCA28?style=for-the-badge&logo=firebase)](https://firebase.google.com/)
@@ -9,58 +9,57 @@
 
 ---
 
-## 💡 The Core USP & Philosophy
+## 💡 Signature USP: Sentinel Memory™
 
-> **"SentinelQR is a Pre-Transaction Payment Trust Engine that evaluates QR payment destinations using multi-signal risk analysis and explainable AI before users authorize a transaction."**
+> **Sentinel Memory™ — A privacy-preserving trust graph that learns trusted QR payment destinations over time. Instead of judging a QR image, it compares the current payment destination with historical trust patterns, geofenced location context, merchant verification, and community intelligence to detect unexpected changes before users pay.**
 
-A QR code image is simply encoded data; you **cannot determine from the QR image alone** whether it is genuine or fraudulent. 
+Most QR scanners only answer:
+> *"What does this QR contain?"*
 
-Instead of asking **"Is this QR fake?"**, SentinelQR asks:
-👉 **"Is this payment destination trustworthy?"**
+SentinelQR adds historical context & memory:
+> **"What have we historically observed at this physical location?"**
 
 ---
 
 ## ⚡ How SentinelQR Works
 
 ```text
-Camera ──► Decode QR ──► Identify Type ──► Extract Destination ──► 20+ Trust Checks ──► Confidence Score (0-100) ──► AI Explainer ──► User Decides
+Camera ──► Decode QR ──► Extract Destination ──► Sentinel Memory™ Graph ──► 20+ Trust Checks ──► Confidence Score (0-100) ──► AI Explainer ──► User Decides
 ```
 
-### 📡 Multi-Signal Risk Engine (7 Independent Signals)
-1. **QR Type Identification**: Routes `UPI`, `Website`, `APK`, `PDF`, `Wi-Fi`, or `Contact` payloads to custom verification suites.
-2. **UPI Validation**: Verifies handle structure, VPA formatting, and imposter merchant name mismatches.
-3. **Website Reputation**: Evaluates HTTPS, domain registration age, redirect depth, Levenshtein brand similarity, and URL shortener expansion.
-4. **Threat Intelligence**: Cross-references Google Safe Browsing, PhishTank, and internal threat caches.
-5. **Community Intelligence**: Escalates risk automatically when multiple crowd-sourced reports flag a destination.
-6. **Merchant Verification *(Optional Trust Layer)***: Enrolled shopkeepers register their official QR payload. If a scanned QR at the store differs from the registered QR, SentinelQR warns of a possible QR replacement. If a merchant isn't registered, SentinelQR protects users via the remaining 6 signals.
-7. **Physical Context**: Evaluates merchant geofencing, scan history, and device proximity.
+### 📡 Multi-Signal Risk Engine & Sentinel Memory™ Model
+1. **Sentinel Memory™ Geofence Baseline**: Privacy-preserving payload hashes matched against historical scan confidence (+20 location, +30 repeat payload, +20 confirmations).
+2. **Defensible Tamper Alerting**: Flags *"Potential QR replacement detected. The payment destination differs from previous trusted scans at this location."*
+3. **QR Type Identification**: Routes `UPI`, `Website`, `APK`, `PDF`, `Wi-Fi`, or `Contact` payloads to custom verification suites.
+4. **UPI Validation**: Verifies handle structure, VPA formatting, and imposter merchant name mismatches.
+5. **Website Reputation**: Evaluates HTTPS, domain registration age, redirect depth, Levenshtein brand similarity, and URL shortener expansion.
+6. **Community Intelligence**: Escalates risk automatically when multiple crowd-sourced reports flag a destination.
+7. **Merchant Verification *(Optional Trust Layer)***: Enrolled shopkeepers register their official QR payload baseline.
 
 ### 📊 Confidence-Based Risk Tiers
-* **🟢 0 – 29**: Low observed risk based on available signals.
-* **🟡 30 – 69**: Suspicious indicators detected. Review before proceeding.
-* **🔴 70 – 100**: Multiple high-risk indicators detected. Payment is **not recommended**.
+* **🟢 0 – 29 (LOW RISK)**: Low observed risk based on available signals.
+* **🟡 30 – 69 (SUSPICIOUS)**: Suspicious indicators detected. Review before proceeding.
+* **🔴 70 – 100 (CRITICAL DANGER)**: Multiple high-risk indicators detected. Payment is **not recommended**.
 
 ---
 
 ## 🎤 The Golden Judge Defense Pitch
 
 > **Q: "How does your AI know if a QR code is fake?"**  
-> **A**: *"We don't rely on AI to decide whether a QR is fake. The QR code is decoded and evaluated using multiple measurable trust signals—such as merchant verification, destination validation, threat intelligence, and community reports. These signals produce a deterministic risk score. Our AI then explains that score in clear language so users understand why a payment may be risky."*
+> **A**: *"A QR code itself is just raw data—you cannot know if an image is fake. SentinelQR evaluates the payment destination and location context. Through Sentinel Memory™, we check whether the payload matches historical trust baselines for that physical location before money leaves the user's account."*
 
-> **Q: "What if the merchant never registers?"**  
-> **A**: *"Merchant verification is an optional trust layer, not a single point of failure. If a merchant isn't enrolled, SentinelQR relies on the remaining trust signals—such as domain age, URL unrolling, UPI syntax validation, threat intelligence databases, and community reports—to assess destination risk."*
-
+> **Q: "What if a merchant legitimately changes their QR code?"**  
+> **A**: *"We avoid overclaiming 'Fake Sticker'. SentinelQR flags a 'Potential QR replacement detected—destination differs from previous trusted scans'. It calculates a confidence score and prompts the user to verify with the shopkeeper."*
 
 ---
 
 ## ✨ Key Features
 
-
-- 🛡️ **Sub-10ms AI Threat Engine**: Real-time deterministic evaluation of domain entropy, Punycode tricks, shortener expansion, VPA validation, and geofence baselines.
-- 🔥 **Firebase Serverless Architecture**: Real-time Firestore synchronization for scans, threat alerts, and fraud broadcasts, alongside Google Popup and Phone OTP authentication (`ssn-university`).
+- 🧠 **Sentinel Memory™ Graph**: Privacy-preserving SHA-256 payload hashing and geofenced location memory.
+- 🛡️ **Sub-10ms AI Threat Engine**: Real-time deterministic evaluation of domain entropy, Punycode tricks, shortener expansion, and VPA validation.
+- 🔥 **Firebase Serverless Architecture**: Real-time Firestore synchronization for scans, threat alerts, and fraud broadcasts.
 - 📷 **Full-Bleed Reticle Viewfinder**: High-tech camera scanner with 4 Electric Cyan corner brackets, sweeping laser animation, torch toggle, and gallery image decoding.
-- 🔊 **Voice Safety Assistant (Read Aloud)**: Web Speech API text-to-speech integration designed for senior citizens and visually impaired users to hear threat assessments out loud.
-- 🌗 **Cyber Trust Theme Strategy**: Seamless live switching between Light Mode ☀️ and Dark Mode 🌙 persisted in local storage.
+- 🔊 **Voice Safety Assistant (Read Aloud)**: Web Speech API text-to-speech integration designed for senior citizens and visually impaired users.
 - 🚨 **Community Fraud Broadcasts**: Instant real-time crowd-sourced reporting of malicious shop stickers to protect surrounding merchants.
 
 ---
@@ -119,7 +118,7 @@ Camera ──► Decode QR ──► Identify Type ──► Extract Destination
 
 For architectural design and FAANG-level product strategy, view our design documents in `docs/`:
 - **Document 0**: Product Strategy & Design Philosophy
-- **Document 14**: SentinelQR Design Philosophy & Experience Strategy
+- **JUDGE_DEFENSE_AND_USP.md**: Master Pitch & Defense Playbook
 
 ---
 

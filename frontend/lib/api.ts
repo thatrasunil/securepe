@@ -34,6 +34,21 @@ export interface ScanResult {
     unverified_vpa?: boolean;
     vpa?: string;
     display_name?: string;
+    sentinel_memory?: {
+      payload_hash: string;
+      expected_payload_hash?: string;
+      historical_scans_count: number;
+      location_match_confidence: number;
+      trust_pattern_mismatch: boolean;
+      confidence_breakdown: {
+        same_location_score: number;
+        repeat_payload_score: number;
+        confirmations_score: number;
+        merchant_verified_score: number;
+        community_trust_score: number;
+        total_trust_confidence: number;
+      };
+    };
   };
   explanation: {
     summary: string;
