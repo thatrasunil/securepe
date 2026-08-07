@@ -205,7 +205,9 @@ export const LoginScreen: React.FC<ScreenProps> = ({ onNavigate, onUserLogin }) 
       setShowOtpInput(true);
     } catch (err: any) {
       console.error("Phone Auth error:", err);
-      if (err.code === "auth/operation-not-allowed") {
+      if (err.code === "auth/billing-not-enabled") {
+        setAuthError("Firebase live SMS requires a paid Firebase Blaze plan or Test Phone Numbers. Please use 'Continue with Google' or 'Continue as Guest'.");
+      } else if (err.code === "auth/operation-not-allowed") {
         setAuthError("Firebase Phone SMS is disabled for this region in Firebase Console. Please use 'Continue with Google' or 'Continue as Guest'.");
       } else {
         setAuthError(err.message || "Failed to send SMS OTP. Please try 'Continue with Google'.");
