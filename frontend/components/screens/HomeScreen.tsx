@@ -98,29 +98,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            {/* API Explorer Button for Judges */}
-            <button
-              onClick={() => onNavigate("api_explorer")}
-              style={{
-                height: "36px",
-                padding: "0 10px",
-                borderRadius: "18px",
-                background: "rgba(56, 189, 248, 0.18)",
-                border: "1px solid rgba(56, 189, 248, 0.5)",
-                color: "#38BDF8",
-                fontSize: "0.74rem",
-                fontWeight: "800",
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                gap: "5px",
-              }}
-              title="Open SecurePE Trust API Explorer"
-            >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-              API Docs
-            </button>
-
             {/* Read Aloud Voice Button */}
             <button
               onClick={speakScreen}
