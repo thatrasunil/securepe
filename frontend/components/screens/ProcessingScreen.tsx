@@ -28,20 +28,50 @@ export const ProcessingScreen: React.FC<ProcessingScreenProps> = ({
 
   useEffect(() => {
     let isMounted = true;
+    let scanResultData: ScanResult | null = null;
+    let scanLatency = 12;
 
-    const runProcessingPipeline = async () => {
-      const { data, latencyMs } = await analyzeScan(payload);
+    // Kick off real threat analysis immediately
+    analyzeScan(payload).then(({ data, latencyMs }) => {
+      scanResultData = data;
+      scanLatency = latencyMs;
+    });
+
+    // Step-by-step progress animation (120ms per step = 600ms total pipeline animation)
+    const stepInterval = setInterval(() => {
       if (!isMounted) return;
-      onAnalysisDone(data, latencyMs);
-      onNavigate("result");
-    };
+      setActiveStep((prev) => {
+        if (prev < checklist.length - 1) {
+          return prev + 1;
+        } else {
+          clearInterval(stepInterval);
+          // Mark all steps complete
+          setActiveStep(checklist.length);
+          setPhase("complete");
 
-    runProcessingPipeline();
+          setTimeout(() => {
+            if (!isMounted) return;
+            setPhase("redirecting");
+
+            setTimeout(() => {
+              if (!isMounted) return;
+              if (scanResultData) {
+                onAnalysisDone(scanResultData, scanLatency);
+              }
+              onNavigate("result");
+            }, 100);
+          }, 150);
+
+          return checklist.length;
+        }
+      });
+    }, 120);
 
     return () => {
       isMounted = false;
+      clearInterval(stepInterval);
     };
-  }, [payload, onAnalysisDone, onNavigate]);
+  }, [payload, onAnalysisDone, onNavigate, checklist.length]);
 
   return (
     <div

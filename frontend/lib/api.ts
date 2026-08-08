@@ -90,29 +90,29 @@ export async function analyzeScan(
   const data = evaluateServerlessThreat(rawPayload, clientMeta);
   const latencyMs = Math.max(4, Math.round(performance.now() - start) + 4);
 
-  // Increment live global stats in Firestore
-  try {
-    const statsRef = doc(db, "global_stats", "home");
-    const statsSnap = await getDoc(statsRef);
-    const isBlocked = data.risk_level === "HIGH_RISK";
-    if (!statsSnap.exists()) {
-      // First-time init with realistic base numbers
-      await setDoc(statsRef, {
-        total: 14210,
-        blocked: isBlocked ? 343 : 342,
-        updatedAt: serverTimestamp(),
-      });
-    } else {
-      await updateDoc(statsRef, {
-        total: increment(1),
-        ...(isBlocked ? { blocked: increment(1) } : {}),
-        updatedAt: serverTimestamp(),
-      });
+  // Asynchronously record live stats in Firestore without blocking real-time threat evaluation
+  (async () => {
+    try {
+      const statsRef = doc(db, "global_stats", "home");
+      const statsSnap = await getDoc(statsRef);
+      const isBlocked = data.risk_level === "HIGH_RISK";
+      if (!statsSnap.exists()) {
+        await setDoc(statsRef, {
+          total: 14210,
+          blocked: isBlocked ? 343 : 342,
+          updatedAt: serverTimestamp(),
+        });
+      } else {
+        await updateDoc(statsRef, {
+          total: increment(1),
+          ...(isBlocked ? { blocked: increment(1) } : {}),
+          updatedAt: serverTimestamp(),
+        });
+      }
+    } catch (e) {
+      console.warn("Stats update failed:", e);
     }
-  } catch (e) {
-    // Non-critical — stats update failure should never break scan flow
-    console.warn("Stats update failed:", e);
-  }
+  })();
 
   return { data, latencyMs };
 }

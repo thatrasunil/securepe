@@ -55,23 +55,30 @@ export const ScannerScreen: React.FC<ScannerScreenProps> = ({ onNavigate, onScan
       }
     }
 
-    function scanFrame() {
+    let lastScanTime = 0;
+    function scanFrame(timestamp?: number) {
       if (videoRef.current && canvasRef.current && videoRef.current.readyState === videoRef.current.HAVE_ENOUGH_DATA) {
-        const canvas = canvasRef.current;
-        const ctx = canvas.getContext("2d", { willReadFrequently: true });
-        if (ctx) {
-          canvas.height = videoRef.current.videoHeight;
-          canvas.width = videoRef.current.videoWidth;
-          ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const now = timestamp || performance.now();
+        if (now - lastScanTime >= 120) {
+          lastScanTime = now;
+          const canvas = canvasRef.current;
+          const ctx = canvas.getContext("2d", { willReadFrequently: true });
+          if (ctx) {
+            const vHeight = videoRef.current.videoHeight;
+            const vWidth = videoRef.current.videoWidth;
+            if (canvas.height !== vHeight) canvas.height = vHeight;
+            if (canvas.width !== vWidth) canvas.width = vWidth;
+            ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
-          const code = jsQR(imageData.data, imageData.width, imageData.height, {
-            inversionAttempts: "dontInvert",
-          });
+            const code = jsQR(imageData.data, imageData.width, imageData.height, {
+              inversionAttempts: "dontInvert",
+            });
 
-          if (code && code.data) {
-            triggerAutoCaptureSequence(code.data);
-            return;
+            if (code && code.data) {
+              triggerAutoCaptureSequence(code.data);
+              return;
+            }
           }
         }
       }
