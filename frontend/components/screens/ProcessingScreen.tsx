@@ -30,11 +30,11 @@ export const ProcessingScreen: React.FC<ProcessingScreenProps> = ({
     let isMounted = true;
 
     const runProcessingPipeline = async () => {
-      // Step 4: AI Analysis in progress (Animate checklist)
+      // Step 4: AI Analysis in progress (Fast checklist animation)
       for (let i = 0; i < checklist.length; i++) {
         if (!isMounted) return;
         setActiveStep(i);
-        await new Promise((r) => setTimeout(r, 260));
+        await new Promise((r) => setTimeout(r, 80));
       }
 
       if (!isMounted) return;
@@ -42,15 +42,15 @@ export const ProcessingScreen: React.FC<ProcessingScreenProps> = ({
       // Analyze Scan
       const { data, latencyMs } = await analyzeScan(payload);
 
-      // Step 5: Analysis Complete (Green Checkmark)
+      // Step 5: Analysis Complete
       setPhase("complete");
-      await new Promise((r) => setTimeout(r, 600));
+      await new Promise((r) => setTimeout(r, 120));
 
       if (!isMounted) return;
 
-      // Step 6: Move to Result (Redirecting Arrow)
+      // Step 6: Move to Result
       setPhase("redirecting");
-      await new Promise((r) => setTimeout(r, 400));
+      await new Promise((r) => setTimeout(r, 100));
 
       if (!isMounted) return;
       onAnalysisDone(data, latencyMs);
