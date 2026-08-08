@@ -12,7 +12,7 @@ interface HomeScreenProps {
 export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
   const [feed, setFeed] = useState<FeedItem[]>([]);
   const [userName, setUserName] = useState("Sunil");
-  const [scanStats, setScanStats] = useState({ total: 12, blocked: 3, safeCount: 9 });
+  const [scanStats, setScanStats] = useState({ total: 14209, blocked: 342, safeCount: 13867 });
   const [recentScans, setRecentScans] = useState<Array<{ id: string; name: string; payload: string; date: string; riskScore: number; level: "SAFE" | "CAUTION" | "HIGH_RISK" }>>([
     {
       id: "s1",
