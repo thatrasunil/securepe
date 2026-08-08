@@ -20,7 +20,8 @@ export type ScreenId =
   | "profile"
   | "payment_review"
   | "payment_sim"
-  | "payment_success";
+  | "payment_success"
+  | "api_explorer";
 
 interface BottomNavProps {
   currentScreen: ScreenId;

@@ -27,6 +27,7 @@ import {
   PaymentSimulationScreen,
   PaymentSuccessScreen,
 } from "@/components/screens/PaymentSimulationScreens";
+import { ApiExplorerScreen } from "@/components/screens/ApiExplorerScreen";
 import { ScanResult } from "@/lib/api";
 import { auth, onAuthStateChanged, User } from "@/lib/firebase";
 
@@ -182,6 +183,9 @@ export default function SentinelApp() {
             simAmount={simAmount}
             setSimAmount={setSimAmount}
           />
+        )}
+        {screen === "api_explorer" && (
+          <ApiExplorerScreen onNavigate={handleNavigate} />
         )}
       </div>
 
