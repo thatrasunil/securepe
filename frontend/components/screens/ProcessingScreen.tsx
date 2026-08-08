@@ -30,27 +30,14 @@ export const ProcessingScreen: React.FC<ProcessingScreenProps> = ({
     let isMounted = true;
 
     const runProcessingPipeline = async () => {
-      // Step 4: AI Analysis in progress (Fast checklist animation)
-      for (let i = 0; i < checklist.length; i++) {
-        if (!isMounted) return;
-        setActiveStep(i);
-        await new Promise((r) => setTimeout(r, 80));
-      }
-
-      if (!isMounted) return;
-
-      // Analyze Scan
+      // 1. Execute threat analysis immediately (< 10ms serverless engine)
       const { data, latencyMs } = await analyzeScan(payload);
-
-      // Step 5: Analysis Complete
-      setPhase("complete");
-      await new Promise((r) => setTimeout(r, 120));
-
+      
       if (!isMounted) return;
+      setActiveStep(4);
 
-      // Step 6: Move to Result
-      setPhase("redirecting");
-      await new Promise((r) => setTimeout(r, 100));
+      // 2. Ultra-fast 120ms visual confirmation transition
+      await new Promise((r) => setTimeout(r, 120));
 
       if (!isMounted) return;
       onAnalysisDone(data, latencyMs);
