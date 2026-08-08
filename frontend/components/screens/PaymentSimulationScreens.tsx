@@ -79,21 +79,26 @@ export const PaymentReviewScreen: React.FC<PaymentReviewProps> = ({
         </div>
 
         {/* Amount Input Box */}
-        <div style={{ background: "rgba(0,0,0,0.04)", borderRadius: "16px", padding: "14px 16px", border: "1px solid var(--bg-card-border)" }}>
-          <div style={{ fontSize: "0.74rem", color: "var(--text-secondary)", fontWeight: "600", marginBottom: "6px" }}>
-            Payment Amount
+        <div style={{ background: "var(--bg-primary)", borderRadius: "18px", padding: "16px", border: "1.5px solid rgba(56, 189, 248, 0.3)" }}>
+          <div style={{ fontSize: "0.74rem", color: "var(--text-secondary)", fontWeight: "700", marginBottom: "6px", textTransform: "uppercase", letterSpacing: "0.04em" }}>
+            Enter Payment Amount
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-            <span style={{ fontSize: "1.5rem", fontWeight: "800", color: "var(--text-main)" }}>₹</span>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <span style={{ fontSize: "1.8rem", fontWeight: "800", color: "#38BDF8", fontFamily: "Poppins, sans-serif" }}>₹</span>
             <input
-              type="number"
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
               value={simAmount || defaultAmount}
-              onChange={(e) => setSimAmount(Number(e.target.value))}
+              onChange={(e) => {
+                const val = e.target.value.replace(/[^0-9]/g, "");
+                setSimAmount(val ? Number(val) : 0);
+              }}
               style={{
                 width: "100%",
                 background: "none",
                 border: "none",
-                fontSize: "1.6rem",
+                fontSize: "1.8rem",
                 fontWeight: "800",
                 color: "var(--text-main)",
                 fontFamily: "Poppins, sans-serif",
@@ -103,21 +108,22 @@ export const PaymentReviewScreen: React.FC<PaymentReviewProps> = ({
             />
           </div>
 
-          {/* Preset Chips */}
-          <div style={{ display: "flex", gap: "8px", marginTop: "10px" }}>
-            {[50, 100, 500, 1000, 5000].map((preset) => (
+          {/* Quick Amount Pills */}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "12px" }}>
+            {[50, 100, 500, 1000, 2000].map((preset) => (
               <button
                 key={preset}
                 onClick={() => setSimAmount(preset)}
                 style={{
-                  padding: "4px 10px",
-                  borderRadius: "10px",
-                  fontSize: "0.74rem",
+                  padding: "6px 14px",
+                  borderRadius: "12px",
+                  fontSize: "0.78rem",
                   fontWeight: "700",
                   background: (simAmount || defaultAmount) === preset ? "#2563EB" : "var(--bg-card)",
                   color: (simAmount || defaultAmount) === preset ? "#ffffff" : "var(--text-main)",
-                  border: "1px solid var(--bg-card-border)",
+                  border: (simAmount || defaultAmount) === preset ? "1px solid #2563EB" : "1px solid var(--bg-card-border)",
                   cursor: "pointer",
+                  boxShadow: (simAmount || defaultAmount) === preset ? "0 4px 12px rgba(37,99,235,0.3)" : "none",
                 }}
               >
                 ₹{preset}
@@ -128,8 +134,9 @@ export const PaymentReviewScreen: React.FC<PaymentReviewProps> = ({
 
         {/* Suspicious Prefill Warning */}
         {intent?.is_suspicious_static_prefill && (
-          <div style={{ marginTop: "14px", padding: "10px 14px", borderRadius: "12px", background: "rgba(245, 158, 11, 0.12)", border: "1px solid #F59E0B", color: "#F59E0B", fontSize: "0.78rem", fontWeight: "600", lineHeight: "1.4" }}>
-            ⚠️ <strong>Amount pre-filled in QR:</strong> Static merchant QR codes commonly require entering amount manually. Please verify with the shopkeeper.
+          <div style={{ marginTop: "14px", padding: "10px 14px", borderRadius: "14px", background: "rgba(245, 158, 11, 0.12)", border: "1px solid #F59E0B", color: "#F59E0B", fontSize: "0.78rem", fontWeight: "600", lineHeight: "1.45", display: "flex", alignItems: "flex-start", gap: "8px" }}>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{flexShrink:0,marginTop:"1px"}}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span><strong>Amount pre-filled in QR:</strong> Normal shop QR codes require entering the amount manually. Please double-check with the shopkeeper before paying.</span>
           </div>
         )}
       </div>
@@ -148,30 +155,35 @@ export const PaymentReviewScreen: React.FC<PaymentReviewProps> = ({
           marginBottom: "24px",
         }}
       >
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
           <div style={{ fontSize: "0.9rem", fontWeight: "800", color: isDanger ? "#EF4444" : isCaution ? "#F59E0B" : "#10B981", fontFamily: "Poppins, sans-serif" }}>
-            SecurePE Security Verdict
+            SecurePE Safety Summary
           </div>
           <span style={{ fontSize: "0.74rem", fontWeight: "800", color: isDanger ? "#EF4444" : isCaution ? "#F59E0B" : "#10B981" }}>
             {result?.risk_score ?? 12}/100 RISK
           </span>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "0.78rem", color: "var(--text-main)", fontWeight: "600" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "8px", fontSize: "0.8rem", color: "var(--text-main)", fontWeight: "600" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <span style={{ color: "#10B981" }}>✓</span> Destination handle verified
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Shop name and payment address verified</span>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <span style={{ color: "#10B981" }}>✓</span> Merchant static/dynamic pattern checked
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Amount matches normal shop payments</span>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <span style={{ color: intent?.is_suspicious_static_prefill ? "#F59E0B" : "#10B981" }}>
-              {intent?.is_suspicious_static_prefill ? "⚠️" : "✓"}
-            </span>
-            Payment intent structure checked
+            {intent?.is_suspicious_static_prefill ? (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            ) : (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+            )}
+            <span>{intent?.is_suspicious_static_prefill ? "Amount pre-set in QR code" : "No hidden extra charges found"}</span>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <span style={{ color: "#10B981" }}>✓</span> Sentinel Memory™ geofence matched
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Matches previous safe scans at this shop</span>
           </div>
         </div>
       </div>
