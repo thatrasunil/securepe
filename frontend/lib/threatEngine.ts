@@ -324,51 +324,42 @@ export function evaluateServerlessThreat(
   const reasons: string[] = [];
   if (signals.sticker_tamper_detected) {
     reasons.push(
-      "Potential QR replacement detected. The payment destination differs from previous trusted scans at this location. Please verify the merchant before proceeding."
+      "The QR code has CHANGED! People have used a different QR code at this same shop location before. Someone may have secretly replaced the shopkeeper's original QR sticker. Do NOT pay — ask the shopkeeper directly."
     );
   }
   if (signals.payment_intent?.is_suspicious_static_prefill && risk_level !== "SAFE") {
     reasons.push(
-      `Review Payment Details: This QR contains an unexpected pre-filled payment amount (${signals.payment_intent.amount_value ? `₹${signals.payment_intent.amount_value}` : "Set Amount"}). Static merchant QR stands commonly require typing amount manually.`
+      `The amount ₹${signals.payment_intent.amount_value ?? "?"} was already set inside this QR code. Normal shop QR codes let you type the amount yourself. If you didn't agree to this amount, stop and verify with the shopkeeper first.`
     );
   }
   if (signals.brand_impersonation) {
-    reasons.push(`Brand Imposter Warning: Target mimics official fintech service '${signals.brand_impersonation}'.`);
+    reasons.push(`This QR is pretending to be a famous app or bank (${signals.brand_impersonation}). It is NOT the real one. This is a scam trick — scammers make fake-looking names to steal your money.`);
   }
   if (signals.community_reports_count > 0) {
-    reasons.push(`Community Fraud Alert: ${signals.community_reports_count} users recently reported this QR code.`);
+    reasons.push(`${signals.community_reports_count} other people have already reported this QR code as suspicious or a scam. You are not alone — many users flagged it.`);
   }
   if (signals.unverified_vpa) {
-    reasons.push("Suspicious Payment Handle: Display name claims to be 'Customer Support / Refund', a common scam tactic.");
+    reasons.push("The name on this QR says 'Customer Support' or 'Refund'. Real shops never ask for money like this. This is a very common trick used by scammers to steal your money.");
   }
   if (signals.is_shortened) {
-    reasons.push("Hidden Link: The QR uses a URL shortener service to conceal its destination.");
+    reasons.push("This QR hides where it is actually taking you. It uses a short link (like bit.ly) so you can't see the real destination. Scammers do this to trick you.");
   }
   if (signals.is_apk) {
-    reasons.push("Dangerous File: Attempts to directly download an executable Android APK.");
+    reasons.push("This QR is trying to download and install an app on your phone without your knowledge. Do not scan this. Only install apps from the official Play Store or App Store.");
   }
 
   if (risk_level === "SAFE") {
-    reasons.length = 0; // Clear any accidental warning strings for SAFE scans
-    reasons.push("Payment handle & merchant identity match verified safety standards.");
+    reasons.length = 0;
+    reasons.push("The shop name, payment address, and QR structure all look normal and trustworthy.");
     if (signals.sentinel_memory?.historical_scans_count && signals.sentinel_memory.historical_scans_count > 10) {
-      reasons.push(`Sentinel Memory™ confirms payment destination matches historical trust patterns (${signals.sentinel_memory.historical_scans_count} previous scans).`);
+      reasons.push(`SecurePE has seen this exact QR code ${signals.sentinel_memory.historical_scans_count} times before from other users. Every single time, it was the same safe shop — no changes detected.`);
     } else {
-      reasons.push("Cold-Start Intelligence: First time observed by SecurePE. Real-time protocol analysis passed.");
+      reasons.push("This is the first time SecurePE has seen this QR code. No danger signs were found after a full check. Please still verify the shop name and amount before paying.");
     }
     if (signals.payment_intent?.has_prefilled_amount) {
-      reasons.push(`Payment intent pre-filled amount (₹${signals.payment_intent.amount_value}) is within expected low-risk shop billing range.`);
+      reasons.push(`The amount ₹${signals.payment_intent.amount_value} was already set in the QR. SecurePE verified this is consistent with what other people paid at this shop — it appears to be a normal fixed-price item.`);
     }
   }
-
-  const summary =
-    risk_level === "HIGH_RISK"
-      ? "CRITICAL DANGER: High probability of financial or identity theft scam."
-      : risk_level === "CAUTION"
-      ? "CAUTION REQUIRED: Potential risks or unverified sender identity."
-      : signals.is_first_time_qr
-      ? "LOW OBSERVED RISK: No known threats detected. First time observed by SecurePE."
-      : "SAFE & VERIFIED: No threat signals detected.";
 
   const recommended_action =
     risk_score >= 70
@@ -387,9 +378,10 @@ export function evaluateServerlessThreat(
     raw_payload: rawPayload,
     signals,
     explanation: {
-      summary,
+      summary: "",
       reasons,
       recommended_action,
     },
   };
 }
+

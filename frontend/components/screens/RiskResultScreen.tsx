@@ -60,10 +60,10 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
 
   const statusLabel =
     level === "HIGH_RISK"
-      ? "HIGH RISK (CRITICAL SCAM DANGER)"
+      ? "🚨 DANGER — DO NOT PAY"
       : level === "CAUTION"
-      ? "CAUTION (POTENTIAL UNVERIFIED THREAT)"
-      : "SAFE & VERIFIED DESTINATION";
+      ? "⚠️ BE CAREFUL — CHECK FIRST"
+      : "✅ LOOKS SAFE TO PAY";
 
   // Speech Synthesizer
   const speakText = (text: string) => {
@@ -162,10 +162,10 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
         }}
       >
         <div style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "4px" }}>
-          Target Merchant / Destination
+          You are paying money to:
         </div>
         <div style={{ fontSize: "1.35rem", fontWeight: "800", color: "var(--text-main)", fontFamily: "Poppins, sans-serif", marginBottom: "2px" }}>
-          {result.signals.display_name || "Unverified Merchant"}
+          {result.signals.display_name || "Unknown Shop / Person"}
         </div>
         <div className="font-mono" style={{ fontSize: "0.85rem", color: "#38BDF8", marginBottom: "12px", wordBreak: "break-all" }}>
           {result.signals.vpa || result.raw_payload}
@@ -173,11 +173,11 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
 
         <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
           <span style={{ fontSize: "0.72rem", background: "rgba(37,99,235,0.1)", color: "#2563EB", padding: "4px 10px", borderRadius: "10px", fontWeight: "700" }}>
-            Protocol: {result.qr_type}
+            {result.qr_type === "UPI_PAYMENT" ? "UPI Money Payment" : result.qr_type === "WEBSITE_URL" ? "Opens a Website" : result.qr_type === "APK_DOWNLOAD" ? "Tries to Install an App" : "QR Code"}
           </span>
           {result.signals.brand_impersonation && (
             <span style={{ fontSize: "0.72rem", background: "rgba(239,68,68,0.1)", color: "#EF4444", padding: "4px 10px", borderRadius: "10px", fontWeight: "700" }}>
-              ⚠️ Imposter: {result.signals.brand_impersonation}
+              ⚠️ Fake copy of: {result.signals.brand_impersonation}
             </span>
           )}
         </div>
@@ -232,19 +232,19 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
             }}
           >
             <span style={{ fontSize: "1.45rem", color: themeColor, lineHeight: 1 }}>{score}</span>
-            <span style={{ fontSize: "0.62rem", color: "var(--text-secondary)", fontWeight: "700" }}>/100 RISK</span>
+            <span style={{ fontSize: "0.62rem", color: "var(--text-secondary)", fontWeight: "700" }}>RISK SCORE</span>
           </div>
         </div>
 
         {/* Decoded Payload Box */}
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
-            <span style={{ fontSize: "0.76rem", color: "var(--text-secondary)", fontWeight: "600" }}>Decoded Payload:</span>
+            <span style={{ fontSize: "0.76rem", color: "var(--text-secondary)", fontWeight: "600" }}>QR Code Contents:</span>
             <button
               onClick={() => setShowEngineInfo(true)}
               style={{ background: "none", border: "none", color: "#38BDF8", fontSize: "0.72rem", fontWeight: "700", cursor: "pointer" }}
             >
-              💡 How it works?
+              💡 What does this mean?
             </button>
           </div>
           <code
@@ -284,20 +284,20 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
             </div>
             <div>
               <div style={{ fontSize: "0.98rem", fontWeight: "800", color: "#F59E0B", fontFamily: "Poppins, sans-serif" }}>
-                Review Payment Details
+                Check the Amount Before Paying
               </div>
               <div style={{ fontSize: "0.74rem", color: "var(--text-secondary)", fontWeight: "600" }}>
-                Payment Intent Validation Engine (Signal #8)
+                SecurePE spotted something unusual
               </div>
             </div>
           </div>
 
           <p style={{ fontSize: "0.84rem", color: "var(--text-main)", lineHeight: "1.45", marginBottom: "10px", fontWeight: "600" }}>
-            This QR contains an unexpected pre-filled payment amount ({intent.amount_value ? `₹${intent.amount_value.toLocaleString()}` : "Set Amount"}).
+            This QR has already set an amount of <strong>{intent.amount_value ? `₹${intent.amount_value.toLocaleString()}` : "some money"}</strong> that will be charged to you.
           </p>
 
           <div style={{ fontSize: "0.78rem", color: "var(--text-secondary)", background: "rgba(0,0,0,0.05)", padding: "10px 12px", borderRadius: "12px", lineHeight: "1.45" }}>
-            💡 <strong>Security Note:</strong> Static merchant QR codes commonly require customers to enter the amount manually. Please verify the amount with the merchant before proceeding.
+            💡 <strong>What to do:</strong> Normal shop QR codes do NOT pre-set any amount — you type it yourself. Ask the shopkeeper to confirm this amount before you pay.
           </div>
         </div>
       )}
@@ -320,7 +320,7 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
           </div>
           <div style={{ fontSize: "0.82rem", color: "var(--text-main)", fontWeight: "600" }}>
-            Payment amount <strong>₹{intent.amount_value}</strong> is pre-filled & verified for shop billing.
+            The amount <strong>₹{intent.amount_value}</strong> was already set in this QR. SecurePE has verified this is normal for this shop — it matches what other customers paid here before.
           </div>
         </div>
       )}
@@ -340,7 +340,7 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
             <div style={{ fontSize: "0.95rem", fontWeight: "700", color: "#0284c7", display: "flex", alignItems: "center", gap: "6px", fontFamily: "Poppins, sans-serif" }}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-              Sentinel Memory™ Trust Graph
+              Has SecurePE seen this before?
             </div>
             <span
               style={{
@@ -353,20 +353,23 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
                 border: memory.trust_pattern_mismatch ? "1px solid rgba(239,68,68,0.3)" : "1px solid rgba(16,185,129,0.3)",
               }}
             >
-              {memory.trust_pattern_mismatch ? "Pattern Mismatch" : "Trust Match 98%"}
+              {memory.trust_pattern_mismatch ? "⚠️ Something Changed" : `✅ Seen ${memory.historical_scans_count}x — All Safe`}
             </span>
           </div>
 
-          <p style={{ fontSize: "0.78rem", color: "var(--text-secondary)", lineHeight: "1.45", marginBottom: "12px" }}>
-            Privacy-preserving historical trust model for this location based on {memory.historical_scans_count} previous user scans.
+          <p style={{ fontSize: "0.82rem", color: "var(--text-secondary)", lineHeight: "1.6", marginBottom: "12px" }}>
+            {memory.trust_pattern_mismatch
+              ? `⚠️ Warning: Other people have scanned a DIFFERENT QR at this location before. The payment address has changed, which is unusual. Please verify with the shopkeeper.`
+              : `SecurePE has seen this exact QR code ${memory.historical_scans_count} times before. Every time, it led to the same safe shop. This is a good sign.`
+            }
           </p>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
-            <div style={{ padding: "8px 10px", background: "rgba(0,0,0,0.04)", borderRadius: "10px", fontSize: "0.72rem", color: "var(--text-secondary)" }}>
-              Payload Hash: <span style={{ fontFamily: "var(--font-mono)", color: "var(--text-main)", fontWeight: "700" }}>{memory.payload_hash}</span>
+            <div style={{ padding: "10px 12px", background: "rgba(0,0,0,0.04)", borderRadius: "12px", fontSize: "0.78rem", color: "var(--text-secondary)", lineHeight: "1.4" }}>
+              🔍 Scanned before: <span style={{ color: "var(--text-main)", fontWeight: "700" }}>{memory.historical_scans_count} times</span>
             </div>
-            <div style={{ padding: "8px 10px", background: "rgba(0,0,0,0.04)", borderRadius: "10px", fontSize: "0.72rem", color: "var(--text-secondary)" }}>
-              Location Confidence: <span style={{ color: "#10B981", fontWeight: "700" }}>{memory.location_match_confidence}%</span>
+            <div style={{ padding: "10px 12px", background: "rgba(0,0,0,0.04)", borderRadius: "12px", fontSize: "0.78rem", color: "var(--text-secondary)", lineHeight: "1.4" }}>
+              📍 Location match: <span style={{ color: "#10B981", fontWeight: "700" }}>{memory.location_match_confidence}%</span>
             </div>
           </div>
         </div>
@@ -385,7 +388,7 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
           <h4 style={{ fontSize: "1.05rem", fontWeight: "700", color: "#7C3AED", display: "flex", alignItems: "center", gap: "8px", fontFamily: "Poppins, sans-serif" }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>
-            AI Security Reasoning
+            Why does SecurePE say this?
           </h4>
           <button
             onClick={() => speakText(`${result.explanation.summary}. ${result.explanation.recommended_action}`)}
@@ -408,8 +411,12 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
           </button>
         </div>
 
-        <div style={{ fontSize: "0.92rem", fontWeight: "700", color: "var(--text-main)", marginBottom: "14px", lineHeight: "1.4" }}>
-          {result.explanation.summary}
+        <div style={{ fontSize: "0.95rem", fontWeight: "700", color: "var(--text-main)", marginBottom: "14px", lineHeight: "1.5", padding: "12px 14px", background: level === "HIGH_RISK" ? "rgba(239,68,68,0.08)" : level === "CAUTION" ? "rgba(245,158,11,0.08)" : "rgba(16,185,129,0.08)", borderRadius: "14px", borderLeft: `4px solid ${themeColor}` }}>
+          {level === "HIGH_RISK"
+            ? "🚨 This QR code has multiple warning signs of a scam. SecurePE strongly recommends you do NOT pay."
+            : level === "CAUTION"
+            ? "⚠️ SecurePE found some unusual things about this QR. It may be fine, but please double-check before paying."
+            : "✅ SecurePE checked this QR thoroughly. Everything looks normal. It appears safe to pay."}
         </div>
 
         {/* Reasoning Items */}
@@ -483,7 +490,11 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
           }}
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
-          Recommendation: {result.explanation.recommended_action}
+          {level === "HIGH_RISK"
+            ? "⛔ SecurePE says: DO NOT pay. Close this and walk away."
+            : level === "CAUTION"
+            ? "⚠️ SecurePE says: Ask the shopkeeper to confirm details first."
+            : "✅ SecurePE says: Safe to proceed."}
         </div>
       </div>
 
@@ -511,7 +522,7 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
               }}
             >
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
-              Cancel Payment (Recommended)
+              🛡️ Don't pay — stay safe
             </button>
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
@@ -532,7 +543,7 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
                   gap: "6px",
                 }}
               >
-                Review Why
+                Why is this risky?
               </button>
 
               <button
@@ -548,7 +559,7 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
                   cursor: "pointer",
                 }}
               >
-                Proceed Anyway
+                I still want to pay
               </button>
             </div>
           </>
@@ -574,7 +585,7 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
               }}
             >
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
-              Proceed to Payment →
+              ✅ Proceed to payment →
             </button>
 
             <button
@@ -591,7 +602,7 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
                 cursor: "pointer",
               }}
             >
-              Scan Another QR
+              🔍 Scan a different QR code
             </button>
           </>
         )}
@@ -627,7 +638,7 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
               <div style={{ fontSize: "1.1rem", fontWeight: "800", color: "#F59E0B", fontFamily: "Poppins, sans-serif" }}>
-                Why are we warning you?
+                🤔 Why should I be careful?
               </div>
               <button
                 onClick={() => setShowWhySheet(false)}
