@@ -790,7 +790,7 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
         </div>
       )}
 
-      {/* How SecurePE Works — Plain Language Modal */}
+      {/* How SecurePE Works Modal */}
       {showEngineInfo && (
         <div
           style={{
@@ -813,7 +813,7 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
               padding: "22px 20px",
               maxWidth: "420px",
               width: "100%",
-              border: "1px solid rgba(56, 189, 248, 0.4)",
+              border: "1px solid rgba(56, 189, 248, 0.3)",
               boxShadow: "0 20px 60px rgba(0,0,0,0.95)",
               color: "#ffffff",
               maxHeight: "88vh",
@@ -823,43 +823,38 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
             {/* Header */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "18px" }}>
               <div>
-                <div style={{ fontSize: "1.1rem", fontWeight: "800", color: "#38BDF8", fontFamily: "Poppins, sans-serif" }}>
-                  How does SecurePE check a QR?
+                <div style={{ fontSize: "1.05rem", fontWeight: "800", color: "#ffffff", fontFamily: "Poppins, sans-serif" }}>
+                  How SecurePE checks a QR code
                 </div>
                 <div style={{ fontSize: "0.72rem", color: "#64748B", fontWeight: "600", marginTop: "2px" }}>
-                  Simple explanation for everyone
+                  3 checks happen automatically when you scan
                 </div>
               </div>
               <button
                 onClick={() => setShowEngineInfo(false)}
-                style={{ width: "34px", height: "34px", borderRadius: "50%", background: "#1E293B", color: "#94A3B8", border: "1px solid #334155", cursor: "pointer", fontWeight: "800", fontSize: "1rem", flexShrink: 0 }}
+                style={{ width: "34px", height: "34px", borderRadius: "50%", background: "#1E293B", color: "#94A3B8", border: "1px solid #334155", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}
               >
-                ✕
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
               </button>
             </div>
 
             {/* Step 1 */}
-            <div style={{ background: "#1E293B", borderRadius: "18px", padding: "16px", marginBottom: "10px", borderLeft: "4px solid #38BDF8" }}>
+            <div style={{ background: "#1E293B", borderRadius: "16px", padding: "14px", marginBottom: "8px", borderLeft: "3px solid #38BDF8" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
-                <div style={{ width: "32px", height: "32px", borderRadius: "10px", background: "rgba(56,189,248,0.15)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem", flexShrink: 0 }}>
-                  🔍
+                <div style={{ width: "30px", height: "30px", borderRadius: "8px", background: "rgba(56,189,248,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" strokeWidth="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                 </div>
-                <div style={{ fontSize: "0.9rem", fontWeight: "800", color: "#38BDF8" }}>
-                  Step 1 — Checks the QR right now
-                </div>
+                <div style={{ fontSize: "0.88rem", fontWeight: "800", color: "#38BDF8" }}>Check 1 — Reads the QR instantly</div>
               </div>
-              <div style={{ fontSize: "0.82rem", color: "#CBD5E1", lineHeight: "1.6" }}>
-                The moment you scan, SecurePE reads what's inside the QR. It checks:
-              </div>
-              <div style={{ marginTop: "8px", display: "flex", flexDirection: "column", gap: "5px" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
                 {[
-                  "Is it a payment QR, website, or app download?",
-                  "Is the shop name and payment address normal?",
-                  "Is someone pretending to be a bank or famous app?",
-                  "Was a money amount already secretly set inside the QR?",
+                  "Payment QR, website link, or dangerous app download?",
+                  "Shop name and payment address look legitimate?",
+                  "Pretending to be a bank or famous payment app?",
+                  "Amount secretly pre-set without your knowledge?",
                 ].map((item, i) => (
-                  <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: "7px", fontSize: "0.78rem", color: "#94A3B8", lineHeight: "1.45" }}>
-                    <span style={{ color: "#38BDF8", fontWeight: "800", marginTop: "1px", flexShrink: 0 }}>→</span>
+                  <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: "8px", fontSize: "0.78rem", color: "#94A3B8", lineHeight: "1.45" }}>
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" strokeWidth="3" style={{ marginTop: "3px", flexShrink: 0 }}><polyline points="20 6 9 17 4 12"/></svg>
                     <span>{item}</span>
                   </div>
                 ))}
@@ -867,56 +862,56 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
             </div>
 
             {/* Step 2 */}
-            <div style={{ background: "#1E293B", borderRadius: "18px", padding: "16px", marginBottom: "10px", borderLeft: "4px solid #10B981" }}>
+            <div style={{ background: "#1E293B", borderRadius: "16px", padding: "14px", marginBottom: "8px", borderLeft: "3px solid #10B981" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
-                <div style={{ width: "32px", height: "32px", borderRadius: "10px", background: "rgba(16,185,129,0.15)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem", flexShrink: 0 }}>
-                  🧠
+                <div style={{ width: "30px", height: "30px", borderRadius: "8px", background: "rgba(16,185,129,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
                 </div>
-                <div style={{ fontSize: "0.9rem", fontWeight: "800", color: "#10B981" }}>
-                  Step 2 — Checks if it was seen before
+                <div style={{ fontSize: "0.88rem", fontWeight: "800", color: "#10B981" }}>Check 2 — Seen before?</div>
+              </div>
+              <div style={{ fontSize: "0.8rem", color: "#CBD5E1", lineHeight: "1.55", marginBottom: "8px" }}>
+                SecurePE remembers QR codes other users scanned safely. A QR seen many times at the same shop = trusted.
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+                <div style={{ background: "rgba(16,185,129,0.08)", borderRadius: "10px", padding: "8px 10px", fontSize: "0.76rem", color: "#10B981", fontWeight: "700", display: "flex", alignItems: "center", gap: "7px" }}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  Same QR seen 142× at this shop — trusted
                 </div>
-              </div>
-              <div style={{ fontSize: "0.82rem", color: "#CBD5E1", lineHeight: "1.6" }}>
-                SecurePE remembers QR codes that other users have safely scanned before. If this QR was seen many times at the same shop location, that's a very good sign.
-              </div>
-              <div style={{ marginTop: "10px", background: "rgba(16,185,129,0.08)", borderRadius: "12px", padding: "10px 12px", fontSize: "0.78rem", color: "#10B981", fontWeight: "700", lineHeight: "1.5" }}>
-                ✅ "Seen 142 times — always the same safe shop" = trusted
-              </div>
-              <div style={{ marginTop: "6px", background: "rgba(239,68,68,0.08)", borderRadius: "12px", padding: "10px 12px", fontSize: "0.78rem", color: "#EF4444", fontWeight: "700", lineHeight: "1.5" }}>
-                🚨 "Different QR found at same location" = possible scam sticker swap
+                <div style={{ background: "rgba(239,68,68,0.08)", borderRadius: "10px", padding: "8px 10px", fontSize: "0.76rem", color: "#EF4444", fontWeight: "700", display: "flex", alignItems: "center", gap: "7px" }}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  Different QR at same shop location — possible swap
+                </div>
               </div>
             </div>
 
             {/* Step 3 */}
-            <div style={{ background: "#1E293B", borderRadius: "18px", padding: "16px", marginBottom: "14px", borderLeft: "4px solid #A855F7" }}>
+            <div style={{ background: "#1E293B", borderRadius: "16px", padding: "14px", marginBottom: "12px", borderLeft: "3px solid #A855F7" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
-                <div style={{ width: "32px", height: "32px", borderRadius: "10px", background: "rgba(168,85,247,0.15)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem", flexShrink: 0 }}>
-                  👥
+                <div style={{ width: "30px", height: "30px", borderRadius: "8px", background: "rgba(168,85,247,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#A855F7" strokeWidth="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                 </div>
-                <div style={{ fontSize: "0.9rem", fontWeight: "800", color: "#A855F7" }}>
-                  Step 3 — Checks community reports
-                </div>
+                <div style={{ fontSize: "0.88rem", fontWeight: "800", color: "#A855F7" }}>Check 3 — Community reports</div>
               </div>
-              <div style={{ fontSize: "0.82rem", color: "#CBD5E1", lineHeight: "1.6" }}>
-                If other users have already reported this QR as a scam, SecurePE instantly knows about it and warns you before you even think about paying.
+              <div style={{ fontSize: "0.8rem", color: "#CBD5E1", lineHeight: "1.55" }}>
+                If other users flagged this QR as a scam, you are warned immediately — before you pay.
               </div>
             </div>
 
-            {/* Key message */}
-            <div style={{ background: "rgba(245, 158, 11, 0.1)", borderRadius: "16px", padding: "14px", border: "1px solid rgba(245,158,11,0.3)", marginBottom: "16px" }}>
-              <div style={{ fontSize: "0.85rem", fontWeight: "800", color: "#F59E0B", marginBottom: "4px" }}>
-                💡 Important to know
+            {/* Key note */}
+            <div style={{ background: "rgba(245,158,11,0.08)", borderRadius: "14px", padding: "12px 14px", border: "1px solid rgba(245,158,11,0.25)", marginBottom: "14px", display: "flex", alignItems: "flex-start", gap: "10px" }}>
+              <div style={{ flexShrink: 0, marginTop: "1px" }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
               </div>
-              <div style={{ fontSize: "0.8rem", color: "#FDE68A", lineHeight: "1.6" }}>
-                Even if SecurePE has <strong>never seen this QR before</strong>, it can still spot many scam signs. A new QR does not automatically mean it is safe — SecurePE always checks carefully.
+              <div style={{ fontSize: "0.79rem", color: "#FDE68A", lineHeight: "1.55" }}>
+                <strong style={{ color: "#F59E0B" }}>Never seen this QR?</strong> SecurePE still runs all 3 checks. A brand-new QR is not automatically safe.
               </div>
             </div>
 
             <button
               onClick={() => setShowEngineInfo(false)}
-              style={{ width: "100%", height: "50px", borderRadius: "16px", background: "linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%)", color: "#fff", fontSize: "1rem", fontWeight: "800", border: "none", cursor: "pointer", boxShadow: "0 4px 16px rgba(37,99,235,0.4)" }}
+              style={{ width: "100%", height: "48px", borderRadius: "14px", background: "linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%)", color: "#fff", fontSize: "0.95rem", fontWeight: "800", border: "none", cursor: "pointer", boxShadow: "0 4px 16px rgba(37,99,235,0.35)" }}
             >
-              Got it — close
+              Got it
             </button>
           </div>
         </div>
@@ -924,3 +919,4 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
     </div>
   );
 };
+
