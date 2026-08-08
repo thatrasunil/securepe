@@ -30,15 +30,7 @@ export const ProcessingScreen: React.FC<ProcessingScreenProps> = ({
     let isMounted = true;
 
     const runProcessingPipeline = async () => {
-      // 1. Execute threat analysis immediately (< 10ms serverless engine)
       const { data, latencyMs } = await analyzeScan(payload);
-      
-      if (!isMounted) return;
-      setActiveStep(4);
-
-      // 2. Ultra-fast 120ms visual confirmation transition
-      await new Promise((r) => setTimeout(r, 120));
-
       if (!isMounted) return;
       onAnalysisDone(data, latencyMs);
       onNavigate("result");

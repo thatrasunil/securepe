@@ -95,14 +95,8 @@ export const ScannerScreen: React.FC<ScannerScreenProps> = ({ onNavigate, onScan
         navigator.vibrate([40]);
       } catch (e) {}
     }
-
-    setTimeout(() => {
-      setScanState("capturing");
-      setTimeout(() => {
-        onScanComplete(payload);
-        onNavigate("processing");
-      }, 400);
-    }, 450);
+    onScanComplete(payload);
+    onNavigate("processing");
   };
 
   const toggleTorch = async () => {
