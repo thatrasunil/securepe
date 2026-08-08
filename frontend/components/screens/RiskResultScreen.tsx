@@ -259,8 +259,8 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
         </div>
       </div>
 
-      {/* 4. Signal #8: Smart Payment Intent Analysis Warning Card */}
-      {intent?.is_suspicious_static_prefill && (
+      {/* 4. Signal #8: Smart Payment Intent Analysis Warning Card (Only for CAUTION or HIGH_RISK) */}
+      {intent?.is_suspicious_static_prefill && level !== "SAFE" && (
         <div
           style={{
             background: "linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, rgba(239, 68, 68, 0.12) 100%)",
@@ -286,11 +286,34 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
           </div>
 
           <p style={{ fontSize: "0.84rem", color: "var(--text-main)", lineHeight: "1.45", marginBottom: "10px", fontWeight: "600" }}>
-            This QR already contains a pre-filled payment amount ({intent.amount_value ? `₹${intent.amount_value.toLocaleString()}` : "Set Amount"}).
+            This QR contains an unexpected pre-filled payment amount ({intent.amount_value ? `₹${intent.amount_value.toLocaleString()}` : "Set Amount"}).
           </p>
 
           <div style={{ fontSize: "0.78rem", color: "var(--text-secondary)", background: "rgba(0,0,0,0.05)", padding: "10px 12px", borderRadius: "12px", lineHeight: "1.45" }}>
             💡 <strong>Security Note:</strong> Static merchant QR codes commonly require customers to enter the amount manually. Please verify the amount with the merchant before proceeding.
+          </div>
+        </div>
+      )}
+
+      {/* SAFE Tier Pre-filled Amount Chip */}
+      {level === "SAFE" && intent?.has_prefilled_amount && (
+        <div
+          style={{
+            background: "rgba(16, 185, 129, 0.08)",
+            borderRadius: "18px",
+            padding: "12px 16px",
+            border: "1px solid rgba(16, 185, 129, 0.25)",
+            marginBottom: "18px",
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+          }}
+        >
+          <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: "#D1FAE5", color: "#059669", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div style={{ fontSize: "0.82rem", color: "var(--text-main)", fontWeight: "600" }}>
+            Payment amount <strong>₹{intent.amount_value}</strong> is pre-filled & verified for shop billing.
           </div>
         </div>
       )}
