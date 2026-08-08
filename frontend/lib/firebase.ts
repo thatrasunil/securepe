@@ -15,6 +15,7 @@ import {
   collection,
   addDoc,
   getDocs,
+  getDoc,
   query,
   orderBy,
   limit,
@@ -22,6 +23,8 @@ import {
   doc,
   setDoc,
   onSnapshot,
+  increment,
+  updateDoc,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -48,6 +51,7 @@ export {
   collection,
   addDoc,
   getDocs,
+  getDoc,
   query,
   orderBy,
   limit,
@@ -55,6 +59,8 @@ export {
   doc,
   setDoc,
   onSnapshot,
+  increment,
+  updateDoc,
 };
 
 export type { User, ConfirmationResult };
