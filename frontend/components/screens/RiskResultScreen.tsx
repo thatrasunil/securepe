@@ -60,10 +60,19 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
 
   const statusLabel =
     level === "HIGH_RISK"
-      ? "🚨 DANGER — DO NOT PAY"
+      ? "DANGER — DO NOT PAY"
       : level === "CAUTION"
-      ? "⚠️ BE CAREFUL — CHECK FIRST"
-      : "✅ LOOKS SAFE TO PAY";
+      ? "BE CAREFUL — CHECK FIRST"
+      : "LOOKS SAFE TO PAY";
+
+  const statusIcon =
+    level === "HIGH_RISK" ? (
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{flexShrink:0}}><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    ) : level === "CAUTION" ? (
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{flexShrink:0}}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    ) : (
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" style={{flexShrink:0}}><polyline points="20 6 9 17 4 12"/></svg>
+    );
 
   // Speech Synthesizer
   const speakText = (text: string) => {
@@ -126,9 +135,12 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
             fontSize: "0.78rem",
             fontWeight: "800",
             letterSpacing: "0.03em",
+            display: "flex",
+            alignItems: "center",
+            gap: "5px",
           }}
         >
-          {statusLabel}
+          {statusIcon}{statusLabel}
         </span>
 
         <button
@@ -176,8 +188,9 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
             {result.qr_type === "UPI_PAYMENT" ? "UPI Money Payment" : result.qr_type === "WEBSITE_URL" ? "Opens a Website" : result.qr_type === "APK_DOWNLOAD" ? "Tries to Install an App" : "QR Code"}
           </span>
           {result.signals.brand_impersonation && (
-            <span style={{ fontSize: "0.72rem", background: "rgba(239,68,68,0.1)", color: "#EF4444", padding: "4px 10px", borderRadius: "10px", fontWeight: "700" }}>
-              ⚠️ Fake copy of: {result.signals.brand_impersonation}
+            <span style={{ fontSize: "0.72rem", background: "rgba(239,68,68,0.1)", color: "#EF4444", padding: "4px 10px", borderRadius: "10px", fontWeight: "700", display: "flex", alignItems: "center", gap: "5px" }}>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              Fake copy of: {result.signals.brand_impersonation}
             </span>
           )}
         </div>
@@ -242,9 +255,10 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
             <span style={{ fontSize: "0.76rem", color: "var(--text-secondary)", fontWeight: "600" }}>QR Code Contents:</span>
             <button
               onClick={() => setShowEngineInfo(true)}
-              style={{ background: "none", border: "none", color: "#38BDF8", fontSize: "0.72rem", fontWeight: "700", cursor: "pointer" }}
+              style={{ background: "none", border: "none", color: "#38BDF8", fontSize: "0.72rem", fontWeight: "700", cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }}
             >
-              💡 What does this mean?
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              What does this mean?
             </button>
           </div>
           <code
@@ -296,8 +310,9 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
             This QR has already set an amount of <strong>{intent.amount_value ? `₹${intent.amount_value.toLocaleString()}` : "some money"}</strong> that will be charged to you.
           </p>
 
-          <div style={{ fontSize: "0.78rem", color: "var(--text-secondary)", background: "rgba(0,0,0,0.05)", padding: "10px 12px", borderRadius: "12px", lineHeight: "1.45" }}>
-            💡 <strong>What to do:</strong> Normal shop QR codes do NOT pre-set any amount — you type it yourself. Ask the shopkeeper to confirm this amount before you pay.
+          <div style={{ fontSize: "0.78rem", color: "var(--text-secondary)", background: "rgba(0,0,0,0.05)", padding: "10px 12px", borderRadius: "12px", lineHeight: "1.45", display: "flex", alignItems: "flex-start", gap: "7px" }}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{marginTop:"1px",flexShrink:0}}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span><strong>What to do:</strong> Normal shop QR codes do NOT pre-set any amount — you type it yourself. Ask the shopkeeper to confirm this amount before you pay.</span>
           </div>
         </div>
       )}
@@ -351,25 +366,34 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
                 background: memory.trust_pattern_mismatch ? "rgba(239, 68, 68, 0.15)" : "rgba(16, 185, 129, 0.15)",
                 color: memory.trust_pattern_mismatch ? "#EF4444" : "#10B981",
                 border: memory.trust_pattern_mismatch ? "1px solid rgba(239,68,68,0.3)" : "1px solid rgba(16,185,129,0.3)",
+                display: "flex", alignItems: "center", gap: "5px",
               }}
             >
-              {memory.trust_pattern_mismatch ? "⚠️ Something Changed" : `✅ Seen ${memory.historical_scans_count}x — All Safe`}
+              {memory.trust_pattern_mismatch ? (
+                <><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Something Changed</>
+              ) : (
+                <><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>Seen {memory.historical_scans_count}x — All Safe</>
+              )}
             </span>
+
           </div>
 
-          <p style={{ fontSize: "0.82rem", color: "var(--text-secondary)", lineHeight: "1.6", marginBottom: "12px" }}>
-            {memory.trust_pattern_mismatch
-              ? `⚠️ Warning: Other people have scanned a DIFFERENT QR at this location before. The payment address has changed, which is unusual. Please verify with the shopkeeper.`
-              : `SecurePE has seen this exact QR code ${memory.historical_scans_count} times before. Every time, it led to the same safe shop. This is a good sign.`
-            }
+          <p style={{ fontSize: "0.82rem", color: "var(--text-secondary)", lineHeight: "1.6", marginBottom: "12px", display: "flex", alignItems: "flex-start", gap: "7px" }}>
+            {memory.trust_pattern_mismatch && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2.5" style={{flexShrink:0,marginTop:"2px"}}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>}
+            <span>{memory.trust_pattern_mismatch
+              ? `Other people scanned a DIFFERENT QR at this location. The payment address has changed. Please verify with the shopkeeper.`
+              : `SecurePE has seen this exact QR code ${memory.historical_scans_count} times before. Every time, it led to the same safe shop.`
+            }</span>
           </p>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
-            <div style={{ padding: "10px 12px", background: "rgba(0,0,0,0.04)", borderRadius: "12px", fontSize: "0.78rem", color: "var(--text-secondary)", lineHeight: "1.4" }}>
-              🔍 Scanned before: <span style={{ color: "var(--text-main)", fontWeight: "700" }}>{memory.historical_scans_count} times</span>
+            <div style={{ padding: "10px 12px", background: "rgba(0,0,0,0.04)", borderRadius: "12px", fontSize: "0.78rem", color: "var(--text-secondary)", lineHeight: "1.4", display: "flex", alignItems: "center", gap: "6px" }}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              Scanned before: <span style={{ color: "var(--text-main)", fontWeight: "700" }}>{memory.historical_scans_count}×</span>
             </div>
-            <div style={{ padding: "10px 12px", background: "rgba(0,0,0,0.04)", borderRadius: "12px", fontSize: "0.78rem", color: "var(--text-secondary)", lineHeight: "1.4" }}>
-              📍 Location match: <span style={{ color: "#10B981", fontWeight: "700" }}>{memory.location_match_confidence}%</span>
+            <div style={{ padding: "10px 12px", background: "rgba(0,0,0,0.04)", borderRadius: "12px", fontSize: "0.78rem", color: "var(--text-secondary)", lineHeight: "1.4", display: "flex", alignItems: "center", gap: "6px" }}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Location match: <span style={{ color: "#10B981", fontWeight: "700" }}>{memory.location_match_confidence}%</span>
             </div>
           </div>
         </div>
@@ -411,12 +435,21 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
           </button>
         </div>
 
-        <div style={{ fontSize: "0.95rem", fontWeight: "700", color: "var(--text-main)", marginBottom: "14px", lineHeight: "1.5", padding: "12px 14px", background: level === "HIGH_RISK" ? "rgba(239,68,68,0.08)" : level === "CAUTION" ? "rgba(245,158,11,0.08)" : "rgba(16,185,129,0.08)", borderRadius: "14px", borderLeft: `4px solid ${themeColor}` }}>
-          {level === "HIGH_RISK"
-            ? "🚨 This QR code has multiple warning signs of a scam. SecurePE strongly recommends you do NOT pay."
+        <div style={{ fontSize: "0.92rem", fontWeight: "700", color: "var(--text-main)", marginBottom: "14px", lineHeight: "1.5", padding: "12px 14px", background: level === "HIGH_RISK" ? "rgba(239,68,68,0.08)" : level === "CAUTION" ? "rgba(245,158,11,0.08)" : "rgba(16,185,129,0.08)", borderRadius: "14px", borderLeft: `4px solid ${themeColor}`, display: "flex", alignItems: "flex-start", gap: "10px" }}>
+          <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: level === "HIGH_RISK" ? "#FEE2E2" : level === "CAUTION" ? "#FEF3C7" : "#D1FAE5", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: "1px" }}>
+            {level === "HIGH_RISK" ? (
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            ) : level === "CAUTION" ? (
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            ) : (
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+            )}
+          </div>
+          <span>{level === "HIGH_RISK"
+            ? "This QR code has multiple warning signs of a scam. SecurePE strongly recommends you do NOT pay."
             : level === "CAUTION"
-            ? "⚠️ SecurePE found some unusual things about this QR. It may be fine, but please double-check before paying."
-            : "✅ SecurePE checked this QR thoroughly. Everything looks normal. It appears safe to pay."}
+            ? "SecurePE found some unusual things about this QR. It may be fine, but please double-check before paying."
+            : "SecurePE checked this QR thoroughly. Everything looks normal. It appears safe to pay."}</span>
         </div>
 
         {/* Reasoning Items */}
@@ -489,12 +522,18 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
             gap: "8px",
           }}
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+          {level === "HIGH_RISK" ? (
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{flexShrink:0}}><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          ) : level === "CAUTION" ? (
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{flexShrink:0}}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          ) : (
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" style={{flexShrink:0}}><polyline points="20 6 9 17 4 12"/></svg>
+          )}
           {level === "HIGH_RISK"
-            ? "⛔ SecurePE says: DO NOT pay. Close this and walk away."
+            ? "SecurePE says: DO NOT pay. Close this and walk away."
             : level === "CAUTION"
-            ? "⚠️ SecurePE says: Ask the shopkeeper to confirm details first."
-            : "✅ SecurePE says: Safe to proceed."}
+            ? "SecurePE says: Ask the shopkeeper to confirm details first."
+            : "SecurePE says: Safe to proceed."}
         </div>
       </div>
 
@@ -522,7 +561,7 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
               }}
             >
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
-              🛡️ Don't pay — stay safe
+              Don't pay — stay safe
             </button>
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
@@ -585,7 +624,7 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
               }}
             >
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
-              ✅ Proceed to payment →
+              Proceed to payment →
             </button>
 
             <button
@@ -600,9 +639,14 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
                 fontSize: "0.9rem",
                 fontWeight: "700",
                 cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "8px",
               }}
             >
-              🔍 Scan a different QR code
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              Scan a different QR code
             </button>
           </>
         )}
