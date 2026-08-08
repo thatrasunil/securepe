@@ -1,6 +1,6 @@
 /**
- * SentinelQR Serverless Deterministic Threat Engine & Smart Payment Intent Validation Engine
- * Sub-10ms Serverless Execution for Vercel / Firebase Functions / Netlify
+ * SentinelQR / SecurePE Serverless Deterministic Threat Engine
+ * Dual-Engine Architecture: Real-Time Cold-Start Intelligence + Historical Sentinel Memory™
  */
 
 export interface SentinelMemoryGraph {
@@ -35,6 +35,7 @@ export interface ThreatSignals {
   is_apk: boolean;
   is_https: boolean;
   is_shortened: boolean;
+  is_first_time_qr?: boolean;
   unrolled_url?: string;
   brand_impersonation?: string;
   community_reports_count: number;
@@ -133,6 +134,7 @@ export function extractServerlessThreatSignals(
     is_apk: false,
     is_https: true,
     is_shortened: false,
+    is_first_time_qr: true,
     community_reports_count: 0,
     sticker_tamper_detected: false,
     unverified_vpa: false,
@@ -212,6 +214,7 @@ export function extractServerlessThreatSignals(
 
         if (dist <= 100 && !isAuthenticRamesh) {
           signals.sticker_tamper_detected = true;
+          signals.is_first_time_qr = false;
           signals.sentinel_memory = {
             payload_hash: payloadHash,
             expected_payload_hash: expectedHash,
@@ -231,6 +234,7 @@ export function extractServerlessThreatSignals(
       }
 
       if (!signals.sentinel_memory && isAuthenticRamesh) {
+        signals.is_first_time_qr = false;
         signals.sentinel_memory = {
           payload_hash: payloadHash,
           expected_payload_hash: payloadHash,
@@ -274,16 +278,16 @@ export function extractServerlessThreatSignals(
   if (!signals.sentinel_memory) {
     signals.sentinel_memory = {
       payload_hash: payloadHash,
-      historical_scans_count: Math.floor(Math.random() * 12) + 1,
+      historical_scans_count: 1,
       location_match_confidence: 85,
       trust_pattern_mismatch: false,
       confidence_breakdown: {
         same_location_score: 20,
-        repeat_payload_score: 25,
-        confirmations_score: 15,
+        repeat_payload_score: 0,
+        confirmations_score: 0,
         merchant_verified_score: 0,
-        community_trust_score: 10,
-        total_trust_confidence: 70,
+        community_trust_score: 0,
+        total_trust_confidence: 20,
       },
     };
   }
@@ -347,7 +351,11 @@ export function evaluateServerlessThreat(
   if (risk_level === "SAFE") {
     reasons.length = 0; // Clear any accidental warning strings for SAFE scans
     reasons.push("Payment handle & merchant identity match verified safety standards.");
-    reasons.push("Sentinel Memory™ confirms payment destination matches historical trust patterns (100% location match).");
+    if (signals.sentinel_memory?.historical_scans_count && signals.sentinel_memory.historical_scans_count > 10) {
+      reasons.push(`Sentinel Memory™ confirms payment destination matches historical trust patterns (${signals.sentinel_memory.historical_scans_count} previous scans).`);
+    } else {
+      reasons.push("Cold-Start Intelligence: First time observed by SecurePE. Real-time protocol analysis passed.");
+    }
     if (signals.payment_intent?.has_prefilled_amount) {
       reasons.push(`Payment intent pre-filled amount (₹${signals.payment_intent.amount_value}) is within expected low-risk shop billing range.`);
     }
@@ -358,6 +366,8 @@ export function evaluateServerlessThreat(
       ? "CRITICAL DANGER: High probability of financial or identity theft scam."
       : risk_level === "CAUTION"
       ? "CAUTION REQUIRED: Potential risks or unverified sender identity."
+      : signals.is_first_time_qr
+      ? "LOW OBSERVED RISK: No known threats detected. First time observed by SecurePE."
       : "SAFE & VERIFIED: No threat signals detected.";
 
   const recommended_action =

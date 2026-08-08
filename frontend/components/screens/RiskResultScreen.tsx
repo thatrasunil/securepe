@@ -13,6 +13,7 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
   const [speechActive, setSpeechActive] = useState(false);
   const [showBypassModal, setShowBypassModal] = useState(false);
   const [showWhySheet, setShowWhySheet] = useState(false);
+  const [showEngineInfo, setShowEngineInfo] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Scroll to top immediately when screen mounts or modal opens
@@ -237,8 +238,14 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
 
         {/* Decoded Payload Box */}
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: "0.76rem", color: "var(--text-secondary)", fontWeight: "600", marginBottom: "6px" }}>
-            Decoded Payload String:
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+            <span style={{ fontSize: "0.76rem", color: "var(--text-secondary)", fontWeight: "600" }}>Decoded Payload:</span>
+            <button
+              onClick={() => setShowEngineInfo(true)}
+              style={{ background: "none", border: "none", color: "#38BDF8", fontSize: "0.72rem", fontWeight: "700", cursor: "pointer" }}
+            >
+              💡 How it works?
+            </button>
           </div>
           <code
             style={{
@@ -768,6 +775,86 @@ export const RiskResultScreen: React.FC<RiskResultScreenProps> = ({ result, onNa
                 Confirm & Proceed to Payment
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Dual-Engine Architecture & Cold-Start Explanatory Modal */}
+      {showEngineInfo && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 99999,
+            background: "rgba(2, 6, 23, 0.88)",
+            backdropFilter: "blur(12px)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "20px",
+          }}
+          className="animate-fade"
+        >
+          <div
+            style={{
+              background: "#0F172A",
+              borderRadius: "28px",
+              padding: "24px",
+              maxWidth: "420px",
+              width: "100%",
+              border: "1px solid #38BDF8",
+              boxShadow: "0 20px 50px rgba(0,0,0,0.9)",
+              color: "#ffffff",
+              maxHeight: "85vh",
+              overflowY: "auto",
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+              <div style={{ fontSize: "1.1rem", fontWeight: "800", color: "#38BDF8", fontFamily: "Poppins, sans-serif" }}>
+                🛡️ Dual-Engine Architecture
+              </div>
+              <button
+                onClick={() => setShowEngineInfo(false)}
+                style={{ width: "32px", height: "32px", borderRadius: "50%", background: "#1E293B", color: "#fff", border: "none", cursor: "pointer", fontWeight: "800" }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div style={{ fontSize: "0.82rem", color: "#CBD5E1", lineHeight: "1.5", marginBottom: "16px" }}>
+              SecurePE combines <strong>Real-Time Cold-Start Intelligence</strong> with <strong>Historical Sentinel Memory™</strong> to evaluate every QR code.
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "20px" }}>
+              <div style={{ background: "#1E293B", padding: "14px", borderRadius: "16px", borderLeft: "4px solid #38BDF8" }}>
+                <div style={{ fontSize: "0.88rem", fontWeight: "800", color: "#38BDF8", marginBottom: "4px" }}>
+                  🔍 Real-Time Cold-Start Engine (Every QR)
+                </div>
+                <div style={{ fontSize: "0.78rem", color: "#CBD5E1", lineHeight: "1.45" }}>
+                  Evaluates intrinsic payload syntax, payment intent consistency, unexpected pre-filled amounts (`am`), missing transaction references (`tr`), Levenshtein brand similarity, and URL shorteners—even on the very first scan.
+                </div>
+              </div>
+
+              <div style={{ background: "#1E293B", padding: "14px", borderRadius: "16px", borderLeft: "4px solid #10B981" }}>
+                <div style={{ fontSize: "0.88rem", fontWeight: "800", color: "#10B981", marginBottom: "4px" }}>
+                  🧠 Sentinel Memory™ Graph (Observed QR)
+                </div>
+                <div style={{ fontSize: "0.78rem", color: "#CBD5E1", lineHeight: "1.45" }}>
+                  Builds a privacy-preserving baseline of SHA-256 payload hashes and geofenced locations over time. Flags unexpected sticker replacements (`abc@ybl` $\rightarrow$ `xyz@ybl`).
+                </div>
+              </div>
+
+              <div style={{ background: "rgba(245, 158, 11, 0.12)", padding: "12px 14px", borderRadius: "14px", border: "1px solid #F59E0B", color: "#F59E0B", fontSize: "0.78rem", fontWeight: "700" }}>
+                💡 <strong>Core Principle:</strong> "No history ≠ Safe." Unobserved first-time QRs receive real-time protocol analysis without assuming safety.
+              </div>
+            </div>
+
+            <button
+              onClick={() => setShowEngineInfo(false)}
+              style={{ width: "100%", height: "48px", borderRadius: "14px", background: "#2563EB", color: "#fff", fontSize: "0.95rem", fontWeight: "800", border: "none", cursor: "pointer" }}
+            >
+              Understood & Close
+            </button>
           </div>
         </div>
       )}

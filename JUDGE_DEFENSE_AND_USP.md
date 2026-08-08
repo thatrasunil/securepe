@@ -1,71 +1,82 @@
-# 🛡️ SentinelQR — Core USP & Hackathon Judge Defense Playbook
+# 🛡️ SecurePE — Core USP & 5-Level Dual-Engine Defense Playbook
 
-> **Core Positioning**: SentinelQR is a **Pre-Transaction Payment Trust Engine** powered by **Sentinel Memory™** and **Smart Payment Intent Validation** — evaluating *where* a payment goes and *whether the payment request itself is consistent with expected merchant behavior* before users authorize a transaction.
-
----
-
-## 🎯 Final Hackathon USP Statement
-
-> **"SentinelQR doesn't just verify where your money is going—it verifies whether the payment request itself is consistent with expected merchant behavior. Our Payment Intent Validation Engine detects suspicious characteristics, such as unexpected pre-filled amounts combined with other trust signals, helping users catch potentially manipulated payment requests before authorizing the transaction."**
+> **Core Positioning**: SecurePE is a **Pre-Transaction Payment Trust Engine** combining **Real-Time Cold-Start Intelligence** (evaluating intrinsic payload syntax, payment intent, and threat feeds on *every* QR) with **Historical Sentinel Memory™** (privacy-preserving trust graph confidence amplifier).
 
 ---
 
-## ⭐ Signal #8: Smart Payment Intent Validation Engine
+## 🎯 Master Hackathon USP & Jury Statement
 
-### Concept
-SentinelQR doesn't just verify **who receives the money**. It verifies **whether the payment request itself looks suspicious**.
-
-### Detection Heuristics & Weighted Rule Engine
-
-| Payment Intent Signal Vector | Weighted Risk Score |
-| :--- | :---: |
-| **Pre-filled payment amount (`am` present)** | `+10` |
-| **No transaction reference (`tr` missing/empty)** | `+15` |
-| **Merchant profile suggests static QR** | `+10` |
-| **Amount unusually high ($\ge$ ₹2,000)** | `+15` |
-| **Merchant VPA handle mismatch** | `+20` |
-| **Community fraud reports on destination** | `+30` |
-
-### Factual & User-Friendly Alerting
-Instead of declaring *"Fake QR"*, SentinelQR presents a factual, non-overclaiming prompt:
-
-> **⚠️ Review Payment Details: This QR already contains a payment amount. Static merchant QR codes commonly require customers to enter the amount manually. Please verify the amount with the merchant before proceeding.**
+> **"A QR code being new to SecurePE doesn't mean it's safe, and it doesn't mean it's malicious. We solve the cold-start problem by separating Real-Time Intelligence from Historical Intelligence. Every QR code is analyzed immediately using its payment structure, destination, threat intelligence, and payment intent consistency. Historical memory is an additional confidence signal that becomes stronger over time as the network observes trusted payment destinations."**
 
 ---
 
-## 🧠 Sentinel Memory™ (Privacy-Preserving Trust Graph)
+## 🧠 5-Level Dual-Engine Intelligence Architecture
 
-SentinelQR builds a privacy-preserving memory of trusted QR payment destinations over time.
+```text
+                  QR SCAN
+                     │
+                     ▼
+              QR DECODER
+                     │
+                     ▼
+              TYPE CLASSIFIER
+                     │
+          ┌──────────┴──────────┐
+          ▼                     ▼
+   REAL-TIME ENGINE       MEMORY ENGINE
+   (Levels 1 - 3)         (Levels 4 - 5)
+   - UPI Syntax           - Merchant Verification
+   - Payment Intent       - Sentinel Memory™
+   - Threat Intel           History Baseline
+   - Community Alerts     - Location Match
+          │                     │
+          └──────────┬──────────┘
+                     ▼
+              RISK ENGINE (0-100)
+                     │
+                     ▼
+              COLD-START TIERING
+          ┌──────────┼──────────┐
+          ▼          ▼          ▼
+       LOW RISK   CAUTION   HIGH RISK
+```
 
-- **Hashed Payload Baseline**: SHA-256 payload hashes (zero plain text sensitive storage).
-- **Geofenced Location Context**: Geofenced latitude/longitude matching.
-- **Historical Scan Patterns**: Anonymous scan counts & repeat confirmations.
+### 1. Level 1 — Real-Time QR Analysis (Cold-Start First Scan)
+- Protocol classification (`UPI`, `Website`, `APK`, `PDF`, `Wi-Fi`, `Contact`).
+- **Static vs Dynamic Payment Intent Engine**: Identifies unexpected pre-filled amounts (`am > 0`) lacking dynamic transaction references (`tr`).
 
-### Defensible Tamper Alerting
-> **"Potential QR replacement detected. The payment destination differs from previous trusted scans at this location. Please verify the merchant before proceeding."**
+### 2. Level 2 — External Threat & Reputation Intelligence
+- Domain age, HTTPS, Levenshtein brand similarity (`paytm-secure-login-example.com` vs `paytm.com`), shortener unrolling (`bit.ly`).
+
+### 3. Level 3 — Known Threat & Community Fraud Intelligence
+- Real-time Firestore fraud broadcasts (`subscribeRealtimeAlerts`), cross-referencing known malicious handles (`paytm-support@ybl`).
+
+### 4. Level 4 — Enrolled Merchant Verification
+- Compares scanned VPA `xyz@ybl` against registered merchant expected VPA `abc@ybl` $\rightarrow$ **Merchant Mismatch Warning**.
+
+### 5. Level 5 — SecurePE Memory™ (Historical Intelligence & Confidence Amplifier)
+- Privacy-preserving SHA-256 payload hashes + geofenced location memory (+20 location, +30 repeat payload).
+- If seen 37 times (`abc@ybl`), and suddenly `xyz@ybl` appears at the same location:
+  $\rightarrow$ **🚨 Unexpected QR Change**: *"We've previously observed a different payment destination at this location."*
 
 ---
 
-## 📊 Complete 9-Signal Vector Matrix
+## 📊 Cold-Start Outcome Rules
 
-| # | Signal Vector | Category | Weight ($w_i$) |
-| :-: | :--- | :--- | :---: |
-| **1** | **QR Type Detection** | Protocol Classifier | Baseline |
-| **2** | **UPI Handle & VPA Validation** | Handle Inspector | `+35` |
-| **3** | **Website Reputation & Shortener Unrolling** | Domain Intelligence | `+25..45` |
-| **4** | **Threat Intelligence (SafeBrowsing / PhishTank)** | Blacklist Feeds | `+40` |
-| **5** | **Community Intelligence** | Crowd-sourced Alerts | `+30` |
-| **6** | **Merchant Verification Baseline** | Enrolled Hash Matching | `+20` |
-| **7** | **Historical Trust Memory (Sentinel Memory™)** | Geofenced Trust Graph | `+20..30` |
-| **⭐ 8** | **Payment Intent Validation Engine** | Payment Request Analysis | `+10..40` |
-| **9** | **Explainable AI (XAI Summary)** | Gemini 1.5 Flash Translation | Human Summary |
+| Risk Verdict | Score | Meaning & UX Text |
+| :--- | :---: | :--- |
+| **🟢 LOW OBSERVED RISK** | `0 – 29` | *"No known threats detected. First time observed by SecurePE. Verify recipient before paying."* |
+| **🟡 CAUTION** | `30 – 69` | *"Some unusual payment characteristics were detected (e.g. pre-filled amount without transaction reference). Review recipient and amount."* |
+| **🔴 HIGH RISK** | `70 – 100` | *"Multiple high-risk indicators detected (e.g. unexpected sticker replacement or brand imposter). Do not proceed."* |
+
+> **Golden Rule**: **"No history ≠ Safe."** Unobserved first-time QRs receive real-time protocol analysis without assuming safety.
 
 ---
 
-## 🎙️ Judge Q&A Playbook
+## 🎙️ Defense Against Tricky Jury Questions
 
-### Q1: "Why is a pre-filled amount on a QR code suspicious?"
-> *"We avoid claiming legitimate static QRs never carry amounts. There are valid use cases where an amount is set. Instead, SentinelQR treats an unexpected pre-filled amount—especially when lacking dynamic transaction references—as a strong risk signal. It increases the risk score and asks the user to confirm the amount with the shopkeeper before proceeding."*
+### Q1: "How do you handle a brand-new scam QR that your system has never seen before?"
+> *"A new QR gets a cold-start assessment using Real-Time Intelligence. We don't rely on history to detect fraud. We analyze intrinsic payment structure, VPA syntax, brand similarity, pre-filled amounts, and threat intelligence. History is an additional confidence amplifier, not a dependency."*
 
-### Q2: "How does your solution differ from standard virus/blacklist scanners?"
-> *"Most teams focus on URL blacklists or VirusTotal API calls. SentinelQR analyzes payment intent and historical location context. We evaluate whether the payment request structure matches expected merchant behavior before money leaves the user's account."*
+### Q2: "Why don't you claim 100% safety on low-risk QRs?"
+> *"Claiming 100% safety on a first-time QR is bad engineering. SecurePE displays: 'LOW OBSERVED RISK: No known threats detected. First time observed.' This builds genuine user trust."*
