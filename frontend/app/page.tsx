@@ -22,6 +22,11 @@ import {
   AlertsScreen,
 } from "@/components/screens/HistoryAndCommunityScreens";
 import { ProfileScreen } from "@/components/screens/ProfileScreen";
+import {
+  PaymentReviewScreen,
+  PaymentSimulationScreen,
+  PaymentSuccessScreen,
+} from "@/components/screens/PaymentSimulationScreens";
 import { ScanResult } from "@/lib/api";
 import { auth, onAuthStateChanged, User } from "@/lib/firebase";
 
@@ -33,6 +38,7 @@ export default function SentinelApp() {
   const [ttsEnabled, setTtsEnabled] = useState<boolean>(true);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [simAmount, setSimAmount] = useState<number>(100);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("sqr_theme") as "dark" | "light" | null;
@@ -57,6 +63,11 @@ export default function SentinelApp() {
   const handleAnalysisDone = (result: ScanResult, latency: number) => {
     setLastScanResult(result);
     setLatencyMs(latency);
+    if (result.signals?.payment_intent?.amount_value) {
+      setSimAmount(result.signals.payment_intent.amount_value);
+    } else {
+      setSimAmount(100);
+    }
   };
 
   const handleSelectTheme = (mode: "dark" | "light") => {
@@ -82,6 +93,9 @@ export default function SentinelApp() {
     "result",
     "merchant",
     "report",
+    "payment_review",
+    "payment_sim",
+    "payment_success",
   ];
 
   const hideNav = noNavScreens.includes(screen);
@@ -106,7 +120,6 @@ export default function SentinelApp() {
             onUserLogin={(user) => setCurrentUser(user)}
           />
         )}
-
         {screen === "home" && <HomeScreen onNavigate={handleNavigate} />}
         {screen === "scanner" && (
           <ScannerScreen
@@ -124,9 +137,7 @@ export default function SentinelApp() {
         {screen === "result" && (
           <RiskResultScreen
             result={lastScanResult}
-            latencyMs={latencyMs}
             onNavigate={handleNavigate}
-            ttsEnabled={ttsEnabled}
           />
         )}
         {screen === "merchant" && <MerchantScreen onNavigate={handleNavigate} />}
@@ -146,6 +157,30 @@ export default function SentinelApp() {
             theme={theme}
             onToggleTheme={toggleTheme}
             currentUser={currentUser}
+          />
+        )}
+        {screen === "payment_review" && (
+          <PaymentReviewScreen
+            result={lastScanResult}
+            onNavigate={handleNavigate}
+            simAmount={simAmount}
+            setSimAmount={setSimAmount}
+          />
+        )}
+        {screen === "payment_sim" && (
+          <PaymentSimulationScreen
+            result={lastScanResult}
+            onNavigate={handleNavigate}
+            simAmount={simAmount}
+            setSimAmount={setSimAmount}
+          />
+        )}
+        {screen === "payment_success" && (
+          <PaymentSuccessScreen
+            result={lastScanResult}
+            onNavigate={handleNavigate}
+            simAmount={simAmount}
+            setSimAmount={setSimAmount}
           />
         )}
       </div>

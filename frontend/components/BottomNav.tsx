@@ -17,7 +17,10 @@ export type ScreenId =
   | "report"
   | "history"
   | "alerts"
-  | "profile";
+  | "profile"
+  | "payment_review"
+  | "payment_sim"
+  | "payment_success";
 
 interface BottomNavProps {
   currentScreen: ScreenId;
@@ -37,6 +40,9 @@ export const BottomNav: React.FC<BottomNavProps> = ({ currentScreen, onNavigate 
     "result",
     "merchant",
     "report",
+    "payment_review",
+    "payment_sim",
+    "payment_success",
   ];
 
   if (hiddenScreens.includes(currentScreen)) return null;
@@ -65,7 +71,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({ currentScreen, onNavigate 
         <span>History</span>
       </button>
 
-      {/* Floating Hero SCAN Button (76px x 76px with Senior-Friendly Text Label) */}
+      {/* Floating Hero SCAN Button */}
       <button
         className="scan-center-btn"
         onClick={() => onNavigate("scanner")}
